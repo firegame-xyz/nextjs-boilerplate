@@ -1,15 +1,15 @@
 import * as anchor from "@coral-xyz/anchor";
 import React, {
 	useCallback,
-	useEffect,
+	// useEffect,
 	useMemo,
 	useState,
-	useRef,
+	// useRef,
 } from "react";
-import { useAtom } from "jotai";
-import { programAtom } from "@/app/state";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
+// import { useAtom } from "jotai";
+// import { programAtom } from "@/app/state";
+// import { generateClient } from "aws-amplify/data";
+// import type { Schema } from "@/amplify/data/resource";
 import Link from "next/link";
 import { clx, formatAddress } from "@/app/utils/helpers";
 import TimeAgo from "./TimeAge";
@@ -19,7 +19,7 @@ import type { Transaction } from "@/app/hooks/useData";
 
 const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 	({ data }) => {
-		const [program] = useAtom(programAtom);
+		// const [program] = useAtom(programAtom);
 		const [filterShow, setFilterShow] = useState(false);
 		const [filterApply, setFilterApply] = useState(false);
 		const [value, setValue] = useState<string>("");
@@ -126,9 +126,12 @@ const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 										{transaction.event_type}
 									</span>
 									<span className='w-2/12 sm:w-4/12'>
-										{transaction.data?.purchaseQuantity 
-											? new anchor.BN(transaction.data.purchaseQuantity, 16).toString()
-											: '0'}
+										{transaction.data?.purchaseQuantity
+											? new anchor.BN(
+													transaction.data.purchaseQuantity,
+													16,
+											  ).toString()
+											: "0"}
 									</span>
 									<span className='flex w-4/12 items-center gap-1'>
 										<span>{formatAddress(transaction.initiator, 12, -12)}</span>

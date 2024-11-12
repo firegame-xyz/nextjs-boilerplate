@@ -3,7 +3,7 @@ import { createAvatar } from "@dicebear/core";
 import { useAvatarUrl } from "@/app/hooks/useData";
 
 import { clx } from "@/app/utils/helpers";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface SolanaAvatarProps {
 	address: string;

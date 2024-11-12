@@ -1,10 +1,10 @@
 import * as anchor from "@coral-xyz/anchor";
 import { useAtom } from "jotai";
 import {
-	squadAtom,
+	// squadAtom,
 	playerDataAtom,
-	voucherBalanceAtom,
-	balanceAtom,
+	// voucherBalanceAtom,
+	// balanceAtom,
 	roundAtom,
 } from "@/app/state";
 import { useEffect, useMemo, useState, useCallback } from "react";
@@ -18,11 +18,11 @@ import { ButtonTertiary } from "../buttons/Button";
  * Reinvest component for handling reinvestment functionality
  */
 export default function Reinvest() {
-	const [squad] = useAtom(squadAtom);
+	// const [squad] = useAtom(squadAtom);
 	const [playerData] = useAtom(playerDataAtom);
 	const [round] = useAtom(roundAtom);
-	const [voucherBalance] = useAtom(voucherBalanceAtom);
-	const [balance] = useAtom(balanceAtom);
+	// const [voucherBalance] = useAtom(voucherBalanceAtom);
+	// const [balance] = useAtom(balanceAtom);
 	const {
 		executeTransaction,
 		createReinvestInstructions,
