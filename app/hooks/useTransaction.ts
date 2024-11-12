@@ -4,16 +4,16 @@ import { useCallback, useMemo, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
 	gameAtom,
-	playerDataAtom,
+	// playerDataAtom,
 	programAtom,
 	providerAtom,
-	roundAtom,
+	// roundAtom,
 	// playerRoundAtom,
 	statePendingAtom,
-	voucherAccountAtom,
-	voucherBalanceAtom,
+	// voucherAccountAtom,
+	// voucherBalanceAtom,
 } from "@/app/state";
-import { DEFAULT_PUBLICKEY } from "@/app/config/token";
+// import { DEFAULT_PUBLICKEY } from "@/app/config/token";
 import { useNotification } from "../notifications";
 
 // Type definition for instruction creator functions
@@ -29,14 +29,14 @@ export default function useTransaction() {
 	const notification = useNotification();
 
 	const [game] = useAtom(gameAtom);
-	const [playerData] = useAtom(playerDataAtom);
+	// const [playerData] = useAtom(playerDataAtom);
 	const [program] = useAtom(programAtom);
 	const [provider] = useAtom(providerAtom);
-	const [round] = useAtom(roundAtom);
+	// const [round] = useAtom(roundAtom);
 	// const [playerRound] = useAtom(playerRoundAtom);
 	const [, setStatePending] = useAtom(statePendingAtom);
-	const [voucherAccount] = useAtom(voucherAccountAtom);
-	const [voucherBalance] = useAtom(voucherBalanceAtom);
+	// const [voucherAccount] = useAtom(voucherAccountAtom);
+	// const [voucherBalance] = useAtom(voucherBalanceAtom);
 
 	const [isTransactionInProgress, setIsTransactionInProgress] = useState<
 		boolean
