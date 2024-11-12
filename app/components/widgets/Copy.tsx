@@ -15,8 +15,7 @@ const CopyComponent: React.FC<Props> = ({ address, startText, endText }) => {
 		const result = await copyToClipboard(address);
 		setIsCopied(result);
 
-		let timer: NodeJS.Timeout;
-		timer = setTimeout(() => {
+		const timer = setTimeout(() => {
 			clearTimeout(timer);
 			setIsCopied(false);
 		}, 3000);
@@ -26,7 +25,7 @@ const CopyComponent: React.FC<Props> = ({ address, startText, endText }) => {
 		<div onClick={handleClick}>
 			{isCopied
 				? endText
-				: (startText ?? <CopyIcon className='w-4 cursor-pointer' />)}
+				: startText ?? <CopyIcon className='w-4 cursor-pointer' />}
 		</div>
 	);
 };

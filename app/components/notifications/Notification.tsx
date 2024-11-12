@@ -33,7 +33,7 @@ export const Notification: React.FC<Props> = ({
 	const [dismissed, setDismissed] = useState(false);
 	const progressRef = useRef<HTMLDivElement>(null);
 	const notification = useNotification();
-	const timer = useRef<any>(null);
+	const timer = useRef<NodeJS.Timeout | null>(null);
 
 	const dismiss = () => {
 		setDismissed(true);
