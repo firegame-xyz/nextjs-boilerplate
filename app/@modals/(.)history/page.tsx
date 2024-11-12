@@ -9,7 +9,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 export default function HistoryModal() {
 	const { publicKey } = useWallet();
 	const modalRef = useRef<ModalHandles>(null);
-	const { transactions } = useQueryData(publicKey?.toString()!);
+	const { transactions } = useQueryData(publicKey?.toString());
 
 	const MemoizedHistoryList = useMemo(
 		() => <HistoryModalBody data={transactions} />,
