@@ -45,25 +45,24 @@ import { Game as GameIdl } from "@/idl/game";
 export function useGlobal() {
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
-	const { publicKey, connected, disconnecting } = useWallet();
+	const { publicKey, disconnecting } = useWallet();
 
-	const [provider, setProvider] = useAtom(providerAtom);
+	const [, setProvider] = useAtom(providerAtom);
 	const [program, setProgram] = useAtom(programAtom);
 	const [game, setGame] = useAtom(gameAtom);
 	const [config, setConfig] = useAtom(configAtom);
 	const [round, setRound] = useAtom(roundAtom);
-	const [period, setPeriod] = useAtom(periodAtom);
-	const [lastPeriod, setLastPeriod] = useAtom(lastPeriodAtom);
+	const [, setPeriod] = useAtom(periodAtom);
+	const [, setLastPeriod] = useAtom(lastPeriodAtom);
 	const [playerData, setPlayerData] = useAtom(playerDataAtom);
-	const [playerPDA, setPlayerPDA] = useAtom(playerPDAAtom);
-	// const [playerRound, setPlayerRound] = useAtom(playerRoundAtom);
-	const [squad, setSquad] = useAtom(squadAtom);
-	const [squadList, setSquadList] = useAtom(squadListAtom);
-	const [balance, setBalance] = useAtom(balanceAtom);
-	const [voucherAccount, setVoucherAccount] = useAtom(voucherAccountAtom);
-	const [voucherBalance, setVoucherBalance] = useAtom(voucherBalanceAtom);
-	const [registered, setRegistered] = useAtom(registeredAtom);
-	const [squadLoading, setSquadLoading] = useAtom(squadLoadingAtom);
+	const [, setPlayerPDA] = useAtom(playerPDAAtom);
+	const [, setSquad] = useAtom(squadAtom);
+	const [, setSquadList] = useAtom(squadListAtom);
+	const [, setBalance] = useAtom(balanceAtom);
+	const [, setVoucherAccount] = useAtom(voucherAccountAtom);
+	const [, setVoucherBalance] = useAtom(voucherBalanceAtom);
+	const [, setRegistered] = useAtom(registeredAtom);
+	const [, setSquadLoading] = useAtom(squadLoadingAtom);
 
 	const [tokenMintAccountAddress, setTokenMintAccountAddress] =
 		useState<anchor.web3.PublicKey | null>(null);
@@ -411,9 +410,8 @@ export function useGlobal() {
 
 	// Set up config listener
 	useEffect(() => {
-		const configPDA = findConfigPDA(
-			program!.programId ?? SystemProgram.programId,
-		);
+		const programId = program ? program.programId : SystemProgram.programId;
+		const configPDA = findConfigPDA(programId);
 		const configListener = connection.onAccountChange(configPDA, fetchConfig);
 
 		return () => {
@@ -423,7 +421,8 @@ export function useGlobal() {
 
 	// Set up game listener
 	useEffect(() => {
-		const gamePDA = findGamePDA(program!.programId ?? SystemProgram.programId);
+		const programId = program ? program.programId : SystemProgram.programId;
+		const gamePDA = findGamePDA(programId);
 		const gameListener = connection.onAccountChange(gamePDA, fetchGame);
 
 		return () => {
@@ -433,10 +432,10 @@ export function useGlobal() {
 
 	// Set up player data and balance listeners
 	useEffect(() => {
-		const playerDataPDA = findPlayerDataPDA(
-			publicKey! ?? SystemProgram.programId,
-			program!.programId ?? SystemProgram.programId,
-		);
+		const _publicKey = publicKey ? publicKey : SystemProgram.programId;
+		const programId = program ? program.programId : SystemProgram.programId;
+
+		const playerDataPDA = findPlayerDataPDA(_publicKey, programId);
 		const playerDataListener = connection.onAccountChange(
 			playerDataPDA,
 			fetchPlayerData,
@@ -449,8 +448,11 @@ export function useGlobal() {
 
 	// Set up token balance listener
 	useEffect(() => {
+		const _tokenMintAccountAddress = tokenMintAccountAddress
+			? tokenMintAccountAddress
+			: SystemProgram.programId;
 		const tokenAccountBalanceListener = connection.onAccountChange(
-			tokenMintAccountAddress! ?? SystemProgram.programId,
+			_tokenMintAccountAddress,
 			getTokenAccountBalance,
 		);
 
@@ -461,8 +463,11 @@ export function useGlobal() {
 
 	// Set up voucher balance listener
 	useEffect(() => {
+		const _voucherMintAccountAddress = voucherMintAccountAddress
+			? voucherMintAccountAddress
+			: SystemProgram.programId;
 		const voucherMintAccountListener = connection.onAccountChange(
-			voucherMintAccountAddress! ?? SystemProgram.programId,
+			_voucherMintAccountAddress,
 			getVoucherAccountBalance,
 		);
 
@@ -473,10 +478,8 @@ export function useGlobal() {
 
 	// Set up round listener
 	useEffect(() => {
-		const roundListener = connection.onAccountChange(
-			game!.currentRound ?? SystemProgram.programId,
-			fetchRound,
-		);
+		const currentRound = game ? game.currentRound : SystemProgram.programId;
+		const roundListener = connection.onAccountChange(currentRound, fetchRound);
 
 		return () => {
 			connection.removeAccountChangeListener(roundListener);
@@ -485,10 +488,8 @@ export function useGlobal() {
 
 	// Set up squad listener
 	useEffect(() => {
-		const squadListener = connection.onAccountChange(
-			playerData!.squad ?? SystemProgram.programId,
-			fetchSquad,
-		);
+		const squad = playerData ? playerData.squad : SystemProgram.programId;
+		const squadListener = connection.onAccountChange(squad, fetchSquad);
 
 		return () => {
 			connection.removeAccountChangeListener(squadListener);
@@ -514,8 +515,10 @@ export function useGlobal() {
 
 	// Set up period listener
 	useEffect(() => {
+		const currentPeriod = round ? round.currentPeriod : SystemProgram.programId;
+
 		const periodListener = connection.onAccountChange(
-			round!.currentPeriod ?? SystemProgram.programId,
+			currentPeriod,
 			fetchPeriod,
 		);
 
