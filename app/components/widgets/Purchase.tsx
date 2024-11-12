@@ -420,7 +420,15 @@ const PurchaseComponent = () => {
 				setStatePending(false);
 			}
 		},
-		[connection, fetchReveal, notification, provider, signTransaction, wallet],
+		[
+			connection,
+			fetchReveal,
+			notification,
+			provider,
+			signTransaction,
+			wallet,
+			value,
+		],
 	);
 
 	const fetchRandomness = useCallback(async () => {
