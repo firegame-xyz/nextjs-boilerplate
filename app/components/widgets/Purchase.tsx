@@ -24,7 +24,7 @@ import {
 } from "@/app/state";
 import {
 	baseWinRate,
-	clx,
+	// clx,
 	discountRate,
 	formatTokenAmount,
 } from "@/app/utils/helpers";
@@ -36,8 +36,8 @@ import Switch from "./Switch";
 const usePurchaseCalculations = (
 	squadScore: anchor.BN,
 	num: anchor.BN,
-	voucherBalance: any,
-	balance: any,
+	voucherBalance: { amount: number } | null,
+	balance: { amount: number } | null,
 ) => {
 	const [error, setError] = useState(false);
 	const [usedTokens, setUsedTokens] = useState([0, 0]);
@@ -78,7 +78,7 @@ const usePurchaseCalculations = (
 		const aToken = new anchor.BN(voucherBalance?.amount || 0);
 		const bToken = new anchor.BN(balance?.amount || 0);
 
-		let usedATokens = anchor.BN.min(aToken, requiredTotal);
+		const usedATokens = anchor.BN.min(aToken, requiredTotal);
 		let usedBTokens = new anchor.BN(0);
 
 		if (usedATokens.lt(requiredTotal)) {
@@ -93,6 +93,12 @@ const usePurchaseCalculations = (
 
 	return { error, handleChange, setValue, usedTokens, value };
 };
+
+interface RevealKey {
+	pubkey: string;
+	isSigner: boolean;
+	isWritable: boolean;
+}
 
 const PurchaseComponent = () => {
 	// Atoms
@@ -111,10 +117,8 @@ const PurchaseComponent = () => {
 	const notification = useNotification();
 	const wallet = useAnchorWallet();
 	const { publicKey, signTransaction } = useWallet();
-	const {
-		createSetAutoReinvestInstructions,
-		executeTransaction,
-	} = useTransaction();
+	const { createSetAutoReinvestInstructions, executeTransaction } =
+		useTransaction();
 
 	// State
 	const [isOn, setIsOn] = useState(false);
@@ -124,13 +128,13 @@ const PurchaseComponent = () => {
 	const num = useMemo(() => new anchor.BN(1000), []);
 	const squadScore = useMemo(() => new anchor.BN(0), [squad]);
 
-	const {
-		error,
-		handleChange,
-		setValue,
-		usedTokens,
-		value,
-	} = usePurchaseCalculations(squadScore, num, voucherBalance, balance);
+	const { error, handleChange, setValue, usedTokens, value } =
+		usePurchaseCalculations(
+			squadScore,
+			num,
+			voucherBalance ? { amount: voucherBalance.amount.toNumber() } : null,
+			balance ? { amount: balance.amount.toNumber() } : null,
+		);
 
 	const discountedPrice = useMemo(() => {
 		return formatTokenAmount(
@@ -200,7 +204,7 @@ const PurchaseComponent = () => {
 
 				const revealIxInstruction = new anchor.web3.TransactionInstruction({
 					data: Buffer.from(revealIx.data),
-					keys: revealIx.keys.map((key: any) => ({
+					keys: revealIx.keys.map((key: RevealKey) => ({
 						...key,
 						pubkey: new anchor.web3.PublicKey(key.pubkey),
 					})),
@@ -212,10 +216,8 @@ const PurchaseComponent = () => {
 					.accounts({})
 					.instruction();
 
-				const {
-					blockhash,
-					lastValidBlockHeight,
-				} = await connection.getLatestBlockhash("finalized");
+				const { blockhash, lastValidBlockHeight } =
+					await connection.getLatestBlockhash("finalized");
 
 				const tx = new anchor.web3.Transaction().add(revealIxInstruction);
 				tx.add(revealDrawLotteryResultIx);
@@ -338,7 +340,7 @@ const PurchaseComponent = () => {
 
 				const commitIxInstruction = new anchor.web3.TransactionInstruction({
 					data: Buffer.from(commitIx.data),
-					keys: commitIx.keys.map((key: any) => ({
+					keys: commitIx.keys.map((key: RevealKey) => ({
 						...key,
 						pubkey: new anchor.web3.PublicKey(key.pubkey),
 					})),
@@ -350,10 +352,8 @@ const PurchaseComponent = () => {
 					.accounts({ randomnessAccountData: randomnessPubkey })
 					.instruction();
 
-				const {
-					blockhash,
-					lastValidBlockHeight,
-				} = await connection.getLatestBlockhash("finalized");
+				const { blockhash, lastValidBlockHeight } =
+					await connection.getLatestBlockhash("finalized");
 
 				const tx = new anchor.web3.Transaction().add(commitIxInstruction);
 				tx.add(purchaseIx);
@@ -524,10 +524,8 @@ const PurchaseComponent = () => {
 			},
 		}));
 
-		const {
-			blockhash,
-			lastValidBlockHeight,
-		} = await connection.getLatestBlockhash("finalized");
+		const { blockhash, lastValidBlockHeight } =
+			await connection.getLatestBlockhash("finalized");
 
 		const tx = anchor.web3.Transaction.from(
 			Buffer.from(randomnessData.tx, "base64"),
@@ -602,10 +600,8 @@ const PurchaseComponent = () => {
 						.accounts({ randomnessAccountData: anchor.web3.PublicKey.default })
 						.instruction(),
 				);
-				const {
-					blockhash,
-					lastValidBlockHeight,
-				} = await connection.getLatestBlockhash("finalized");
+				const { blockhash, lastValidBlockHeight } =
+					await connection.getLatestBlockhash("finalized");
 
 				const tx = new anchor.web3.Transaction().add(...instructions);
 				tx.feePayer = provider.wallet.publicKey;
