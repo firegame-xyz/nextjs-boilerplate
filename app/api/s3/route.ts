@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 		}
 
-		const buffer = await file.arrayBuffer();
+		await file.arrayBuffer();
 		const fileExtension = file.name.split(".").pop();
 		const timestamp = Date.now();
 		const randomString = generateRandomString(5);
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 		// const command = new PutObjectCommand(params);
 		// await s3Client.send(command);
 
-		const { data, error } = await supabase.storage
+		const { error } = await supabase.storage
 			.from(bucket)
 			.upload(filePath, file, {
 				cacheControl: "3600",
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 			data: { publicUrl },
 		} = supabase.storage.from(bucket).getPublicUrl(filePath);
 
-		console.log(publicUrl);
+		// console.log(publicUrl);
 
 		return NextResponse.json({
 			message: "File uploaded successfully",

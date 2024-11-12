@@ -10,15 +10,15 @@ interface ButtonPrimaryProps
 	disabled?: boolean;
 }
 
-interface ButtonProps extends ButtonPrimaryProps {
-	variant?: string;
-	styleName?: string;
-}
+// interface ButtonProps extends ButtonPrimaryProps {
+// 	variant?: string;
+// 	styleName?: string;
+// }
 
 export const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	onClick,
 	destructive = false,
 	...otherProps
@@ -40,7 +40,7 @@ export const ButtonPrimary: React.FC<ButtonPrimaryProps> = ({
 export const ButtonTertiary: React.FC<ButtonPrimaryProps> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	onClick,
 	destructive = false,
 	...otherProps
@@ -63,7 +63,7 @@ export const ButtonTertiary: React.FC<ButtonPrimaryProps> = ({
 export const ButtonDefault: React.FC<ButtonPrimaryProps> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	onClick,
 	destructive = false,
 	...otherProps

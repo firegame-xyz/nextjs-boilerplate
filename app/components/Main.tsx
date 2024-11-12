@@ -37,7 +37,7 @@ const MainComponent: React.FC = () => {
 	// State
 	const [expiryTimestamp, setExpiryTimestamp] = useState<string>("0");
 	const [exitRewardsValue, setExitRewardsValue] = useState<number>(0);
-	const [isTimerComplete, setIsTimerComplete] = useState<boolean>(false);
+	const [, setIsTimerComplete] = useState<boolean>(false);
 	const [pendingRewardsValue, setPendingRewardsValue] = useState<number>(0);
 	const [tabActive, setTabActive] = useState<number>(0);
 
@@ -82,7 +82,7 @@ const MainComponent: React.FC = () => {
 	}, []);
 
 	const timerComplete = useCallback(() => {
-		console.log("Timer complete!");
+		// console.log("Timer complete!");
 		setIsTimerComplete(true);
 	}, []);
 

@@ -1,4 +1,3 @@
-
 import { clx } from "@/app/utils/helpers";
 
 interface Props extends React.SVGAttributes<SVGElement> {
@@ -14,10 +13,10 @@ interface Props extends React.SVGAttributes<SVGElement> {
 export const CopyIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	color = "#CED3DB",
-	opacity = "0.8",
-	strokeWidth = "1.5",
+	// opacity = "0.8",
+	// strokeWidth = "1.5",
 	...otherProps
 }) => {
 	return (
@@ -44,11 +43,11 @@ export const CopyIcon: React.FC<Props> = ({
 export const TriangleIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	color1 = "#FEC84B",
 	color2 = "#FDB022",
-	opacity = "0.8",
-	strokeWidth = "1.5",
+	// opacity = "0.8",
+	// strokeWidth = "1.5",
 	...otherProps
 }) => {
 	return (
@@ -79,10 +78,10 @@ export const TriangleIcon: React.FC<Props> = ({
 export const BackIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	color = "#A3A3A3",
-	opacity = "0.8",
-	strokeWidth = "1.5",
+	// opacity = "0.8",
+	// strokeWidth = "1.5",
 	...otherProps
 }) => {
 	return (
@@ -109,10 +108,10 @@ export const BackIcon: React.FC<Props> = ({
 export const SelectIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	color = "#A3A3A3",
-	opacity = "0.8",
-	strokeWidth = "1.5",
+	// opacity = "0.8",
+	// strokeWidth = "1.5",
 	...otherProps
 }) => {
 	return (
@@ -139,10 +138,10 @@ export const SelectIcon: React.FC<Props> = ({
 export const QuestionIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
+	// contentClassName,
 	color = "#F8FFFE",
-	opacity = "0.8",
-	strokeWidth = "1.5",
+	// opacity = "0.8",
+	// strokeWidth = "1.5",
 	...otherProps
 }) => {
 	return (
@@ -169,10 +168,10 @@ export const QuestionIcon: React.FC<Props> = ({
 export const LeaveIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
-	color = "#F8FFFE",
-	opacity = "1",
-	strokeWidth = "1.66667",
+	// contentClassName,
+	// color = "#F8FFFE",
+	// opacity = "1",
+	// strokeWidth = "1.66667",
 	...otherProps
 }) => {
 	return (
@@ -195,10 +194,10 @@ export const LeaveIcon: React.FC<Props> = ({
 export const PhotoIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
-	color = "#F8FFFE",
-	opacity = "1",
-	strokeWidth = "1.66667",
+	// contentClassName,
+	// color = "#F8FFFE",
+	// opacity = "1",
+	// strokeWidth = "1.66667",
 	...otherProps
 }) => {
 	return (
@@ -221,10 +220,10 @@ export const PhotoIcon: React.FC<Props> = ({
 export const MenuIcon: React.FC<Props> = ({
 	children,
 	className,
-	contentClassName,
-	color = "#F8FFFE",
-	opacity = "1",
-	strokeWidth = "1.66667",
+	// contentClassName,
+	// color = "#F8FFFE",
+	// opacity = "1",
+	// strokeWidth = "1.66667",
 	...otherProps
 }) => {
 	return (
@@ -324,10 +323,10 @@ export const LinkExternalIcon: React.FC<Props> = ({
 
 export const FilterIcon: React.FC<Props> = ({
 	children,
-	className,
-	contentClassName,
-	color = "#F8FFFE",
-	opacity = "1",
+	// className,
+	// contentClassName,
+	// color = "#F8FFFE",
+	// opacity = "1",
 	strokeWidth = "0",
 	...otherProps
 }) => {

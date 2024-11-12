@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAtom } from "jotai";
-import { roundAtom, gameAtom, statePendingAtom } from "@/app/state";
+import { roundAtom, statePendingAtom } from "@/app/state";
 import { useTimer } from "react-timer-hook";
 
 import { ButtonDefault } from "./buttons/Button";
@@ -67,19 +67,19 @@ export function Timer({
 	className,
 	timerComplete,
 }: TimerProps) {
-	const [game] = useAtom(gameAtom);
+	// const [game] = useAtom(gameAtom);
 	const [round] = useAtom(roundAtom);
 	const [statePending] = useAtom(statePendingAtom);
 	const [isClient, setIsClient] = useState(false);
 	const [timerKey, setTimerKey] = useState(0);
-	const [isTimerComplete, setIsTimerComplete] = useState(false);
+	const [, setIsTimerComplete] = useState(false);
 	const [isCallTime, setIsCallTime] = useState(false);
 	const currentTime = useCurrentTime();
 
 	const timerCompleteChild = useCallback(() => {
 		timerComplete();
 		setIsTimerComplete(true);
-		console.log("timerCompleteChild", "Timer complete!");
+		// console.log("timerCompleteChild", "Timer complete!");
 	}, [timerComplete]);
 
 	useEffect(() => {
@@ -106,9 +106,10 @@ export function Timer({
 		}
 	}, [currentTime, round?.endTime, round?.isOver]);
 
-	const particlesVelocity = useMemo(() => (statePending ? 0.1 : 0.009), [
-		statePending,
-	]);
+	const particlesVelocity = useMemo(
+		() => (statePending ? 0.1 : 0.009),
+		[statePending],
+	);
 
 	return (
 		<div

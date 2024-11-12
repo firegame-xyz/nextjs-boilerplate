@@ -1,8 +1,5 @@
 import { Connection } from "@solana/web3.js";
-import {
-	useWallet,
-	useConnection,
-} from "@solana/wallet-adapter-react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useState, useCallback } from "react";
 import { useAtom } from "jotai";
 
@@ -50,7 +47,7 @@ export const RpcModalBody: React.FC<ModalProps> = ({ modalClosed }) => {
 		try {
 			const testConnection = new Connection(tempRpc, connection.commitment);
 			const version = await testConnection.getVersion();
-			console.log("Connected to Solana node version:", version);
+			// console.log("Connected to Solana node version:", version);
 
 			setRpcEndpoint(tempRpc);
 			// localStorage.setItem("rpcEndpoint", tempRpc);

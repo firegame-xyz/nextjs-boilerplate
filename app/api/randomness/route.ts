@@ -14,7 +14,7 @@ import {
 
 export async function POST(req: Request) {
 	try {
-		console.log("Starting random number generation...");
+		// console.log("Starting random number generation...");
 
 		// Get appropriate network configuration based on environment
 		const queue = isMainNet ? ON_DEMAND_MAINNET_QUEUE : ON_DEMAND_DEVNET_QUEUE;
@@ -32,29 +32,29 @@ export async function POST(req: Request) {
 			commitment: "confirmed",
 			confirmTransactionInitialTimeout: 60000, // 60 seconds timeout
 		});
-		console.log("Created Solana connection");
+		// console.log("Created Solana connection");
 
 		// Create Anchor provider with wallet
 		const provider = new anchor.AnchorProvider(connection, wallet!, {});
-		console.log("Provider initialized");
+		// console.log("Provider initialized");
 
 		// Fetch Switchboard program IDL and create program instance
 		const sbIdl = await anchor.Program.fetchIdl(sbProgramId, provider);
 		const sbProgram = new anchor.Program(sbIdl as Idl, provider);
-		console.log("Switchboard program instance created");
+		// console.log("Switchboard program instance created");
 
 		// Generate keypair for random number request
 		const rngKp = anchor.web3.Keypair.generate();
-		console.log("Generated randomness keypair:", rngKp.publicKey.toString());
+		// console.log("Generated randomness keypair:", rngKp.publicKey.toString());
 
 		// Create randomness request using Switchboard
-		console.log("Creating randomness request...");
+		// console.log("Creating randomness request...");
 		const [randomness, ix] = await sb.Randomness.create(
 			sbProgram,
 			rngKp,
 			queue,
 		);
-		console.log("Randomness request created successfully");
+		// console.log("Randomness request created successfully");
 
 		const { blockhash } = await connection.getLatestBlockhash("finalized");
 
