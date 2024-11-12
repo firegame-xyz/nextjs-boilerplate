@@ -1,5 +1,5 @@
-import * as anchor from "@coral-xyz/anchor";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+// import * as anchor from "@coral-xyz/anchor";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 export type Transaction = {
@@ -13,7 +13,7 @@ export type Transaction = {
 		period?: string;
 		referrer?: string;
 		purchaseQuantity?: string | number;
-		[key: string]: any;
+		[key: string]: string | number | undefined;
 	} | null;
 	initiator_type: string;
 	initiator: string;
@@ -68,7 +68,7 @@ export const useQueryData = (address?: string) => {
 	}, []);
 
 	const setupSubscriptionAndQuery = useCallback(async () => {
-		const queryOptions = constructQueryOptions(address);
+		// const queryOptions = constructQueryOptions(address);
 
 		// try {
 		// 	const { data } = await client.models.Transaction.list(queryOptions);
@@ -89,7 +89,7 @@ export const useQueryData = (address?: string) => {
 				.in("event_type", ["purchase", "reinvest", "autoReinvest", "exit"])
 				.order("timestamp", { ascending: false });
 
-			const { data, error } = await (address
+			const { data } = await (address
 				? query.eq("initiator", address)
 				: query);
 
