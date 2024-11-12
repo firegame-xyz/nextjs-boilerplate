@@ -7,7 +7,7 @@ import {
 	createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useNotification } from "@/app/notifications";
 
@@ -22,8 +22,8 @@ export default function Faucet() {
 	const notification = useNotification();
 	const { connection } = useConnection();
 	const { publicKey } = useWallet();
-	const [pending, setPending] = useState(false);
-	const [isAirdrop, setIsAirdrop] = useState(false);
+	const [, setPending] = useState(false);
+	// const [isAirdrop, setIsAirdrop] = useState(false);
 	const [num, setNum] = useState(1000000000);
 
 	const fetchBalance = async () => {
@@ -54,13 +54,13 @@ export default function Faucet() {
 			Uint8Array.from(walletJson),
 		);
 		// 6KMXwypa4PqUnzGCUK3cttXu35xoKj9eMCd5ALmserCo
-		const coinMint = coinWallet.publicKey;
+		// const coinMint = coinWallet.publicKey;
 		// Generate new keypair for Mint Account
 		const mintKeypair = coinWallet;
 		// Address for Mint Account
 		const mint = mintKeypair.publicKey;
 
-		const decimals = 6;
+		// const decimals = 6;
 		const mintAuthority = mint;
 
 		const tokenAccount = await connection.getParsedTokenAccountsByOwner(
@@ -84,8 +84,10 @@ export default function Faucet() {
 			1_000_000_000_000,
 		);
 
-		let tx = new anchor.web3.Transaction();
-		tokenAccount.value.length < 1 && tx.add(createToInstruction);
+		const tx = new anchor.web3.Transaction();
+		if (tokenAccount.value.length < 1) {
+			tx.add(createToInstruction);
+		}
 		tx.add(mintToInstruction);
 
 		const { blockhash } = await connection.getLatestBlockhash("finalized");
@@ -147,7 +149,7 @@ export default function Faucet() {
 			.collateralExchange(new anchor.BN(num))
 			.accounts({})
 			.instruction();
-		let tx = new anchor.web3.Transaction();
+		const tx = new anchor.web3.Transaction();
 		tx.add(claimVouchers);
 		const { blockhash } = await connection.getLatestBlockhash("finalized");
 		tx.recentBlockhash = blockhash;
