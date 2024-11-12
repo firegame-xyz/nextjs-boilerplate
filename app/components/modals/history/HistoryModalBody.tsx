@@ -2,18 +2,13 @@ import * as anchor from "@coral-xyz/anchor";
 import Link from "next/link";
 import React from "react";
 
-import {
-	LinkExternalIcon,
-} from "@/app/components/icons/Icon";
+import { LinkExternalIcon } from "@/app/components/icons/Icon";
 import TimeAgo from "@/app/components/widgets/TimeAge";
-import {
-	clx,
-	formatAddress,
-} from "@/app/utils/helpers";
+import { clx, formatAddress } from "@/app/utils/helpers";
 import { Transaction } from "@/app/hooks/useData";
 
 const HistoryModalBody: React.FC<{ data: Transaction[] }> = React.memo(
-	({ data }) => {
+	function HistoryModalBody({ data }) {
 		const transactions = data;
 
 		return (
