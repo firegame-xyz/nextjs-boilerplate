@@ -8,6 +8,7 @@ import { formatAddress } from "@/app/utils/helpers";
 import { ButtonPrimary } from "../buttons/Button";
 import { MenuIcon } from "../icons/Icon";
 
+// import ConstructionWorkerSalariesBalance from "./ConstructionWorkerSalariesBalance";
 import CopyComponent from "./Copy";
 
 // interface Props {
@@ -37,7 +38,7 @@ const Dropdown: React.FC = () => {
 	const { setVisible } = useWalletModal();
 	const { connected, publicKey, disconnect } = useWallet();
 	const [isOpen, setIsOpen] = useState(false);
-	const [baseUrl, setBaseUrl] = useState("");
+	const [, setBaseUrl] = useState("");
 	const ref = useRef<HTMLDivElement>(null);
 
 	const handleClickOutside = (event: MouseEvent) => {
@@ -68,7 +69,7 @@ const Dropdown: React.FC = () => {
 					aria-expanded='true'
 					onClick={() => (connected ? setIsOpen(!isOpen) : setVisible(true))}
 				>
-					{connected ? formatAddress(publicKey?.toBase58()!) : "Connect"}
+					{connected ? formatAddress(publicKey?.toBase58() ?? "") : "Connect"}
 				</ButtonPrimary>
 			</div>
 
@@ -94,7 +95,7 @@ const Dropdown: React.FC = () => {
 						className='block cursor-pointer px-4 py-2 text-gray-200 sm:hidden'
 						role='menuitem'
 					>
-						{formatAddress(publicKey?.toBase58()!)}
+						{formatAddress(publicKey?.toBase58() || "")}
 					</div>
 					{/* <div
             className='block cursor-pointer px-4 py-2 text-gray-200'
@@ -118,7 +119,7 @@ const Dropdown: React.FC = () => {
 						role='menuitem'
 					>
 						<CopyComponent
-							address={publicKey?.toBase58()!}
+							address={publicKey?.toBase58() ?? ""}
 							endText='Copied'
 							startText='Copy Address'
 						/>
