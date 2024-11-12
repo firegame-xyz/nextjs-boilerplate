@@ -3,7 +3,6 @@ import React, {
 	useEffect,
 	useRef,
 	useState,
-	forwardRef,
 	useImperativeHandle,
 } from "react";
 

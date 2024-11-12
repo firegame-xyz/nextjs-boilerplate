@@ -1,11 +1,9 @@
-import * as anchor from "@coral-xyz/anchor";
 import { Connection } from "@solana/web3.js";
 import {
 	useWallet,
-	useAnchorWallet,
 	useConnection,
 } from "@solana/wallet-adapter-react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useAtom } from "jotai";
 
 import { rpcEndpointAtom } from "@/app/state";

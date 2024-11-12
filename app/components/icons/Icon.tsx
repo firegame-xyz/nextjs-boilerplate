@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 import { clx } from "@/app/utils/helpers";
 

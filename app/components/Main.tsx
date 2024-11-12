@@ -14,18 +14,14 @@ import {
 	playerDataAtom,
 	registeredAtom,
 	roundAtom,
-	squadAtom,
 } from "@/app/state";
 import { BoxBalance } from "@/app/components/widgets/BoxBalance";
 import { Timer } from "@/app/components/Timer";
 import { clx, formatAmount, formatTokenAmount } from "@/app/utils/helpers";
-import { QuestionIcon } from "./icons/Icon";
 import { useQueryData, useCurrentTime } from "@/app/hooks/useData";
 import EndList from "@/app/components/widgets/EndList";
 import Exit from "@/app/components/widgets/Exit";
-import Portal from "./Portal";
 import PurchaseComponent from "@/app/components/widgets/Purchase";
-import RegisterComponent from "@/app/components/widgets/Register";
 import TopArea from "@/app/components/widgets/TopArea";
 import TransactionsList from "@/app/components/widgets/TransactionsList";
 import ConstructionWorkerSalariesBalance from "./widgets/ConstructionWorkerSalariesBalance";

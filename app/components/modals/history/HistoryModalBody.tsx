@@ -1,18 +1,14 @@
 import * as anchor from "@coral-xyz/anchor";
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React from "react";
 
 import {
-	CloseIcon,
-	FilterIcon,
 	LinkExternalIcon,
 } from "@/app/components/icons/Icon";
 import TimeAgo from "@/app/components/widgets/TimeAge";
 import {
 	clx,
 	formatAddress,
-	formatAmount,
-	formatTokenAmount,
 } from "@/app/utils/helpers";
 import { Transaction } from "@/app/hooks/useData";
 

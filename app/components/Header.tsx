@@ -1,7 +1,6 @@
 "use client";
 
 import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
 import { useAtom } from "jotai";
 import {
 	useWallet,
@@ -9,11 +8,9 @@ import {
 	useConnection,
 } from "@solana/wallet-adapter-react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import {
-	gameAtom,
-	roundAtom,
 	// playerRoundAtom,
 	programAtom,
 	providerAtom,

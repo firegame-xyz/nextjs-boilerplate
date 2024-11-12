@@ -8,7 +8,6 @@ import { formatAddress } from "@/app/utils/helpers";
 import { ButtonPrimary } from "../buttons/Button";
 import { MenuIcon } from "../icons/Icon";
 
-import ConstructionWorkerSalariesBalance from "./ConstructionWorkerSalariesBalance";
 import CopyComponent from "./Copy";
 
 // interface Props {

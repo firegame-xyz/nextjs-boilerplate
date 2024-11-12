@@ -7,10 +7,9 @@ import {
 	registeredAtom,
 } from "@/app/state";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
-	discountRate,
 	formatAmount,
 	formatTokenAmount,
 } from "@/app/utils/helpers";

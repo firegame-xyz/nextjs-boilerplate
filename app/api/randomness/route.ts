@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import * as anchor from "@coral-xyz/anchor";
-import { Program, AnchorProvider, web3, Idl } from "@coral-xyz/anchor";
+import { web3, Idl } from "@coral-xyz/anchor";
 import * as sb from "@switchboard-xyz/on-demand";
 import {
 	isMainNet,
