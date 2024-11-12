@@ -74,9 +74,18 @@ export interface Notification {
 export const NotificationContext =
 	createContext<NotificationContextType | null>(null);
 
+interface NotificationState {
+	notifications: Notification[];
+}
+
+type NotificationAction =
+	| { type: "ADD_NOTIFICATION"; payload: Notification }
+	| { type: "DELETE_NOTIFICATION"; payload: number }
+	| { type: "CLEAR_NOTIFICATION"; payload: null };
+
 export const notificationReducer = (
-	state: any,
-	action: { type: string; payload: any },
+	state: NotificationState,
+	action: NotificationAction,
 ) => {
 	switch (action.type) {
 		case "ADD_NOTIFICATION":
@@ -98,7 +107,8 @@ export const notificationReducer = (
 				notifications: [],
 			};
 		default:
-			throw new Error(`Unhandled action type: ${action.type}`);
+			// const _exhaustiveCheck: never = action;
+			throw new Error(`Unhandled action type`);
 	}
 };
 
