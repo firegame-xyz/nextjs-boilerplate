@@ -307,10 +307,12 @@ const voucherBalanceAtom = atom<Balance | null>(null);
 const registeredAtom = atom<boolean>(false);
 const squadLoadingAtom = atom<boolean>(false);
 const statePendingAtom = atom<boolean>(false);
+const RPCPendingAtom = atom<boolean>(false);
 const mySquadAtom = atomWithStorage("mySquad", null);
 
 // Export individual atoms for use in other components
 export {
+	RPCPendingAtom,
 	rpcEndpointAtom,
 	randomnessAtom,
 	providerAtom,
