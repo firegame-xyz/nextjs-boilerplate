@@ -123,13 +123,13 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center">
               <SolanaAvatar
                 className="h-20 w-20"
-                address={publicKey?.toString()!}
+                address={publicKey?.toString() ?? ""}
               />
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
                 <span className="text-base-white">
-                  {formatAddress(publicKey?.toString()!, 12, -12)}
+                  {formatAddress(publicKey?.toString() ?? "", 12, -12)}
                 </span>
               </div>
 
@@ -138,7 +138,9 @@ export default function Page() {
                   <span>Exit Rewards Claimed</span>
                   <div className="flex items-center gap-2 text-xs text-base-white">
                     {formatTokenAmount(
-                      formatAmount(playerData?.totalExitRewardsClaimed!)
+                      formatAmount(
+                        playerData?.totalExitRewardsClaimed ?? new anchor.BN(0)
+                      )
                     )}
                   </div>
                 </div>
@@ -154,9 +156,9 @@ export default function Page() {
                 <div className="flex flex-col">
                   <span>My Referral Code</span>
                   <div className="flex items-center gap-2 text-xs text-base-white">
-                    {formatAddress(publicKey?.toString()!)}
+                    {formatAddress(publicKey?.toString() ?? "")}
                     <CopyComponent
-                      address={publicKey?.toString()!}
+                      address={publicKey?.toString() ?? ""}
                       endText="Copied"
                     />
                   </div>
@@ -164,7 +166,7 @@ export default function Page() {
                 <div className="flex flex-col">
                   <span>URL</span>
                   <div className="flex items-center gap-2 text-xs text-base-white">
-                    {formatAddress(currentUrl?.toString()!)}
+                    {formatAddress(currentUrl ?? "")}
                     <CopyComponent address={currentUrl} endText="Copied" />
                   </div>
                 </div>
@@ -179,7 +181,11 @@ export default function Page() {
                   <div className="flex flex-col">
                     <span>Referral</span>
                     <span className="text-xs text-base-white">
-                      {formatAddress(playerData?.referrer.toString()!, 12, -12)}
+                      {formatAddress(
+                        playerData?.referrer.toString() ?? "",
+                        12,
+                        -12
+                      )}
                     </span>
                   </div>
                 )}
