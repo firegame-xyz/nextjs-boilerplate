@@ -58,9 +58,10 @@ export const generateRandomString = (length: number): string => {
 
 export function isValidSolanaAddress(address: string) {
 	try {
-		let pubkey = new anchor.web3.PublicKey(address);
+		const pubkey = new anchor.web3.PublicKey(address);
 		return anchor.web3.PublicKey.isOnCurve(pubkey);
 	} catch (error) {
+		console.log(error);
 		return false;
 	}
 }
@@ -234,6 +235,8 @@ export const formatTokenAmount = (
 ) => {
 	if (!amount) return 0;
 
+	console.log(compact);
+
 	const formattedAmount = Number(amount).toFixed(5);
 	const parsedAmount = parseFloat(formattedAmount);
 
@@ -271,7 +274,7 @@ export const copyToClipboard = (text: string) => {
 			},
 		);
 	} else {
-		let textarea = document.createElement("textarea");
+		const textarea = document.createElement("textarea");
 		textarea.value = text;
 		textarea.style.position = "fixed"; // Prevent scrolling to bottom of page in MS Edge.
 		document.body.appendChild(textarea);
@@ -280,6 +283,7 @@ export const copyToClipboard = (text: string) => {
 		try {
 			return document.execCommand("copy");
 		} catch (err) {
+			console.log(err);
 			return false;
 		} finally {
 			document.body.removeChild(textarea);
