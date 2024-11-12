@@ -1,10 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, {
-	useEffect,
-	useRef,
-	useState,
-	useImperativeHandle,
-} from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle } from "react";
 
 import { clx } from "@/app/utils/helpers";
 
@@ -50,7 +45,9 @@ export const Modal = React.forwardRef<ModalHandles, Props>(function ModalHandle(
 		setTimeout(() => {
 			setIsAnimating(false);
 			setIsOpen(false);
-			redirect && router.back();
+			if (redirect) {
+				router.back();
+			}
 		}, 200);
 	};
 

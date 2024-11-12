@@ -1,6 +1,7 @@
 "use client";
 
 import * as anchor from "@coral-xyz/anchor";
+import { Idl } from "@coral-xyz/anchor";
 import { useAtom } from "jotai";
 import {
 	useWallet,
@@ -25,20 +26,10 @@ import Dropdown from "./widgets/Dropdown";
 import Nav from "./widgets/Nav";
 import { VoucherBalance } from "./widgets/VoucherBalance";
 
-interface TelegramUser {
-	id: number;
-	first_name: string;
-	last_name?: string;
-	username?: string;
-	photo_url?: string;
-	auth_date: number;
-	hash: string;
-}
-
 export default function Header() {
 	const {} = useGlobal();
 	const { connection } = useConnection();
-	const { publicKey, connected, signMessage } = useWallet();
+	const { connected } = useWallet();
 	const wallet = useAnchorWallet();
 
 	// const [playerRound] = useAtom(playerRoundAtom);
@@ -86,7 +77,7 @@ export default function Header() {
 
 	useEffect(() => {
 		const provider = new anchor.AnchorProvider(connection, wallet!, {});
-		const gameIdlProgram = new anchor.Program(gameIdl as any, provider);
+		const gameIdlProgram = new anchor.Program(gameIdl as Idl, provider);
 		// const cashierIdlProgram = new anchor.Program(cashierIdl as any, provider);
 
 		setProvider(provider);
