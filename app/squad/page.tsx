@@ -3,23 +3,11 @@
 import * as anchor from "@coral-xyz/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
-import {
-	//   ButtonDefault,
-	ButtonPrimary,
-	ButtonTertiary,
-} from "@/app/components/buttons/Button";
+import { ButtonPrimary, ButtonTertiary } from "@/app/components/buttons/Button";
 
-import {
-	clx,
-	//   discountRate,
-	formatAddress,
-	//   formatAmount,
-	formatTokenAmount,
-	//   isValidSolanaAddress,
-	//   u32ToToLEBuffer,
-} from "@/app/utils/helpers";
+import { clx, formatAddress, formatTokenAmount } from "@/app/utils/helpers";
 
 import { SolanaAvatar } from "../components/widgets/SolanaAvatar";
 import { useAtom } from "jotai";
@@ -30,21 +18,22 @@ import {
 	programAtom,
 	providerAtom,
 	registeredAtom,
-	SquadAll,
+	squadListAtom,
 } from "@/app/state";
 import useTransaction from "../hooks/useTransaction";
 
 export default function Page() {
 	const [playData] = useAtom(playerDataAtom);
 	const [provider] = useAtom(providerAtom);
+	const [squadList] = useAtom(squadListAtom);
 	const [program] = useAtom(programAtom);
 	const [game] = useAtom(gameAtom);
 	const [registered] = useAtom(registeredAtom);
 	const [balance] = useAtom(balanceAtom);
 	const { publicKey } = useWallet();
-	//   const [setError] = useState<string | null>(null);
+	const [error, setError] = useState<string | null>(null);
 	const [searchValue, setSearchValue] = useState<string>("");
-	const [squadAll, setSquadAll] = useState<SquadAll[] | null>(null);
+	// const [squadAll, setSquadAll] = useState<SquadAll[] | null>(null);
 	const [pending] = useState<boolean>(false);
 	const { executeTransaction } = useTransaction();
 
@@ -206,16 +195,19 @@ export default function Page() {
 
 	const changeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
+
 		if (newValue === "") {
 			setSearchValue("");
+			setError("");
+			return;
 		}
 
 		const allowedPattern = /^[a-zA-Z0-9]+$/;
 
 		if (!allowedPattern.test(newValue)) {
-			//   setError(`Only letters And numbers are allowed.`);
+			setError("Only letters and numbers are allowed.");
 		} else {
-			//   setError(null);
+			setError("");
 			setSearchValue(newValue);
 		}
 	};
@@ -228,34 +220,33 @@ export default function Page() {
 		// });
 	};
 
-	const fetchSquadAll = useCallback(async () => {
-		if (!program) return;
-		try {
-			const data = await program.account.squad.all();
-			setSquadAll(data);
-		} catch (err) {
-			console.error("Error fetching squad all:", err);
-		} finally {
-		}
-	}, [program]);
+	// const fetchSquadAll = useCallback(async () => {
+	// 	if (!program) return;
+	// 	try {
+	// 		const data = await program.account.squad.all();
+	// 		setSquadAll(data);
+	// 	} catch (err) {
+	// 		console.error("Error fetching squad all:", err);
+	// 	} finally {
+	// 	}
+	// }, [program]);
 
-	useEffect(() => {
-		if (!program) return;
-		fetchSquadAll();
-		const listener = program.addEventListener(
-			"transferEvent",
-			(event, slot) => {
-				if (event.eventType.createSquad) {
-					fetchSquadAll();
-				}
-				console.log("New event:", event, "at slot:", slot);
-			},
-		);
+	// useEffect(() => {
+	// 	if (!program) return;
+	// 	fetchSquadAll();
+	// 	const listener = program.addEventListener(
+	// 		"transferEvent",
+	// 		(event, slot) => {
+	// 			if (event.eventType.createSquad) {
+	// 				fetchSquadAll();
+	// 			}
+	// 		},
+	// 	);
 
-		return () => {
-			program.removeEventListener(listener).catch(console.error);
-		};
-	}, [program, playData, fetchSquadAll]);
+	// 	return () => {
+	// 		program.removeEventListener(listener).catch(console.error);
+	// 	};
+	// }, [program, playData, fetchSquadAll]);
 
 	// useEffect(() => {
 	//   if (searchValue) return;
@@ -329,8 +320,8 @@ export default function Page() {
 							{!isCreateSquad && <span></span>}
 						</span>
 					</div>
-					{squadAll && squadAll.length > 0 ? (
-						squadAll?.map(
+					{squadList && squadList.length > 0 ? (
+						squadList?.map(
 							(item, index) =>
 								item.account.captain.toString() !==
 									"11111111111111111111111111111111" && (
