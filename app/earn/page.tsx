@@ -1,6 +1,6 @@
 "use client";
 
-import * as anchor from "@coral-xyz/anchor";
+// import * as anchor from "@coral-xyz/anchor";
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { ButtonPrimary, ButtonTertiary } from "@/app/components/buttons/Button";
@@ -146,7 +146,8 @@ export default function DepositPage() {
 								!amount ||
 								parseFloat(amount) <= 0 ||
 								parseFloat(amount) % 1000000 !== 0 ||
-								parseFloat(amount) > parseFloat(balance?.amount.toString()!) ||
+								parseFloat(amount) >
+									Number(balance?.amount?.toString() || "0") ||
 								isTransactionInProgress
 							}
 							className='w-full text-sm rounded-lg'
