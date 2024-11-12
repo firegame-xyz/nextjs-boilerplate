@@ -28,10 +28,10 @@ import {
 	findPeriodPDA,
 	findPlayerDataPDA,
 	// findPlayerRoundPDA,
-	findVoucherMintPDA,
+	// findVoucherMintPDA,
 	// findPeriodPDA,
 } from "@/app/config/pda";
-import { MINT_PUBLICKEY } from "@/app/config/token";
+// import { MINT_PUBLICKEY } from "@/app/config/token";
 
 /**
  * Custom hook for managing global state and interactions with the Solana blockchain
@@ -39,23 +39,23 @@ import { MINT_PUBLICKEY } from "@/app/config/token";
  */
 export function useGlobal() {
 	const { connection } = useConnection();
-	const { publicKey, connected, disconnecting } = useWallet();
+	const { publicKey, disconnecting } = useWallet();
 
 	const [program, setProgram] = useAtom(programAtom);
 	const [game, setGame] = useAtom(gameAtom);
 	const [config, setConfig] = useAtom(configAtom);
 	const [round, setRound] = useAtom(roundAtom);
-	const [period, setPeriod] = useAtom(periodAtom);
-	const [lastPeriod, setLastPeriod] = useAtom(lastPeriodAtom);
+	const [, setPeriod] = useAtom(periodAtom);
+	const [, setLastPeriod] = useAtom(lastPeriodAtom);
 	const [playerData, setPlayerData] = useAtom(playerDataAtom);
-	const [playerPDA, setPlayerPDA] = useAtom(playerPDAAtom);
-	// const [playerRound, setPlayerRound] = useAtom(playerRoundAtom);
-	const [squad, setSquad] = useAtom(squadAtom);
-	const [balance, setBalance] = useAtom(balanceAtom);
-	const [voucherAccount, setVoucherAccount] = useAtom(voucherAccountAtom);
-	const [voucherBalance, setVoucherBalance] = useAtom(voucherBalanceAtom);
-	const [registered, setRegistered] = useAtom(registeredAtom);
-	const [squadLoading, setSquadLoading] = useAtom(squadLoadingAtom);
+	const [, setPlayerPDA] = useAtom(playerPDAAtom);
+	// const [, setPlayerRound] = useAtom(playerRoundAtom);
+	const [, setSquad] = useAtom(squadAtom);
+	const [, setBalance] = useAtom(balanceAtom);
+	const [, setVoucherAccount] = useAtom(voucherAccountAtom);
+	const [, setVoucherBalance] = useAtom(voucherBalanceAtom);
+	const [, setRegistered] = useAtom(registeredAtom);
+	const [, setSquadLoading] = useAtom(squadLoadingAtom);
 
 	const [
 		tokenMintAccountAddress,
@@ -117,7 +117,7 @@ export function useGlobal() {
 			const periodData = await program.account.period.fetch(
 				round.currentPeriod,
 			);
-			setPeriod(periodData);
+			// setPeriod(periodData);
 
 			if (periodData.periodNumber > 1) {
 				const prevPeriodPromises = Array.from(
@@ -126,7 +126,7 @@ export function useGlobal() {
 						try {
 							const currentPeriodNumber = periodData.periodNumber - 1 - i;
 							const prevPeriodPDA = findPeriodPDA(
-								game?.currentRound!,
+								game?.currentRound ?? new anchor.web3.PublicKey(0),
 								currentPeriodNumber,
 								program.programId,
 							);
@@ -135,6 +135,7 @@ export function useGlobal() {
 							);
 							return prevPeriodData;
 						} catch (error) {
+							console.log(error);
 							return null;
 						}
 					},
@@ -292,6 +293,7 @@ export function useGlobal() {
 							);
 							return prevPeriodData;
 						} catch (error) {
+							console.log(error);
 							return null;
 						}
 					},
