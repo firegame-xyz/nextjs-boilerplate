@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Modal, ModalHandles } from "@/app/components/modals/Modal";
 import { RpcModalBody } from "@/app/components/modals/rpc/RpcModalBody";
