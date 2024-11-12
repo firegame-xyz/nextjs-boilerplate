@@ -40,7 +40,7 @@ type Game = {
 	defaultSquad: anchor.web3.PublicKey;
 };
 
-type Round = {
+export type Round = {
 	roundNumber: number;
 	currentPeriod: anchor.web3.PublicKey;
 	roundVault: anchor.web3.PublicKey;
@@ -159,29 +159,29 @@ export type Squad = {
 	createdAt: anchor.BN;
 };
 
-// type Voucher = {
-//   voucherMint: anchor.web3.PublicKey;
-//   voucherVault: anchor.web3.PublicKey;
-//   mintedAmount: anchor.BN;
-//   bump: number;
-// };
+type Voucher = {
+	voucherMint: anchor.web3.PublicKey;
+	voucherVault: anchor.web3.PublicKey;
+	mintedAmount: anchor.BN;
+	bump: number;
+};
 
-// type Pool = {
-//   /// Token mint address
-//   tokenMint: anchor.web3.PublicKey;
+type Pool = {
+	/// Token mint address
+	tokenMint: anchor.web3.PublicKey;
 
-//   /// Pool vault address
-//   poolVault: anchor.web3.PublicKey;
+	/// Pool vault address
+	poolVault: anchor.web3.PublicKey;
 
-//   /// Current balance of the pool
-//   balance: anchor.BN;
+	/// Current balance of the pool
+	balance: anchor.BN;
 
-//   /// Total amount of resources mined
-//   totalMinedAmount: anchor.BN;
+	/// Total amount of resources mined
+	totalMinedAmount: anchor.BN;
 
-//   /// Bump seed for PDA derivation
-//   bump: number;
-// };
+	/// Bump seed for PDA derivation
+	bump: number;
+};
 
 export type Order = {
 	depositAmount: anchor.BN;
@@ -197,9 +197,9 @@ export type Order = {
 	bump: number;
 };
 
-// type Name = {
-//   owner: anchor.web3.PublicKey | null;
-// };
+type Name = {
+	owner: anchor.web3.PublicKey | null;
+};
 
 type Balance = {
 	valueAmount: anchor.BN;
@@ -297,6 +297,7 @@ const roundAtom = atom<Round | null>(null);
 const playerDataAtom = atom<PlayerData | null>(null);
 const playerPDAAtom = atom<anchor.web3.PublicKey | null>(null);
 const squadAtom = atom<Squad | null>(null);
+const squadListAtom = atom<SquadAll[] | []>([]);
 const periodAtom = atom<Period | null>(null);
 const lastPeriodAtom = atom<Period[] | []>([]);
 const balanceAtom = atom<Balance | null>(null);
@@ -319,6 +320,7 @@ export {
 	playerDataAtom,
 	playerPDAAtom,
 	squadAtom,
+	squadListAtom,
 	periodAtom,
 	lastPeriodAtom,
 	balanceAtom,

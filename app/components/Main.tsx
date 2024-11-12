@@ -10,11 +10,7 @@ import React, {
 import { useAtom } from "jotai";
 import { useWallet } from "@solana/wallet-adapter-react";
 
-import {
-	playerDataAtom,
-	registeredAtom,
-	roundAtom,
-} from "@/app/state";
+import { playerDataAtom, registeredAtom, roundAtom } from "@/app/state";
 import { BoxBalance } from "@/app/components/widgets/BoxBalance";
 import { Timer } from "@/app/components/Timer";
 import { clx, formatAmount, formatTokenAmount } from "@/app/utils/helpers";
@@ -62,9 +58,8 @@ const MainComponent: React.FC = () => {
 			.mul(timeDiff);
 
 		// Add to existing pending rewards
-		const totalPendingRewards = playerData.pendingExitRewards.add(
-			pendingExitRewards,
-		);
+		const totalPendingRewards =
+			playerData.pendingExitRewards.add(pendingExitRewards);
 
 		// Cap at max rewards (ore_amount * price)
 		const maxExitRewards = playerData.oreAmount.mul(PRICE_PER_ORE);
@@ -207,19 +202,6 @@ const MainComponent: React.FC = () => {
 				</span>
 			</div>
 			{tabActive === 0 ? MemoizedTransactionsList : MemoizedEndList}
-
-			{/* <Portal>
-        <div
-          className={clx(
-            "wrap-modal-base",
-            isTimerComplete && round?.isOver === false && "block"
-          )}
-        >
-          <div className="flex h-svh items-center justify-center">
-            <div className="text-xl">In Settlement</div>
-          </div>
-        </div>
-      </Portal> */}
 		</Suspense>
 	);
 };

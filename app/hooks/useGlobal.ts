@@ -1,6 +1,11 @@
 import * as anchor from "@coral-xyz/anchor";
+import { SystemProgram } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+	useAnchorWallet,
+	useConnection,
+	useWallet,
+} from "@solana/wallet-adapter-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useAtom } from "jotai";
 
@@ -13,6 +18,7 @@ import {
 	playerDataAtom,
 	// playerRoundAtom,
 	squadAtom,
+	squadListAtom,
 	balanceAtom,
 	voucherAccountAtom,
 	voucherBalanceAtom,
@@ -20,6 +26,7 @@ import {
 	squadLoadingAtom,
 	playerPDAAtom,
 	lastPeriodAtom,
+	providerAtom,
 } from "@/app/state";
 
 import {
@@ -27,44 +34,41 @@ import {
 	findGamePDA,
 	findPeriodPDA,
 	findPlayerDataPDA,
-	// findPlayerRoundPDA,
-	// findVoucherMintPDA,
 	// findPeriodPDA,
 } from "@/app/config/pda";
-// import { MINT_PUBLICKEY } from "@/app/config/token";
-
+import gameIdl from "@/idl/game.json";
+import { Game as GameIdl } from "@/idl/game";
 /**
  * Custom hook for managing global state and interactions with the Solana blockchain
  * @returns An object containing various functions and state for game interactions
  */
 export function useGlobal() {
 	const { connection } = useConnection();
-	const { publicKey, disconnecting } = useWallet();
+	const wallet = useAnchorWallet();
+	const { publicKey, connected, disconnecting } = useWallet();
 
+	const [provider, setProvider] = useAtom(providerAtom);
 	const [program, setProgram] = useAtom(programAtom);
 	const [game, setGame] = useAtom(gameAtom);
 	const [config, setConfig] = useAtom(configAtom);
 	const [round, setRound] = useAtom(roundAtom);
-	const [, setPeriod] = useAtom(periodAtom);
-	const [, setLastPeriod] = useAtom(lastPeriodAtom);
+	const [period, setPeriod] = useAtom(periodAtom);
+	const [lastPeriod, setLastPeriod] = useAtom(lastPeriodAtom);
 	const [playerData, setPlayerData] = useAtom(playerDataAtom);
-	const [, setPlayerPDA] = useAtom(playerPDAAtom);
-	// const [, setPlayerRound] = useAtom(playerRoundAtom);
-	const [, setSquad] = useAtom(squadAtom);
-	const [, setBalance] = useAtom(balanceAtom);
-	const [, setVoucherAccount] = useAtom(voucherAccountAtom);
-	const [, setVoucherBalance] = useAtom(voucherBalanceAtom);
-	const [, setRegistered] = useAtom(registeredAtom);
-	const [, setSquadLoading] = useAtom(squadLoadingAtom);
+	const [playerPDA, setPlayerPDA] = useAtom(playerPDAAtom);
+	// const [playerRound, setPlayerRound] = useAtom(playerRoundAtom);
+	const [squad, setSquad] = useAtom(squadAtom);
+	const [squadList, setSquadList] = useAtom(squadListAtom);
+	const [balance, setBalance] = useAtom(balanceAtom);
+	const [voucherAccount, setVoucherAccount] = useAtom(voucherAccountAtom);
+	const [voucherBalance, setVoucherBalance] = useAtom(voucherBalanceAtom);
+	const [registered, setRegistered] = useAtom(registeredAtom);
+	const [squadLoading, setSquadLoading] = useAtom(squadLoadingAtom);
 
-	const [
-		tokenMintAccountAddress,
-		setTokenMintAccountAddress,
-	] = useState<anchor.web3.PublicKey | null>(null);
-	const [
-		voucherMintAccountAddress,
-		setVoucherMintAccountAddress,
-	] = useState<anchor.web3.PublicKey | null>(null);
+	const [tokenMintAccountAddress, setTokenMintAccountAddress] =
+		useState<anchor.web3.PublicKey | null>(null);
+	const [voucherMintAccountAddress, setVoucherMintAccountAddress] =
+		useState<anchor.web3.PublicKey | null>(null);
 
 	/**
 	 * Fetches the current config state
@@ -117,7 +121,7 @@ export function useGlobal() {
 			const periodData = await program.account.period.fetch(
 				round.currentPeriod,
 			);
-			// setPeriod(periodData);
+			setPeriod(periodData);
 
 			if (periodData.periodNumber > 1) {
 				const prevPeriodPromises = Array.from(
@@ -126,7 +130,7 @@ export function useGlobal() {
 						try {
 							const currentPeriodNumber = periodData.periodNumber - 1 - i;
 							const prevPeriodPDA = findPeriodPDA(
-								game?.currentRound ?? new anchor.web3.PublicKey(0),
+								game!.currentRound,
 								currentPeriodNumber,
 								program.programId,
 							);
@@ -135,7 +139,6 @@ export function useGlobal() {
 							);
 							return prevPeriodData;
 						} catch (error) {
-							console.log(error);
 							return null;
 						}
 					},
@@ -186,6 +189,19 @@ export function useGlobal() {
 			setSquadLoading(false);
 		}
 	}, [program, playerData, setSquad, setSquadLoading]);
+
+	/**
+	 * Fetches the player's squad data
+	 */
+	const fetchSquadList = useCallback(async () => {
+		if (!program) return;
+		try {
+			const squadListData = await program.account.squad.all();
+			setSquadList(squadListData);
+		} catch (err) {
+			console.error("Error fetching squad list:", err);
+		}
+	}, [program, setSquadList]);
 
 	/**
 	 * Fetches the token account balance
@@ -293,7 +309,6 @@ export function useGlobal() {
 							);
 							return prevPeriodData;
 						} catch (error) {
-							console.log(error);
 							return null;
 						}
 					},
@@ -382,6 +397,13 @@ export function useGlobal() {
 					setSquadLoading(false);
 				}
 			}
+
+			try {
+				const squadListData = await program.account.squad.all();
+				setSquadList(squadListData);
+			} catch (err) {
+				console.error("Error fetching squad list:", err);
+			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
@@ -389,9 +411,9 @@ export function useGlobal() {
 
 	// Set up config listener
 	useEffect(() => {
-		if (!connection || !program) return;
-
-		const configPDA = findConfigPDA(program.programId);
+		const configPDA = findConfigPDA(
+			program!.programId ?? SystemProgram.programId,
+		);
 		const configListener = connection.onAccountChange(configPDA, fetchConfig);
 
 		return () => {
@@ -401,9 +423,7 @@ export function useGlobal() {
 
 	// Set up game listener
 	useEffect(() => {
-		if (!connection || !program) return;
-
-		const gamePDA = findGamePDA(program.programId);
+		const gamePDA = findGamePDA(program!.programId ?? SystemProgram.programId);
 		const gameListener = connection.onAccountChange(gamePDA, fetchGame);
 
 		return () => {
@@ -413,9 +433,10 @@ export function useGlobal() {
 
 	// Set up player data and balance listeners
 	useEffect(() => {
-		if (!connection || !publicKey || !program) return;
-
-		const playerDataPDA = findPlayerDataPDA(publicKey, program.programId);
+		const playerDataPDA = findPlayerDataPDA(
+			publicKey! ?? SystemProgram.programId,
+			program!.programId ?? SystemProgram.programId,
+		);
 		const playerDataListener = connection.onAccountChange(
 			playerDataPDA,
 			fetchPlayerData,
@@ -428,10 +449,8 @@ export function useGlobal() {
 
 	// Set up token balance listener
 	useEffect(() => {
-		if (!connection || !tokenMintAccountAddress) return;
-
 		const tokenAccountBalanceListener = connection.onAccountChange(
-			tokenMintAccountAddress,
+			tokenMintAccountAddress! ?? SystemProgram.programId,
 			getTokenAccountBalance,
 		);
 
@@ -442,10 +461,8 @@ export function useGlobal() {
 
 	// Set up voucher balance listener
 	useEffect(() => {
-		if (!connection || !voucherMintAccountAddress) return;
-
 		const voucherMintAccountListener = connection.onAccountChange(
-			voucherMintAccountAddress,
+			voucherMintAccountAddress! ?? SystemProgram.programId,
 			getVoucherAccountBalance,
 		);
 
@@ -456,10 +473,8 @@ export function useGlobal() {
 
 	// Set up round listener
 	useEffect(() => {
-		if (!connection || !program || !game) return;
-
 		const roundListener = connection.onAccountChange(
-			game.currentRound,
+			game!.currentRound ?? SystemProgram.programId,
 			fetchRound,
 		);
 
@@ -470,10 +485,8 @@ export function useGlobal() {
 
 	// Set up squad listener
 	useEffect(() => {
-		if (!connection || !program || !playerData) return;
-
 		const squadListener = connection.onAccountChange(
-			playerData.squad,
+			playerData!.squad ?? SystemProgram.programId,
 			fetchSquad,
 		);
 
@@ -482,12 +495,27 @@ export function useGlobal() {
 		};
 	}, [connection, program, playerData, fetchSquad]);
 
+	// Set up squad list listener
+	useEffect(() => {
+		const squadListListener = program?.addEventListener(
+			"transferEvent",
+			(event, slot) => {
+				if (event.eventType.createSquad) {
+					fetchSquadList();
+				}
+			},
+		);
+
+		return () => {
+			if (squadListListener)
+				program?.removeEventListener(squadListListener).catch(console.error);
+		};
+	}, [connection, program, fetchSquadList]);
+
 	// Set up period listener
 	useEffect(() => {
-		if (!connection || !program || !round) return;
-
 		const periodListener = connection.onAccountChange(
-			round?.currentPeriod,
+			round!.currentPeriod ?? SystemProgram.programId,
 			fetchPeriod,
 		);
 
@@ -505,11 +533,50 @@ export function useGlobal() {
 	// 	if (playerData) fetchSquad();
 	// }, [playerData, fetchSquad]);
 
+	const reset = useCallback(async () => {
+		await Promise.resolve().then(() => {
+			setConfig(null);
+			setGame(null);
+			setRound(null);
+			setPeriod(null);
+			setLastPeriod([]);
+			setPlayerData(null);
+			setSquad(null);
+			setBalance(null);
+			setVoucherBalance(null);
+			setRegistered(false);
+			setSquadLoading(false);
+			setSquadList([]);
+		});
+	}, []);
+
 	// Fetch all data on initial load and when wallet connects
 	useEffect(() => {
 		if (!connection || !program) return;
 		fetchAllData();
 	}, [publicKey, connection, program, fetchAllData]);
+
+	// Initialize program and provider when connection is available
+	useEffect(() => {
+		if (!connection) return;
+
+		const provider = new anchor.AnchorProvider(connection, wallet!, {});
+		let gameIdlProgram;
+
+		if (connection.rpcEndpoint.includes("devnet")) {
+			gameIdlProgram = new anchor.Program(gameIdl as GameIdl, provider);
+		} else {
+			gameIdlProgram = null;
+		}
+
+		setProvider(provider);
+		setProgram(gameIdlProgram);
+	}, [connection, wallet]);
+
+	useEffect(() => {
+		if (program) return;
+		reset();
+	}, [program, reset]);
 
 	// Clean up on disconnect
 	useEffect(() => {
@@ -530,18 +597,12 @@ export function useGlobal() {
 	return useMemo(
 		() => ({
 			fetchPlayerData,
-			fetchGame,
-			fetchRound,
-			// fetchPlayerRound,
 			fetchSquad,
 			getTokenAccountBalance,
 			getVoucherAccountBalance,
 		}),
 		[
 			fetchPlayerData,
-			fetchGame,
-			fetchRound,
-			// fetchPlayerRound,
 			fetchSquad,
 			getTokenAccountBalance,
 			getVoucherAccountBalance,

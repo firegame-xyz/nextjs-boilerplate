@@ -233,14 +233,15 @@ export const formatTokenAmount = (
 	compact = true,
 	options = {},
 ) => {
-	if (!amount) return 0;
-
-	console.log(compact);
+	if (new anchor.BN(amount).isZero()) {
+		return 0;
+	}
 
 	const formattedAmount = Number(amount).toFixed(5);
 	const parsedAmount = parseFloat(formattedAmount);
 
 	return Intl.NumberFormat("en-US", {
+		notation: compact && parsedAmount > 10000000 ? "compact" : "standard",
 		minimumFractionDigits: minimumFractionDigits ?? 2,
 		maximumFractionDigits: 5,
 		...options,
@@ -264,11 +265,11 @@ export const copyToClipboard = (text: string) => {
 	if (navigator.clipboard && window.isSecureContext) {
 		// Navigator Clipboard API method'
 		return navigator.clipboard.writeText(text).then(
-			function() {
+			function () {
 				/* clipboard successfully set */
 				return true;
 			},
-			function() {
+			function () {
 				/* clipboard write failed */
 				return false;
 			},

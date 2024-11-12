@@ -43,6 +43,33 @@ const usePurchaseCalculations = (
 	const [usedTokens, setUsedTokens] = useState([0, 0]);
 	const [value, setValue] = useState("");
 
+	// Calculate used tokens whenever relevant values change
+	const calculateUsedTokens = useCallback(
+		(inputValue: string) => {
+			if (!inputValue) {
+				setUsedTokens([0, 0]);
+				return;
+			}
+
+			const requiredTotal = new anchor.BN(inputValue).mul(new anchor.BN(1000));
+			const aToken = new anchor.BN(voucherBalance?.amount || 0);
+			const bToken = new anchor.BN(balance?.amount || 0);
+
+			const usedATokens = anchor.BN.min(aToken, requiredTotal);
+			let usedBTokens = new anchor.BN(0);
+
+			if (usedATokens.lt(requiredTotal)) {
+				usedBTokens = requiredTotal.sub(usedATokens);
+				if (usedBTokens.gt(bToken)) {
+					usedBTokens = bToken;
+				}
+			}
+
+			setUsedTokens([usedATokens.toNumber(), usedBTokens.toNumber()]);
+		},
+		[balance, voucherBalance],
+	);
+
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const newValue = e.target.value;
@@ -50,6 +77,7 @@ const usePurchaseCalculations = (
 			if (newValue === "") {
 				setError(false);
 				setValue("");
+				calculateUsedTokens("");
 				return;
 			}
 
@@ -63,33 +91,11 @@ const usePurchaseCalculations = (
 
 				setError(scoredValue.gt(total));
 				setValue(newValue);
+				calculateUsedTokens(newValue);
 			}
 		},
-		[balance, num, squadScore, voucherBalance],
+		[balance, calculateUsedTokens, num, squadScore, voucherBalance],
 	);
-
-	useEffect(() => {
-		if (!value) {
-			setUsedTokens([0, 0]);
-			return;
-		}
-
-		const requiredTotal = new anchor.BN(value).mul(new anchor.BN(1000));
-		const aToken = new anchor.BN(voucherBalance?.amount || 0);
-		const bToken = new anchor.BN(balance?.amount || 0);
-
-		const usedATokens = anchor.BN.min(aToken, requiredTotal);
-		let usedBTokens = new anchor.BN(0);
-
-		if (usedATokens.lt(requiredTotal)) {
-			usedBTokens = requiredTotal.sub(usedATokens);
-			if (usedBTokens.gt(bToken)) {
-				usedBTokens = bToken;
-			}
-		}
-
-		setUsedTokens([usedATokens.toNumber(), usedBTokens.toNumber()]);
-	}, [balance, value, voucherBalance]);
 
 	return { error, handleChange, setValue, usedTokens, value };
 };

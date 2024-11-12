@@ -1,90 +1,16 @@
 "use client";
 
-import * as anchor from "@coral-xyz/anchor";
-import { useAtom } from "jotai";
-import {
-	useWallet,
-	useAnchorWallet,
-	useConnection,
-} from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
-import { useEffect } from "react";
-
-import {
-	// playerRoundAtom,
-	programAtom,
-	providerAtom,
-} from "@/app/state";
-
 import { TokenBalance } from "@/app/components/widgets/TokenBalance";
-import { useGlobal } from "@/app/hooks/useGlobal";
-// import cashierIdl from "@/idl/cashier.json";
-import gameIdl from "@/idl/game.json";
-import { Game as GameIdl } from "@/idl/game";
-
 import Dropdown from "./widgets/Dropdown";
 import Nav from "./widgets/Nav";
 import { VoucherBalance } from "./widgets/VoucherBalance";
+import { useGlobal } from "../hooks/useGlobal";
 
 export default function Header() {
-	const {} = useGlobal();
-	const { connection } = useConnection();
 	const { connected } = useWallet();
-	const wallet = useAnchorWallet();
-
-	// const [playerRound] = useAtom(playerRoundAtom);
-	const [, setProgram] = useAtom(programAtom);
-	const [, setProvider] = useAtom(providerAtom);
-
-	// const [signature, setSignature] = useState<string | null>(null);
-	// const [user, setUser] = useState<TelegramUser | null>(null);
-
-	// const handleTelegramResponse = async (telegramUser: TelegramUser) => {
-	// 	const response = await fetch("/api/telegram-auth", {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify(telegramUser),
-	// 	});
-
-	// 	if (response.ok) {
-	// 		setUser(telegramUser);
-	// 	} else {
-	// 		console.error("Telegram authentication failed");
-	// 	}
-	// };
-
-	// const onSignMessage = useCallback(async () => {
-	// 	if (!publicKey || !signMessage) {
-	// 		console.log(
-	// 			"Wallet not connected or does not support signing functionality.",
-	// 		);
-	// 		return;
-	// 	}
-
-	// 	try {
-	// 		const message = new TextEncoder().encode("Hello, Solana!");
-	// 		const signedMessage = await signMessage(message);
-	// 		console.log(publicKey.toString());
-	// 		console.log(Buffer.from(signedMessage).toString("base64"));
-	// 		console.log(signedMessage);
-	// 		setSignature(Buffer.from(signedMessage).toString("base64"));
-	// 	} catch (error) {
-	// 		console.error("Signature failed:", error);
-	// 	}
-	// }, [publicKey, signMessage]);
-
-	useEffect(() => {
-		if (!wallet) return;
-
-		const provider = new anchor.AnchorProvider(connection, wallet, {});
-		const gameIdlProgram = new anchor.Program(gameIdl as GameIdl, provider);
-		// const cashierIdlProgram = new anchor.Program(cashierIdl as any, provider);
-
-		setProvider(provider);
-		setProgram(gameIdlProgram);
-	}, [wallet, connection]);
+	const {} = useGlobal();
 
 	return (
 		<div className='flex justify-between border-b-2 border-b-warning p-5 sm:justify-start'>
