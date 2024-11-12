@@ -35,25 +35,29 @@ export const Notification: React.FC<Props> = ({
 	const notification = useNotification();
 	const timer = useRef<NodeJS.Timeout | null>(null);
 
-	const dismiss = () => {
+	const dismiss = useRef(() => {
 		setDismissed(true);
 		setTimeout(() => {
 			notification.remove(id);
 		}, 300);
-	};
+	}).current;
 
 	useEffect(() => {
 		timer.current = setTimeout(() => {
 			dismiss();
 		}, liveTime);
 		return () => {
-			clearTimeout(timer.current);
+			if (timer.current) {
+				clearTimeout(timer.current);
+			}
 		};
-	}, []);
+	}, [liveTime, dismiss]);
 
 	const handleMouseEnter = () => {
 		if (progressRef.current !== null) {
-			clearTimeout(timer.current);
+			if (timer.current) {
+				clearTimeout(timer.current);
+			}
 			progressRef.current.style.animationPlayState = "paused";
 		}
 	};

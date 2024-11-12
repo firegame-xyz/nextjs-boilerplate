@@ -1,7 +1,6 @@
 "use client";
 
 import * as anchor from "@coral-xyz/anchor";
-import { Idl } from "@coral-xyz/anchor";
 import { useAtom } from "jotai";
 import {
 	useWallet,
@@ -21,6 +20,7 @@ import { TokenBalance } from "@/app/components/widgets/TokenBalance";
 import { useGlobal } from "@/app/hooks/useGlobal";
 // import cashierIdl from "@/idl/cashier.json";
 import gameIdl from "@/idl/game.json";
+import { Game as GameIdl } from "@/idl/game";
 
 import Dropdown from "./widgets/Dropdown";
 import Nav from "./widgets/Nav";
@@ -76,8 +76,10 @@ export default function Header() {
 	// }, [publicKey, signMessage]);
 
 	useEffect(() => {
-		const provider = new anchor.AnchorProvider(connection, wallet!, {});
-		const gameIdlProgram = new anchor.Program(gameIdl as Idl, provider);
+		if (!wallet) return;
+
+		const provider = new anchor.AnchorProvider(connection, wallet, {});
+		const gameIdlProgram = new anchor.Program(gameIdl as GameIdl, provider);
 		// const cashierIdlProgram = new anchor.Program(cashierIdl as any, provider);
 
 		setProvider(provider);
