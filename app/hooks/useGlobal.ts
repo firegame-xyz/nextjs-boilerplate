@@ -120,7 +120,20 @@ export function useGlobal() {
 			const periodData = await program.account.period.fetch(
 				round.currentPeriod,
 			);
-			setPeriod(periodData);
+
+			const accounts = await Promise.all(
+				periodData.topSquads.map(async (item) => {
+					const squadInfo = await program.account.squad.fetch(item.squad);
+					return {
+						...item,
+						info: squadInfo,
+					};
+				}),
+			);
+			setPeriod({
+				...periodData,
+				topSquads: accounts,
+			});
 
 			if (periodData.periodNumber > 1) {
 				const prevPeriodPromises = Array.from(
@@ -128,31 +141,47 @@ export function useGlobal() {
 					async (_, i) => {
 						try {
 							const currentPeriodNumber = periodData.periodNumber - 1 - i;
+							const currentRound = game
+								? game.currentRound
+								: SystemProgram.programId;
 							const prevPeriodPDA = findPeriodPDA(
-								game!.currentRound,
+								currentRound,
 								currentPeriodNumber,
 								program.programId,
 							);
 							const prevPeriodData = await program.account.period.fetch(
 								prevPeriodPDA,
 							);
-							return prevPeriodData;
+							const accounts = await Promise.all(
+								prevPeriodData.topSquads.map(async (item) => {
+									const squadInfo = await program.account.squad.fetch(
+										item.squad,
+									);
+									return {
+										...item,
+										info: squadInfo,
+									};
+								}),
+							);
+							return {
+								...prevPeriodData,
+								topSquads: accounts,
+							};
 						} catch (error) {
 							return null;
 						}
 					},
 				);
 				const allPeriods = await Promise.all(prevPeriodPromises);
-				// 获取前两个非null的周期数据
 				const previousPeriods = allPeriods
 					.filter((period) => period !== null)
 					.slice(0, 2);
-				setLastPeriod(previousPeriods); // 注意：需要修改 lastPeriod 的类型为数组
+				setLastPeriod(previousPeriods);
 			}
 		} catch (error) {
 			console.error("Error fetching period:", error);
 		}
-	}, [program, round, game, setPeriod]);
+	}, [program, round, game, setPeriod, setLastPeriod]);
 
 	/**
 	 * Fetches the player's data
@@ -289,24 +318,54 @@ export function useGlobal() {
 			const periodData = await program.account.period.fetch(
 				roundData.currentPeriod,
 			);
-			setPeriod(periodData);
 
-			// Handle previous periods
+			const accounts = await Promise.all(
+				periodData.topSquads.map(async (item) => {
+					const squadInfo = await program.account.squad.fetch(item.squad);
+					return {
+						...item,
+						info: squadInfo,
+					};
+				}),
+			);
+
+			setPeriod({
+				...periodData,
+				topSquads: accounts,
+			});
+
 			if (periodData.periodNumber > 1) {
 				const prevPeriodPromises = Array.from(
 					{ length: periodData.periodNumber },
 					async (_, i) => {
 						try {
 							const currentPeriodNumber = periodData.periodNumber - 1 - i;
+							const currentRound = game
+								? game.currentRound
+								: SystemProgram.programId;
 							const prevPeriodPDA = findPeriodPDA(
-								gameData.currentRound,
+								currentRound,
 								currentPeriodNumber,
 								program.programId,
 							);
 							const prevPeriodData = await program.account.period.fetch(
 								prevPeriodPDA,
 							);
-							return prevPeriodData;
+							const accounts = await Promise.all(
+								prevPeriodData.topSquads.map(async (item) => {
+									const squadInfo = await program.account.squad.fetch(
+										item.squad,
+									);
+									return {
+										...item,
+										info: squadInfo,
+									};
+								}),
+							);
+							return {
+								...prevPeriodData,
+								topSquads: accounts,
+							};
 						} catch (error) {
 							return null;
 						}

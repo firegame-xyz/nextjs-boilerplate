@@ -87,6 +87,7 @@ export type TopPlayerAccount = {
 export type TopSquadAccount = {
 	squad: anchor.web3.PublicKey;
 	purchaseQuantity: anchor.BN;
+	info: Squad;
 };
 
 // type Player = {

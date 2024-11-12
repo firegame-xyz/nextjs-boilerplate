@@ -89,9 +89,7 @@ export const useQueryData = (address?: string) => {
 				.in("event_type", ["purchase", "reinvest", "autoReinvest", "exit"])
 				.order("timestamp", { ascending: false });
 
-			const { data } = await (address
-				? query.eq("initiator", address)
-				: query);
+			const { data } = await (address ? query.eq("initiator", address) : query);
 
 			const typedData = (data || []).map((item) => ({
 				...item,
@@ -175,47 +173,58 @@ export const useQueryData = (address?: string) => {
 const avatarUrlCache = new Map<string, { url: string; timestamp: number }>();
 
 export const getAvatarUrl = async (url: string) => {
-	// Check cache first
+	const CACHE_DURATION = 3600000; // 1 hour in milliseconds
 	const cached = avatarUrlCache.get(url);
-	if (cached && Date.now() - cached.timestamp < 3600000) {
-		// 1 hour cache
+
+	if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
 		return cached.url;
 	}
 
-	const pathSegments = url.split("/");
-	const imgId = pathSegments[pathSegments.length - 1];
+	try {
+		const imgId = url.split("/").pop();
+		if (!imgId) throw new Error("Invalid URL format");
 
-	const { data } = await supabase.storage
-		.from("avatar")
-		.createSignedUrl(`uploads/${imgId}`, 3600);
+		const { data, error } = await supabase.storage
+			.from("avatar")
+			.createSignedUrl(`uploads/${imgId}`, 3600);
 
-	// Store in cache if successful
-	if (data?.signedUrl) {
-		avatarUrlCache.set(url, {
-			url: data.signedUrl,
-			timestamp: Date.now(),
-		});
+		if (error) throw error;
+
+		if (data?.signedUrl) {
+			avatarUrlCache.set(url, {
+				url: data.signedUrl,
+				timestamp: Date.now(),
+			});
+			return data.signedUrl;
+		}
+		return null;
+	} catch (err) {
+		console.error("Error generating signed URL:", err);
+		return null;
 	}
-
-	return data?.signedUrl;
 };
 
 export function useAvatarUrl(imageUrl: string | undefined | null) {
 	const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-	useEffect(() => {
+	const fetchUrl = useCallback(async () => {
 		if (!imageUrl?.trim()) {
 			setAvatarUrl(null);
 			return;
 		}
 
-		getAvatarUrl(imageUrl)
-			.then((url) => setAvatarUrl(url || null))
-			.catch((err) => {
-				console.error("Error fetching avatar URL:", err);
-				setAvatarUrl(null);
-			});
+		try {
+			const url = await getAvatarUrl(imageUrl);
+			setAvatarUrl(url);
+		} catch (err) {
+			console.error("Error fetching avatar URL:", err);
+			setAvatarUrl(null);
+		}
 	}, [imageUrl]);
+
+	useEffect(() => {
+		fetchUrl();
+	}, [fetchUrl]);
 
 	return avatarUrl;
 }
