@@ -1,18 +1,144 @@
 import type { Config } from "tailwindcss";
 
-export default {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
-  },
-  plugins: [],
-} satisfies Config;
+const config: Config = {
+	content: [
+		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
+		"./components/**/*.{js,ts,jsx,tsx,mdx}",
+		"./app/**/*.{js,ts,jsx,tsx,mdx}",
+	],
+	corePlugins: {
+		container: false,
+	},
+	theme: {
+		colors: {
+			base: {
+				white: "#F8FFFE",
+				black: "#0D0E11",
+			},
+			transparent: "transparent",
+			primary: {
+				25: "#F6FEFC",
+				50: "#F0FDF9",
+				100: "#CCFBEF",
+				200: "#99F6E0",
+				300: "#5FE9D0",
+				400: "#2ED3B7",
+				DEFAULT: "#15B79E",
+				600: "#0E9384",
+				700: "#107569",
+				800: "#125D56",
+				900: "#134E48",
+			},
+			blue: {
+				DEFAULT: "#061FA3",
+				600: "#40444F",
+				700: "#1C1F2D",
+				900: "#090A0B",
+			},
+			gray: {
+				25: "#FCFCFC",
+				50: "#FAFAFA",
+				100: "#F5F5F5",
+				200: "#E5E5E5",
+				300: "#D6D6D6",
+				400: "#A3A3A3",
+				DEFAULT: "#737373",
+				600: "#525252",
+				700: "#424242",
+				800: "#292929",
+				900: "#141414",
+			},
+			error: {
+				25: "#FFFBFA",
+				50: "#FEF3F2",
+				100: "#FEE4E2",
+				200: "#FECDCA",
+				300: "#FDA29B",
+				400: "#F97066",
+				DEFAULT: "#F04438",
+				600: "#D92D20",
+				700: "#B42318",
+				800: "#912018",
+				900: "#7A271A",
+			},
+			warning: {
+				25: "#FFFCF5",
+				50: "#FFFAEB",
+				100: "#FEF0C7",
+				200: "#FEDF89",
+				300: "#FEC84B",
+				400: "#FDB022",
+				DEFAULT: "#FFBE00",
+				600: "#DC6803",
+				700: "#B54708",
+				800: "#93370D",
+				900: "#7A2E0E",
+			},
+			success: {
+				25: "#F6FEF9",
+				50: "#ECFDF3",
+				100: "#D1FADF",
+				200: "#A6F4C5",
+				300: "#6CE9A6",
+				400: "#32D583",
+				DEFAULT: "#12B76A",
+				600: "#039855",
+				700: "#027A48",
+				800: "#05603A",
+				900: "#054F31",
+			},
+			secondary: {
+				warning: {
+					25: "#FEFAF5",
+					50: "#FEF6EE",
+					100: "#FDEAD7",
+					200: "#F9DBAF",
+					300: "#F7B27A",
+					400: "#F38744",
+					DEFAULT: "#EF6820",
+					600: "#E04F16",
+					700: "#B93815",
+					800: "#932F19",
+					900: "#772917",
+				},
+			},
+		},
+		boxShadow: {
+			xs: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+			sm: "0 2px 4px 0 rgb(0 0 0 / 0.05)",
+			md: "0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06)",
+			lg: "0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03)",
+			xl: "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+			"2xl": "0px 24px 48px -12px rgba(16, 24, 40, 0.18)",
+			"3xl": "0px 32px 64px -12px rgba(16, 24, 40, 0.14)",
+		},
+		backdropBlur: {
+			sm: "4px",
+			md: "8px",
+			lg: "12px",
+			xl: "20px",
+		},
+		extend: {
+			fontFamily: {
+				sans: ["var(--font-oswald)"],
+				major: ["var(--font-major)"],
+			},
+			fontSize: {
+				xs: ["12px", "18px"],
+				sm: ["14px", "20px"],
+				md: ["16px", "24px"],
+				lg: ["18px", "28px"],
+				xl: ["20px", "30px"],
+				"2xl": ["24px", "32px"],
+				"3xl": ["30px", "36px"],
+			},
+			backgroundImage: {
+				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+				"gradient-conic":
+					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			},
+		},
+	},
+	plugins: [],
+};
+export default config;

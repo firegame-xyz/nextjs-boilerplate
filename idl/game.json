@@ -1,0 +1,6654 @@
+{
+	"address": "5v9RRwYa4NnS4FhV5S1v1tJLZRqX55zeF8gVHguALPBh",
+	"metadata": {
+		"name": "game",
+		"version": "0.1.0",
+		"spec": "0.1.0",
+		"description": "Created with Anchor"
+	},
+	"instructions": [
+		{
+			"name": "accept_squad_application",
+			"discriminator": [34, 95, 186, 138, 30, 207, 105, 206],
+			"accounts": [
+				{
+					"name": "acceptor",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["acceptor_player_data"]
+				},
+				{
+					"name": "acceptor_player_data",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "acceptor"
+							}
+						]
+					}
+				},
+				{
+					"name": "applicant_player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "applicant"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "applicant",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "apply_to_join_squad",
+			"discriminator": [68, 39, 156, 14, 119, 23, 28, 230],
+			"accounts": [
+				{
+					"name": "squad",
+					"writable": true
+				},
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "auto_reinvest",
+			"discriminator": [220, 119, 143, 176, 145, 160, 83, 160],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account", "权限账户"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["Current round account", "当前轮次账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "current_period",
+					"docs": ["Current period account", "当前周期账户"],
+					"writable": true,
+					"relations": ["current_round"]
+				},
+				{
+					"name": "player_data",
+					"docs": ["Player data account", "玩家数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "squad",
+					"docs": ["Squad account", "战队账户"],
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "referrer_data",
+					"docs": ["Referrer player data account", "推荐人玩家数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player_data.referrer",
+								"account": "PlayerData"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "player",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "cancel_auto_reinvest",
+			"discriminator": [116, 255, 17, 198, 82, 194, 199, 132],
+			"accounts": [
+				{
+					"name": "player",
+					"docs": [
+						"The player account (signer) canceling auto-reinvest",
+						"取消自动再投资的玩家账户（签名者）"
+					],
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"docs": ["The player's data account", "玩家的数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account", "游戏账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["The current round account", "当前回合账户"],
+					"writable": true,
+					"relations": ["game"]
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "collateral_exchange",
+			"discriminator": [113, 248, 87, 210, 125, 27, 52, 57],
+			"accounts": [
+				{
+					"name": "player",
+					"docs": [
+						"The player account (signer) performing the collateral exchange",
+						"执行抵押品交换的玩家账户（签名者）"
+					],
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"docs": ["The player's data account", "玩家的数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "config",
+					"docs": ["The global configuration account", "全局配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"docs": ["The player's token account", "玩家的代币账户"],
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "voucher_account",
+					"docs": ["The player's voucher account", "玩家的凭证账户"],
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "voucher",
+					"docs": ["The voucher account", "凭证账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [118, 111, 117, 99, 104, 101, 114]
+							}
+						]
+					}
+				},
+				{
+					"name": "voucher_vault",
+					"docs": ["The voucher vault account", "凭证金库账户"],
+					"writable": true,
+					"relations": ["voucher"]
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"docs": ["The voucher mint account", "凭证铸造账户"],
+					"writable": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "collect_developer_rewards",
+			"discriminator": [162, 124, 33, 222, 98, 204, 230, 170],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"docs": ["Game vault token account", "游戏金库代币账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"docs": ["Authority's token account", "权限账户的代币账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "authority"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "collect_referrer_rewards",
+			"discriminator": [25, 189, 56, 237, 243, 29, 163, 197],
+			"accounts": [
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "create_squad",
+			"discriminator": [5, 221, 149, 143, 156, 81, 164, 46],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [115, 113, 117, 97, 100]
+							},
+							{
+								"kind": "account",
+								"path": "config.nonce",
+								"account": "Config"
+							}
+						]
+					}
+				},
+				{
+					"name": "config",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "deposit",
+			"discriminator": [242, 35, 198, 137, 82, 225, 242, 182],
+			"accounts": [
+				{
+					"name": "player",
+					"docs": [
+						"The player account (signer) making the deposit",
+						"进行存款的玩家账户（签名者）"
+					],
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"docs": ["The player's data account", "玩家的数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"docs": ["The player's token account", "玩家的代币账户"],
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "pool",
+					"docs": ["The pool account", "池账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 111, 111, 108]
+							}
+						]
+					}
+				},
+				{
+					"name": "pool_vault",
+					"docs": ["The pool's token vault", "池的代币金库"],
+					"writable": true,
+					"relations": ["pool"]
+				},
+				{
+					"name": "order",
+					"docs": ["The order account to be initialized", "要初始化的订单账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [111, 114, 100, 101, 114]
+							},
+							{
+								"kind": "account",
+								"path": "pool.nonce",
+								"account": "Pool"
+							}
+						]
+					}
+				},
+				{
+					"name": "order_vault",
+					"docs": ["The order's token vault", "订单的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "order"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["pool"]
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "distribute_grand_prizes",
+			"discriminator": [107, 24, 238, 49, 60, 155, 117, 72],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["Current round account", "当前轮次账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "player_data",
+					"docs": ["Player data account", "玩家数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "current_round.last_active_participants\n[current_round.grand_prize_distribution_index as usize]",
+								"account": "Round"
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"docs": ["Game vault token account", "游戏金库代币账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "token_account",
+					"docs": ["Player's token account", "玩家的代币账户"],
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "distribute_leaderboard_rewards",
+			"discriminator": [7, 77, 66, 190, 243, 30, 121, 36],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "period",
+					"docs": ["Period account", "周期账户"],
+					"writable": true
+				},
+				{
+					"name": "squad_first",
+					"docs": ["First place squad account", "第一名团队账户"],
+					"writable": true
+				},
+				{
+					"name": "squad_second",
+					"docs": ["Second place squad account", "第二名团队账户"],
+					"writable": true
+				},
+				{
+					"name": "squad_third",
+					"docs": ["Third place squad account", "第三名团队账户"],
+					"writable": true
+				},
+				{
+					"name": "game_vault",
+					"docs": ["Game vault token account", "游戏金库代币账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "player_leaderboard_winner",
+					"docs": [
+						"Leaderboard winner player data account",
+						"排行榜冠军玩家数据账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [115, 113, 117, 97, 100]
+							},
+							{
+								"kind": "account",
+								"path": "period.top_players [0].player",
+								"account": "Period"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"docs": ["Winner's token account", "冠军的代币账户"],
+					"writable": true,
+					"relations": ["player_leaderboard_winner"]
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "distribute_squad_rewards",
+			"discriminator": [206, 0, 124, 119, 238, 243, 171, 138],
+			"accounts": [
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["captain_data"]
+				},
+				{
+					"name": "captain",
+					"writable": true,
+					"signer": true,
+					"relations": ["squad"]
+				},
+				{
+					"name": "captain_data",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "captain"
+							}
+						]
+					}
+				},
+				{
+					"name": "member_player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "member"
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["member_player_data"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": [
+				{
+					"name": "member",
+					"type": "pubkey"
+				},
+				{
+					"name": "reward_amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "exit",
+			"discriminator": [234, 32, 12, 71, 126, 5, 219, 160],
+			"accounts": [
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "current_round",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "grant_manager_privileges",
+			"discriminator": [186, 147, 175, 135, 153, 31, 133, 65],
+			"accounts": [
+				{
+					"name": "captain",
+					"docs": [
+						"The squad captain who is granting manager privileges",
+						"授予管理员权限的队长"
+					],
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"docs": [
+						"The squad account that is being modified",
+						"正在被修改的小队账户"
+					],
+					"writable": true,
+					"relations": ["captain_data"]
+				},
+				{
+					"name": "captain_data",
+					"docs": ["The captain's player data account", "队长的玩家数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "captain"
+							}
+						]
+					}
+				},
+				{
+					"name": "member_data",
+					"docs": [
+						"The member's player data account who is being granted manager privileges",
+						"被授予管理员权限的成员的玩家数据账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "member"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "member",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "increase_game_balance",
+			"discriminator": [42, 11, 193, 55, 254, 125, 189, 168],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"docs": ["Authority's token account", "权限账户的代币账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "authority"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "game_vault",
+					"docs": ["Game vault token account", "游戏金库代币账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated Token Program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token Program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": [
+				{
+					"name": "amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "increase_pool_balance",
+			"discriminator": [142, 244, 43, 121, 209, 95, 223, 55],
+			"accounts": [
+				{
+					"name": "authority",
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "pool",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 111, 111, 108]
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "pool_vault",
+					"writable": true,
+					"relations": ["pool"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": [
+				{
+					"name": "amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "increase_registration_reward_slots",
+			"discriminator": [161, 118, 80, 138, 80, 52, 154, 84],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "additional_slots",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "initialize",
+			"discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+			"accounts": [
+				{
+					"name": "super_admin",
+					"docs": [
+						"The super admin account, must match the predefined public key",
+						"超级管理员账户，必须匹配预定义的公钥"
+					],
+					"writable": true,
+					"signer": true,
+					"address": "FzTqvgGBS3ioKG4oYpQUP3hNJdaLavsxCu9giELZcnPA"
+				},
+				{
+					"name": "config",
+					"docs": [
+						"The global configuration account for the game",
+						"游戏的全局配置账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": [
+						"The main token mint account for the game",
+						"游戏的主要代币铸造账户"
+					]
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_default_player",
+			"discriminator": [23, 116, 120, 192, 192, 83, 105, 89],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "default_player",
+					"docs": ["Default player account", "默认玩家账户"],
+					"address": "11111111111111111111111111111111"
+				},
+				{
+					"name": "player_data",
+					"docs": ["Player data account", "玩家数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "default_player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"docs": ["Voucher mint account", "凭证铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"docs": ["Default player's token account", "默认玩家的代币账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "default_player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "voucher_account",
+					"docs": ["Default player's voucher account", "默认玩家的凭证账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "default_player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "voucher_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_default_squad",
+			"discriminator": [202, 205, 219, 187, 185, 124, 234, 104],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "squad",
+					"docs": ["Default squad account", "默认小队账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [115, 113, 117, 97, 100]
+							},
+							{
+								"kind": "const",
+								"value": [64, 66, 15, 0]
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_default_token",
+			"discriminator": [51, 86, 59, 20, 84, 83, 59, 160],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "default_player",
+					"docs": ["Default player account", "默认玩家账户"],
+					"address": "11111111111111111111111111111111"
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"docs": ["Voucher mint account", "凭证铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"docs": ["Default player's token account", "默认玩家的代币账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "default_player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "voucher_account",
+					"docs": ["Default player's voucher account", "默认玩家的凭证账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "default_player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "voucher_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token Program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated Token Program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System Program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_game",
+			"discriminator": [44, 62, 102, 247, 126, 208, 130, 215],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The admin (signer) initializing the game",
+						"初始化游戏的管理员账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"Config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account to be initialized", "要初始化的游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The main token mint", "主要代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "game_vault",
+					"docs": ["The game's token vault", "游戏的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "game"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_next_period",
+			"discriminator": [46, 76, 173, 91, 54, 12, 193, 41],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": ["Authority account (signer)", "权限账户（签名者）"],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": ["Config account", "配置账户"],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["Game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["Current round account", "当前轮次账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "current_period",
+					"docs": ["Current period account", "当前周期账户"],
+					"writable": true,
+					"relations": ["current_round"]
+				},
+				{
+					"name": "next_period",
+					"docs": [
+						"Next period account to be initialized",
+						"要初始化的下一个周期账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 101, 114, 105, 111, 100]
+							},
+							{
+								"kind": "account",
+								"path": "current_round"
+							},
+							{
+								"kind": "account",
+								"path": "current_round.nonce",
+								"account": "Round"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_vault",
+					"docs": ["Token vault for the next period", "下一个周期的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "next_period"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "start_time",
+					"type": "u64"
+				},
+				{
+					"name": "leaderboard_duration",
+					"type": "u64"
+				},
+				{
+					"name": "squad_reward_amount",
+					"type": "u64"
+				},
+				{
+					"name": "individual_reward_amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "initialize_next_round",
+			"discriminator": [10, 118, 67, 132, 36, 211, 96, 20],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The authority account (signer) initializing the next round",
+						"初始化下一轮的权限账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"The config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["The current round account", "当前轮次账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "next_round",
+					"docs": [
+						"The next round account to be initialized",
+						"要初始化的下一轮次账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [114, 111, 117, 110, 100]
+							},
+							{
+								"kind": "account",
+								"path": "game.nonce",
+								"account": "Game"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_vault",
+					"docs": ["The token vault for the next round", "下一轮次的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "next_round"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "start_time",
+					"type": "u64"
+				},
+				{
+					"name": "countdown_duration",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "initialize_period",
+			"discriminator": [72, 211, 113, 54, 173, 192, 29, 170],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The authority account (signer) initializing the period",
+						"初始化周期的权限账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"The config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"docs": ["The current round account", "当前轮次账户"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "period",
+					"docs": [
+						"The period account to be initialized",
+						"要初始化的周期账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 101, 114, 105, 111, 100]
+							},
+							{
+								"kind": "account",
+								"path": "current_round"
+							},
+							{
+								"kind": "account",
+								"path": "current_round.nonce",
+								"account": "Round"
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"docs": ["The game's token vault", "游戏的代币金库"],
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "period_vault",
+					"docs": ["The period's token vault", "周期的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "period"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "start_time",
+					"type": "u64"
+				},
+				{
+					"name": "leaderboard_duration",
+					"type": "u64"
+				},
+				{
+					"name": "squad_reward_amount",
+					"type": "u64"
+				},
+				{
+					"name": "individual_reward_amount",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "initialize_player",
+			"discriminator": [79, 249, 88, 177, 220, 62, 56, 128],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "referrer_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "referrer"
+							}
+						]
+					}
+				},
+				{
+					"name": "config",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"writable": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "voucher_account",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "voucher_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "voucher",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [118, 111, 117, 99, 104, 101, 114]
+							}
+						]
+					}
+				},
+				{
+					"name": "voucher_vault",
+					"writable": true,
+					"relations": ["voucher"]
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "referrer",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "initialize_pool",
+			"discriminator": [95, 180, 10, 172, 84, 174, 232, 40],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The authority account (signer) initializing the pool",
+						"初始化池的权限账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"The config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "pool",
+					"docs": ["The pool account to be initialized", "要初始化的池账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 111, 111, 108]
+							}
+						]
+					}
+				},
+				{
+					"name": "pool_vault",
+					"docs": ["The pool's token vault", "池的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "pool"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_round",
+			"discriminator": [43, 135, 19, 93, 14, 225, 131, 188],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The authority account (signer) initializing the round",
+						"初始化轮次的权限账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"The config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"docs": ["The game account", "游戏账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "round",
+					"docs": ["The round account to be initialized", "要初始化的轮次账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [114, 111, 117, 110, 100]
+							},
+							{
+								"kind": "account",
+								"path": "game.nonce",
+								"account": "Game"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["The token mint account", "代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "token_vault",
+					"docs": ["The token vault for the round", "轮次的代币金库"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "round"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["The associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "start_time",
+					"type": "u64"
+				},
+				{
+					"name": "countdown_duration",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "initialize_token",
+			"discriminator": [38, 209, 150, 50, 190, 117, 16, 54],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "config",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"relations": ["config"]
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "voucher_account",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "player"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "voucher_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "initialize_voucher",
+			"discriminator": [63, 32, 98, 163, 253, 60, 197, 211],
+			"accounts": [
+				{
+					"name": "authority",
+					"docs": [
+						"The authority account (signer) initializing the voucher",
+						"初始化代金券的权限账户（签名者）"
+					],
+					"writable": true,
+					"signer": true,
+					"relations": ["config"]
+				},
+				{
+					"name": "config",
+					"docs": [
+						"Config account containing global settings",
+						"包含全局设置的配置账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [99, 111, 110, 102, 105, 103]
+							}
+						]
+					}
+				},
+				{
+					"name": "voucher",
+					"docs": ["Voucher account to be initialized", "要初始化的代金券账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [118, 111, 117, 99, 104, 101, 114]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_mint",
+					"docs": ["Main token mint account", "主要代币铸造账户"],
+					"relations": ["config"]
+				},
+				{
+					"name": "voucher_mint",
+					"docs": ["Voucher token mint account", "代金券代币铸造账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [
+									118,
+									111,
+									117,
+									99,
+									104,
+									101,
+									114,
+									95,
+									109,
+									105,
+									110,
+									116
+								]
+							}
+						]
+					}
+				},
+				{
+					"name": "voucher_vault",
+					"docs": ["Voucher token vault account", "代金券代币金库账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "account",
+								"path": "voucher"
+							},
+							{
+								"kind": "const",
+								"value": [
+									6,
+									221,
+									246,
+									225,
+									215,
+									101,
+									161,
+									147,
+									217,
+									203,
+									225,
+									70,
+									206,
+									235,
+									121,
+									172,
+									28,
+									180,
+									133,
+									237,
+									95,
+									91,
+									55,
+									145,
+									58,
+									140,
+									245,
+									133,
+									126,
+									255,
+									0,
+									169
+								]
+							},
+							{
+								"kind": "account",
+								"path": "token_mint"
+							}
+						],
+						"program": {
+							"kind": "const",
+							"value": [
+								140,
+								151,
+								37,
+								143,
+								78,
+								36,
+								137,
+								241,
+								187,
+								61,
+								16,
+								41,
+								20,
+								142,
+								13,
+								131,
+								11,
+								90,
+								19,
+								153,
+								218,
+								255,
+								16,
+								132,
+								4,
+								142,
+								123,
+								216,
+								219,
+								233,
+								248,
+								89
+							]
+						}
+					}
+				},
+				{
+					"name": "token_metadata",
+					"docs": ["Token metadata account", "代币元数据账户"],
+					"writable": true
+				},
+				{
+					"name": "token_metadata_program",
+					"docs": ["Token metadata program", "代币元数据程序"],
+					"address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+				},
+				{
+					"name": "token_program",
+					"docs": ["Token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "associated_token_program",
+					"docs": ["Associated token program", "关联代币程序"],
+					"address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+				},
+				{
+					"name": "system_program",
+					"docs": ["System program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				},
+				{
+					"name": "rent",
+					"docs": ["Rent sysvar", "租金系统变量"],
+					"address": "SysvarRent111111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "leave_squad",
+			"discriminator": [167, 247, 102, 137, 238, 146, 1, 89],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "purchase",
+			"discriminator": [21, 93, 113, 154, 193, 160, 242, 168],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "voucher_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "randomness_account_data"
+				},
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "round_vault",
+					"writable": true,
+					"relations": ["current_round"]
+				},
+				{
+					"name": "current_period",
+					"writable": true,
+					"relations": ["current_round"]
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "voucher",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [118, 111, 117, 99, 104, 101, 114]
+							}
+						]
+					}
+				},
+				{
+					"name": "voucher_vault",
+					"writable": true,
+					"relations": ["voucher"]
+				},
+				{
+					"name": "voucher_mint",
+					"writable": true,
+					"relations": ["voucher"]
+				},
+				{
+					"name": "referrer",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player_data.referrer",
+								"account": "PlayerData"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "purchase_quantity",
+					"type": "u64"
+				}
+			]
+		},
+		{
+			"name": "reinvest",
+			"discriminator": [107, 29, 95, 200, 217, 52, 155, 76],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "current_period",
+					"writable": true,
+					"relations": ["current_round"]
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "referrer",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player_data.referrer",
+								"account": "PlayerData"
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "reject_squad_application",
+			"discriminator": [22, 99, 93, 87, 181, 72, 104, 54],
+			"accounts": [
+				{
+					"name": "rejector",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["rejector_data"]
+				},
+				{
+					"name": "rejector_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "rejector"
+							}
+						]
+					}
+				},
+				{
+					"name": "applicant_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "applicant"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "applicant",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "remove_member_from_squad",
+			"discriminator": [106, 203, 130, 154, 197, 174, 6, 57],
+			"accounts": [
+				{
+					"name": "manager",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["member_to_remove_data"]
+				},
+				{
+					"name": "member_to_remove_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "member_to_remove"
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "member_to_remove",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "request_early_unlock",
+			"discriminator": [163, 4, 108, 223, 45, 125, 7, 14],
+			"accounts": [
+				{
+					"name": "player",
+					"docs": [
+						"The player account (signer) requesting early unlock",
+						"请求提前解锁的玩家账户（签名者）"
+					],
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"docs": ["The player's data account", "玩家的数据账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "order",
+					"docs": [
+						"The order account to be unlocked early",
+						"要提前解锁的订单账户"
+					],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [111, 114, 100, 101, 114]
+							},
+							{
+								"kind": "arg",
+								"path": "order_number"
+							}
+						]
+					}
+				},
+				{
+					"name": "order_vault",
+					"docs": ["The order's token vault", "订单的代币金库"],
+					"writable": true,
+					"relations": ["order"]
+				},
+				{
+					"name": "pool",
+					"docs": ["The pool account", "池账户"],
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 111, 111, 108]
+							}
+						]
+					}
+				},
+				{
+					"name": "pool_vault",
+					"docs": ["The pool's token vault", "池的代币金库"],
+					"writable": true,
+					"relations": ["pool"]
+				},
+				{
+					"name": "token_program",
+					"docs": ["The token program", "代币程序"],
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"docs": ["The system program", "系统程序"],
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "order_number",
+					"type": "u16"
+				}
+			]
+		},
+		{
+			"name": "reveal_draw_lottery_result",
+			"discriminator": [213, 11, 203, 24, 105, 45, 18, 238],
+			"accounts": [
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "randomness_account",
+					"relations": ["player_data"]
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "revoke_manager_privileges",
+			"discriminator": [152, 214, 82, 132, 4, 91, 108, 73],
+			"accounts": [
+				{
+					"name": "captain",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["captain_data"]
+				},
+				{
+					"name": "captain_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "captain"
+							}
+						]
+					}
+				},
+				{
+					"name": "manager_data",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "manager"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "manager",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "set_auto_reinvest",
+			"discriminator": [223, 44, 41, 29, 18, 103, 147, 112],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "game",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "current_round",
+					"writable": true,
+					"relations": ["game"]
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "set_referrer",
+			"discriminator": [115, 251, 55, 0, 166, 189, 25, 74],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "referrer_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "referrer"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "referrer",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "settle_previous_round",
+			"discriminator": [76, 156, 154, 22, 191, 72, 250, 56],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "game",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [103, 97, 109, 101]
+							}
+						]
+					}
+				},
+				{
+					"name": "game_vault",
+					"writable": true,
+					"relations": ["game"]
+				},
+				{
+					"name": "current_round",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				}
+			],
+			"args": []
+		},
+		{
+			"name": "transfer_squad_captaincy",
+			"discriminator": [214, 206, 74, 1, 167, 123, 6, 216],
+			"accounts": [
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["captain_player_data"]
+				},
+				{
+					"name": "captain",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "captain_player_data",
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "captain"
+							}
+						]
+					}
+				},
+				{
+					"name": "member_player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "arg",
+								"path": "member"
+							}
+						]
+					}
+				}
+			],
+			"args": [
+				{
+					"name": "member",
+					"type": "pubkey"
+				}
+			]
+		},
+		{
+			"name": "update_squad_info",
+			"discriminator": [217, 142, 107, 234, 229, 67, 174, 22],
+			"accounts": [
+				{
+					"name": "squad",
+					"writable": true,
+					"relations": ["captain_data"]
+				},
+				{
+					"name": "captain",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "captain_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "captain"
+							}
+						]
+					}
+				},
+				{
+					"name": "name_account",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [110, 97, 109, 101]
+							},
+							{
+								"kind": "arg",
+								"path": "name"
+							}
+						]
+					}
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"name": "logo_url",
+					"type": "string"
+				},
+				{
+					"name": "description",
+					"type": "string"
+				}
+			]
+		},
+		{
+			"name": "withdraw",
+			"discriminator": [183, 18, 70, 156, 148, 109, 161, 34],
+			"accounts": [
+				{
+					"name": "player",
+					"writable": true,
+					"signer": true
+				},
+				{
+					"name": "player_data",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 108, 97, 121, 101, 114, 95, 100, 97, 116, 97]
+							},
+							{
+								"kind": "account",
+								"path": "player"
+							}
+						]
+					}
+				},
+				{
+					"name": "order",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [111, 114, 100, 101, 114]
+							},
+							{
+								"kind": "arg",
+								"path": "order_number"
+							}
+						]
+					}
+				},
+				{
+					"name": "order_vault",
+					"writable": true,
+					"relations": ["order"]
+				},
+				{
+					"name": "token_account",
+					"writable": true,
+					"relations": ["player_data"]
+				},
+				{
+					"name": "pool",
+					"writable": true,
+					"pda": {
+						"seeds": [
+							{
+								"kind": "const",
+								"value": [112, 111, 111, 108]
+							}
+						]
+					}
+				},
+				{
+					"name": "token_program",
+					"address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+				},
+				{
+					"name": "system_program",
+					"address": "11111111111111111111111111111111"
+				}
+			],
+			"args": [
+				{
+					"name": "order_number",
+					"type": "u16"
+				}
+			]
+		}
+	],
+	"accounts": [
+		{
+			"name": "Config",
+			"discriminator": [155, 12, 170, 224, 30, 250, 204, 130]
+		},
+		{
+			"name": "Game",
+			"discriminator": [27, 90, 166, 125, 74, 100, 121, 18]
+		},
+		{
+			"name": "Name",
+			"discriminator": [138, 96, 142, 48, 110, 26, 183, 234]
+		},
+		{
+			"name": "Order",
+			"discriminator": [134, 173, 223, 185, 77, 86, 28, 51]
+		},
+		{
+			"name": "Period",
+			"discriminator": [238, 24, 19, 43, 114, 210, 252, 212]
+		},
+		{
+			"name": "PlayerData",
+			"discriminator": [197, 65, 216, 202, 43, 139, 147, 128]
+		},
+		{
+			"name": "Pool",
+			"discriminator": [241, 154, 109, 4, 17, 177, 109, 188]
+		},
+		{
+			"name": "Round",
+			"discriminator": [87, 127, 165, 51, 73, 78, 116, 174]
+		},
+		{
+			"name": "Squad",
+			"discriminator": [224, 107, 111, 49, 238, 116, 28, 160]
+		},
+		{
+			"name": "Voucher",
+			"discriminator": [191, 204, 149, 234, 213, 165, 13, 65]
+		}
+	],
+	"events": [
+		{
+			"name": "TransferEvent",
+			"discriminator": [100, 10, 46, 113, 8, 28, 179, 125]
+		}
+	],
+	"errors": [
+		{
+			"code": 6000,
+			"name": "InsufficientSquadRewardBalance",
+			"msg": "Insufficient squad reward balance"
+		},
+		{
+			"code": 6001,
+			"name": "SquadFull",
+			"msg": "Squad is full"
+		},
+		{
+			"code": 6002,
+			"name": "ApplicationListFull",
+			"msg": "Application list is full"
+		},
+		{
+			"code": 6003,
+			"name": "AlreadyApplied",
+			"msg": "Player has already applied to join"
+		},
+		{
+			"code": 6004,
+			"name": "AlreadyMember",
+			"msg": "Player is already a member of the squad"
+		},
+		{
+			"code": 6005,
+			"name": "ApplicationNotFound",
+			"msg": "Application not found"
+		},
+		{
+			"code": 6006,
+			"name": "ManagerListFull",
+			"msg": "Manager list is full"
+		},
+		{
+			"code": 6007,
+			"name": "AlreadyManager",
+			"msg": "Player is already a manager"
+		},
+		{
+			"code": 6008,
+			"name": "NotSquadMember",
+			"msg": "Player is not a squad member"
+		},
+		{
+			"code": 6009,
+			"name": "ManagerNotFound",
+			"msg": "Manager not found"
+		},
+		{
+			"code": 6010,
+			"name": "MemberNotFound",
+			"msg": "Member not found"
+		},
+		{
+			"code": 6011,
+			"name": "CaptainCannotLeave",
+			"msg": "Captain cannot leave the squad"
+		},
+		{
+			"code": 6012,
+			"name": "NameTooLong",
+			"msg": "Squad name is too long"
+		},
+		{
+			"code": 6013,
+			"name": "LogoUrlTooLong",
+			"msg": "Squad logo URL is too long"
+		},
+		{
+			"code": 6014,
+			"name": "DescriptionTooLong",
+			"msg": "Squad description is too long"
+		}
+	],
+	"types": [
+		{
+			"name": "Config",
+			"docs": ["Configuration account structure", "配置账户结构"],
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "authority",
+						"docs": ["Authority's public key", "权限公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "token_mint",
+						"docs": ["Main token mint public key", "主要代币铸造公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "voucher_mint",
+						"docs": ["Voucher token mint public key", "代金券代币铸造公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "nonce",
+						"docs": [
+							"Nonce for unique identification",
+							"用于唯一标识的nonce值"
+						],
+						"type": "u32"
+					},
+					{
+						"name": "last_updated",
+						"docs": ["Timestamp of the last update", "最后更新时间戳"],
+						"type": "u64"
+					}
+				]
+			}
+		},
+		{
+			"name": "EventData",
+			"type": {
+				"kind": "enum",
+				"variants": [
+					{
+						"name": "AutoReinvest",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "period",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "referrer",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "purchase_quantity",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "CollectDeveloperRewards",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "reward_amount",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "DistributeGrandPrizes",
+						"fields": [
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "index",
+								"type": "u8"
+							},
+							{
+								"name": "prize_amount",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "DistributeLeaderboardRewards",
+						"fields": [
+							{
+								"name": "period",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad_first",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad_second",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad_third",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "IncreaseGameBalance",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "IncreasePoolBalance",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "pool",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "IncreaseRegistrationRewardSlots",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "additional_slots",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "InitializeDefaultPlayer"
+					},
+					{
+						"name": "InitializeDefaultSquad"
+					},
+					{
+						"name": "InitializeDefaultToken"
+					},
+					{
+						"name": "InitializeGame",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializeNextPeriod",
+						"fields": [
+							{
+								"name": "period",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializeNextRound",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "current_round",
+								"type": "pubkey"
+							},
+							{
+								"name": "next_round",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializePeriod",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "period",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializePool",
+						"fields": [
+							{
+								"name": "pool",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializeRound",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializeVoucher",
+						"fields": [
+							{
+								"name": "voucher",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "Initialize",
+						"fields": [
+							{
+								"name": "config",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "Deposit",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "amount",
+								"type": "u64"
+							},
+							{
+								"name": "order_number",
+								"type": "u16"
+							}
+						]
+					},
+					{
+						"name": "RequestEarlyUnlock",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "order_number",
+								"type": "u16"
+							}
+						]
+					},
+					{
+						"name": "Withdraw",
+						"fields": [
+							{
+								"name": "order_number",
+								"type": "u16"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "amount",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "CancelAutoReinvest",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "CollateralExchange",
+						"fields": []
+					},
+					{
+						"name": "CollectReferrerRewards",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "reward_amount",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "Exit",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "purchase_quantity",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "InitializePlayer",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "referrer",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "InitializeToken",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "token_account",
+								"type": "pubkey"
+							},
+							{
+								"name": "voucher_account",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "Purchase",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "period",
+								"type": "pubkey"
+							},
+							{
+								"name": "referrer",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "purchase_quantity",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "Reinvest",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "period",
+								"type": "pubkey"
+							},
+							{
+								"name": "referrer",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "purchase_quantity",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "RevealDrawLotteryResult",
+						"fields": [
+							{
+								"name": "game",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "SetAutoReinvest",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "round",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "SetReferrer",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "referrer",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "SettlePreviousRound",
+						"fields": [
+							{
+								"name": "round",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "AcceptSquadApplication",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "applicant",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "ApplyToJoinSquad",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "CreateSquad",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "player",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "DistributeSquadRewards",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "member",
+								"type": "pubkey"
+							},
+							{
+								"name": "reward_amount",
+								"type": "u64"
+							}
+						]
+					},
+					{
+						"name": "GrantManagerPrivileges",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "member",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "LeaveSquad",
+						"fields": [
+							{
+								"name": "player",
+								"type": "pubkey"
+							},
+							{
+								"name": "squad",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "RejectSquadApplication",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "applicant",
+								"type": "pubkey"
+							},
+							{
+								"name": "rejector",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "RemoveMemberFromSquad",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "member",
+								"type": "pubkey"
+							},
+							{
+								"name": "manager",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "RevokeManagerPrivileges",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "manager",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "TransferSquadCaptaincy",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							},
+							{
+								"name": "captain",
+								"type": "pubkey"
+							},
+							{
+								"name": "new_captain",
+								"type": "pubkey"
+							}
+						]
+					},
+					{
+						"name": "UpdateSquadInfo",
+						"fields": [
+							{
+								"name": "squad",
+								"type": "pubkey"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"name": "EventType",
+			"type": {
+				"kind": "enum",
+				"variants": [
+					{
+						"name": "AutoReinvest"
+					},
+					{
+						"name": "CollectDeveloperRewards"
+					},
+					{
+						"name": "DistributeGrandPrizes"
+					},
+					{
+						"name": "DistributeLeaderboardRewards"
+					},
+					{
+						"name": "IncreaseGameBalance"
+					},
+					{
+						"name": "IncreasePoolBalance"
+					},
+					{
+						"name": "IncreaseRegistrationRewardSlots"
+					},
+					{
+						"name": "InitializeDefaultPlayer"
+					},
+					{
+						"name": "InitializeDefaultSquad"
+					},
+					{
+						"name": "InitializeDefaultToken"
+					},
+					{
+						"name": "InitializeGame"
+					},
+					{
+						"name": "InitializeNextPeriod"
+					},
+					{
+						"name": "InitializeNextRound"
+					},
+					{
+						"name": "InitializePeriod"
+					},
+					{
+						"name": "InitializePool"
+					},
+					{
+						"name": "InitializeRound"
+					},
+					{
+						"name": "InitializeVoucher"
+					},
+					{
+						"name": "Initialize"
+					},
+					{
+						"name": "Deposit"
+					},
+					{
+						"name": "RequestEarlyUnlock"
+					},
+					{
+						"name": "Withdraw"
+					},
+					{
+						"name": "CancelAutoReinvest"
+					},
+					{
+						"name": "CollateralExchange"
+					},
+					{
+						"name": "CollectReferrerRewards"
+					},
+					{
+						"name": "Exit"
+					},
+					{
+						"name": "InitializePlayer"
+					},
+					{
+						"name": "InitializeToken"
+					},
+					{
+						"name": "Purchase"
+					},
+					{
+						"name": "Reinvest"
+					},
+					{
+						"name": "RevealDrawLotteryResult"
+					},
+					{
+						"name": "SetAutoReinvest"
+					},
+					{
+						"name": "SetReferrer"
+					},
+					{
+						"name": "SettlePreviousRound"
+					},
+					{
+						"name": "AcceptSquadApplication"
+					},
+					{
+						"name": "ApplyToJoinSquad"
+					},
+					{
+						"name": "CreateSquad"
+					},
+					{
+						"name": "DistributeSquadRewards"
+					},
+					{
+						"name": "GrantManagerPrivileges"
+					},
+					{
+						"name": "LeaveSquad"
+					},
+					{
+						"name": "RejectSquadApplication"
+					},
+					{
+						"name": "RemoveMemberFromSquad"
+					},
+					{
+						"name": "RevokeManagerPrivileges"
+					},
+					{
+						"name": "TransferSquadCaptaincy"
+					},
+					{
+						"name": "UpdateSquadInfo"
+					}
+				]
+			}
+		},
+		{
+			"name": "Game",
+			"docs": ["Game's global state", "游戏的全局状态"],
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "game_vault",
+						"docs": ["Game vault account public key", "游戏金库账户公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "current_round",
+						"docs": ["Current round public key", "当前轮次公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "total_balance",
+						"docs": ["Game total balance", "游戏总余额"],
+						"type": "u64"
+					},
+					{
+						"name": "construction_worker_salary_pool_balance",
+						"docs": [
+							"Construction worker salary pool balance",
+							"建造工人工资池余额"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "total_construction_worker_salaries_claimed",
+						"docs": [
+							"Total construction worker salaries claimed",
+							"已领取的建造工人工资总数"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "bonus_salary_pool_balance",
+						"docs": ["Bonus salary pool balance", "奖励工资池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_bonus_salaries_claimed",
+						"docs": ["Total bonus salaries claimed", "已领取的奖励工资总数"],
+						"type": "u64"
+					},
+					{
+						"name": "special_reward_pool_balance",
+						"docs": ["Special reward pool balance", "特别奖励池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_special_rewards_claimed",
+						"docs": ["Total special rewards claimed", "已领取的特别奖励总额"],
+						"type": "u64"
+					},
+					{
+						"name": "developer_pool_balance",
+						"docs": ["Developer pool balance", "开发者池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_developer_rewards_claimed",
+						"docs": [
+							"Total developer rewards claimed",
+							"已领取的开发者奖励总额"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "referrer_reward_pool_balance",
+						"docs": ["Referrer reward pool balance", "推荐人奖励池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_referrer_rewards_claimed",
+						"docs": [
+							"Total referrer rewards claimed",
+							"已领取的推荐人奖励总额"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "registration_reward_pool_balance",
+						"docs": ["Registration reward pool balance", "注册奖励池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_registration_rewards_claimed",
+						"docs": [
+							"Total registration rewards claimed",
+							"已领取的注册奖励总额"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "single_registration_reward_amount",
+						"docs": ["Single registration reward amount", "单次注册奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "remaining_registration_reward_slots",
+						"docs": [
+							"Remaining slots for registration rewards",
+							"剩余可获得注册奖励的名额"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "total_exit_rewards_claimed",
+						"docs": ["Total exit rewards claimed", "已领取的退出奖励总额"],
+						"type": "u64"
+					},
+					{
+						"name": "nonce",
+						"docs": ["Game's nonce", "游戏的随机数"],
+						"type": "u16"
+					},
+					{
+						"name": "bump",
+						"docs": ["Bump for PDA validation", "PDA 验证的膨胀值"],
+						"type": "u8"
+					},
+					{
+						"name": "default_squad",
+						"docs": ["Default squad public key", "默认战队公钥"],
+						"type": "pubkey"
+					}
+				]
+			}
+		},
+		{
+			"name": "InitiatorType",
+			"type": {
+				"kind": "enum",
+				"variants": [
+					{
+						"name": "SYSTEM"
+					},
+					{
+						"name": "PLAYER"
+					},
+					{
+						"name": "SQUAD"
+					},
+					{
+						"name": "ORDER"
+					}
+				]
+			}
+		},
+		{
+			"name": "Name",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "owner",
+						"type": {
+							"option": "pubkey"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "Order",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "deposit_amount",
+						"docs": ["存入的数量", "Amount deposited"],
+						"type": "u64"
+					},
+					{
+						"name": "mined_amount",
+						"docs": ["已经挖出来的数量", "Amount of resources mined"],
+						"type": "u64"
+					},
+					{
+						"name": "locked_amount",
+						"docs": ["锁定的数量", "Amount of resources locked"],
+						"type": "u64"
+					},
+					{
+						"name": "order_vault",
+						"docs": ["订单金库", "Order vault public key"],
+						"type": "pubkey"
+					},
+					{
+						"name": "order_timestamp",
+						"docs": ["订单创建时间戳", "Timestamp when the order was created"],
+						"type": "u64"
+					},
+					{
+						"name": "withdrawable_timestamp",
+						"docs": [
+							"可提取时间戳",
+							"Timestamp when the order becomes withdrawable"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "annual_percentage_rate",
+						"docs": [
+							"年化率（基点，1 basis point = 0.01%）",
+							"Annual percentage rate (in basis points, 1 basis point = 0.01%)"
+						],
+						"type": "u16"
+					},
+					{
+						"name": "early_unlock_apr",
+						"docs": ["提前解锁年化率", "Early unlock annual percentage rate"],
+						"type": "u16"
+					},
+					{
+						"name": "early_unlock_requested",
+						"docs": [
+							"是否请求提前解锁",
+							"Whether early unlock has been requested"
+						],
+						"type": "bool"
+					},
+					{
+						"name": "early_unlock_timestamp",
+						"docs": ["提前解锁时间戳", "Timestamp for early unlock"],
+						"type": "u64"
+					},
+					{
+						"name": "bump",
+						"docs": ["用于PDA派生的bump", "Bump used for PDA derivation"],
+						"type": "u8"
+					},
+					{
+						"name": "is_completed",
+						"docs": ["是否完成", "Whether the order is completed"],
+						"type": "bool"
+					}
+				]
+			}
+		},
+		{
+			"name": "Period",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "period_number",
+						"docs": ["Period number", "期数"],
+						"type": "u16"
+					},
+					{
+						"name": "start_time",
+						"docs": ["Start time of the period", "期间开始时间"],
+						"type": "u64"
+					},
+					{
+						"name": "end_time",
+						"docs": ["End time of the period", "期间结束时间"],
+						"type": "u64"
+					},
+					{
+						"name": "period_vault",
+						"docs": ["Token vault account", "代币保管账户"],
+						"type": "pubkey"
+					},
+					{
+						"name": "top_players",
+						"docs": ["Top player accounts", "顶级玩家账户列表"],
+						"type": {
+							"vec": {
+								"defined": {
+									"name": "TopPlayerAccount"
+								}
+							}
+						}
+					},
+					{
+						"name": "top_squads",
+						"docs": ["Top squad accounts", "顶级团队账户列表"],
+						"type": {
+							"vec": {
+								"defined": {
+									"name": "TopSquadAccount"
+								}
+							}
+						}
+					},
+					{
+						"name": "squad_reward_amount",
+						"docs": ["Total squad reward amount", "团队总奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "squad_first_place_reward_amount",
+						"docs": ["Squad first place reward amount", "团队一等奖奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "squad_second_place_reward_amount",
+						"docs": ["Squad second place reward amount", "团队二等奖奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "squad_third_place_reward_amount",
+						"docs": ["Squad third place reward amount", "团队三等奖奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "individual_reward_amount",
+						"docs": ["Individual reward amount", "个人奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "is_distribution_completed",
+						"docs": ["Whether rewards have been distributed", "是否已分发奖励"],
+						"type": "bool"
+					}
+				]
+			}
+		},
+		{
+			"name": "PlayerData",
+			"docs": ["Player account structure", "玩家账户结构"],
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "player",
+						"docs": ["Player's public key", "玩家的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "nonce",
+						"docs": [
+							"Nonce for unique identification",
+							"用于唯一标识的nonce值"
+						],
+						"type": "u16"
+					},
+					{
+						"name": "token_account",
+						"docs": ["The player's main token account", "玩家的主要代币账户"],
+						"type": "pubkey"
+					},
+					{
+						"name": "voucher_account",
+						"docs": [
+							"The player's voucher token account",
+							"玩家的代金券代币账户"
+						],
+						"type": "pubkey"
+					},
+					{
+						"name": "referrer",
+						"docs": ["The referrer's public key", "推荐人的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "referral_count",
+						"docs": ["Referral count", "邀请的人数"],
+						"type": "u16"
+					},
+					{
+						"name": "squad",
+						"docs": ["Squad's public key", "战队的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "squad_applications",
+						"docs": [
+							"List of squad's public key applications",
+							"申请加入的战队列表"
+						],
+						"type": {
+							"vec": "pubkey"
+						}
+					},
+					{
+						"name": "can_apply_squad_timestamp",
+						"docs": [
+							"The timestamp when the player can apply for a squad",
+							"可以申请战队的时间"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "pending_referrer_rewards",
+						"docs": [
+							"Pending referrer rewards to be claimed",
+							"待领取的邀请奖励"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "total_referrer_rewards_claimed",
+						"docs": ["Total referrer rewards claimed", "总共已领取的邀请奖励"],
+						"type": "u64"
+					},
+					{
+						"name": "current_round",
+						"docs": [
+							"Current round the player is participating in",
+							"玩家当前参与的轮次"
+						],
+						"type": "pubkey"
+					},
+					{
+						"name": "current_period",
+						"docs": [
+							"Current period the player is participating in",
+							"当前周期"
+						],
+						"type": "pubkey"
+					},
+					{
+						"name": "earnings_per_ore",
+						"docs": [
+							"Earnings per ore unit in the current round",
+							"当前轮次用户的每单位收益"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "construction_worker_salaries",
+						"docs": [
+							"Unclaimed earnings in the current round",
+							"当前轮次用户未提取的收益"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "ore_amount",
+						"docs": [
+							"Amount of ore in the current round",
+							"当前轮次用户的矿石数量"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "randomness_account",
+						"docs": ["Randomness account public key", "随机性账户公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "randomness_commit_slot",
+						"docs": ["Randomness commit slot", "随机性提交槽位"],
+						"type": "u64"
+					},
+					{
+						"name": "randomness_probability",
+						"docs": ["Randomness probability", "随机性概率"],
+						"type": "u32"
+					},
+					{
+						"name": "randomness_reward_amount",
+						"docs": ["Randomness reward amount", "随机性奖励金额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_purchase_quantity",
+						"docs": [
+							"Total quantity of purchases (formerly score)",
+							"购买总数量（原为score）"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "current_period_purchase_quantity",
+						"docs": [
+							"Total quantity of purchases in the current period",
+							"当期购买的总数量"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "auto_reinvest",
+						"docs": ["Whether to automatically reinvest", "是否自动再投资"],
+						"type": "bool"
+					},
+					{
+						"name": "last_purchase_timestamp",
+						"docs": ["Timestamp of the last purchase", "最后一次购买的时间戳"],
+						"type": "u64"
+					},
+					{
+						"name": "has_exited",
+						"docs": [
+							"Whether the player has exited the game",
+							"玩家是否已退出游戏"
+						],
+						"type": "bool"
+					},
+					{
+						"name": "created_at",
+						"docs": ["PlayerData creation timestamp", "玩家数据创建时间戳"],
+						"type": "u64"
+					},
+					{
+						"name": "total_exit_rewards_claimed",
+						"docs": ["Total exit rewards claimed", "已领取的退出奖励总额"],
+						"type": "u64"
+					},
+					{
+						"name": "pending_exit_rewards",
+						"docs": ["Pending exit rewards", "预计退出奖励"],
+						"type": "u64"
+					},
+					{
+						"name": "order_number_list",
+						"docs": ["List of order numbers", "订单编号列表"],
+						"type": {
+							"vec": "u16"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "Pool",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "token_mint",
+						"docs": ["Token mint address", "代币铸造地址"],
+						"type": "pubkey"
+					},
+					{
+						"name": "pool_vault",
+						"docs": ["Pool vault address", "资金池保管库地址"],
+						"type": "pubkey"
+					},
+					{
+						"name": "balance",
+						"docs": ["Current balance of the pool", "资金池当前余额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_mined_amount",
+						"docs": ["Total amount of resources mined", "已挖出的资源总量"],
+						"type": "u64"
+					},
+					{
+						"name": "bump",
+						"docs": ["Bump seed for PDA derivation", "PDA 派生的 bump seed"],
+						"type": "u8"
+					},
+					{
+						"name": "nonce",
+						"docs": [
+							"Nonce for unique identification",
+							"用于唯一标识的nonce值"
+						],
+						"type": "u16"
+					}
+				]
+			}
+		},
+		{
+			"name": "Round",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "round_number",
+						"docs": ["Round number", "轮次编号"],
+						"type": "u16"
+					},
+					{
+						"name": "current_period",
+						"docs": ["Current period", "当前期"],
+						"type": "pubkey"
+					},
+					{
+						"name": "round_vault",
+						"docs": ["Token vault account", "代币保管账户"],
+						"type": "pubkey"
+					},
+					{
+						"name": "auto_reinvest_player_amount",
+						"docs": ["Auto reinvest player amount", "自动复投玩家数量"],
+						"type": "u32"
+					},
+					{
+						"name": "start_time",
+						"docs": ["Start time of the round", "轮次开始时间"],
+						"type": "u64"
+					},
+					{
+						"name": "end_time",
+						"docs": ["End time of the round", "轮次结束时间"],
+						"type": "u64"
+					},
+					{
+						"name": "last_call_slot",
+						"docs": ["Last call slot", "最后一次调用的时间槽"],
+						"type": "u64"
+					},
+					{
+						"name": "call_count",
+						"docs": ["Call count for final countdown", "最终倒计时的调用次数"],
+						"type": "u8"
+					},
+					{
+						"name": "earnings_per_ore",
+						"docs": ["Current earnings per ore", "当前每单位矿石的收益"],
+						"type": "u64"
+					},
+					{
+						"name": "sold_ores",
+						"docs": ["Total number of sold ores", "已售出的矿石总数"],
+						"type": "u64"
+					},
+					{
+						"name": "active_ores",
+						"docs": ["Number of active ores", "活跃的矿石数量"],
+						"type": "u64"
+					},
+					{
+						"name": "grand_prize_pool_balance",
+						"docs": ["Grand prize pool balance", "大奖池余额"],
+						"type": "u64"
+					},
+					{
+						"name": "first_grand_prize_amount",
+						"docs": ["First grand prize amount", "第一大奖金额"],
+						"type": "u64"
+					},
+					{
+						"name": "second_grand_prize_amount",
+						"docs": ["Second grand prize amount", "第二大奖金额"],
+						"type": "u64"
+					},
+					{
+						"name": "total_grand_prizes_distributed",
+						"docs": [
+							"Total number of grand prizes distributed",
+							"已分发的大奖总数"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "last_active_participants",
+						"docs": ["Last active participants", "最后活跃的参与者"],
+						"type": {
+							"vec": "pubkey"
+						}
+					},
+					{
+						"name": "grand_prize_distribution_index",
+						"docs": ["Index of grand prize distribution", "大奖分发索引"],
+						"type": "u8"
+					},
+					{
+						"name": "is_over",
+						"docs": ["Is the current round over?", "当前轮次是否结束"],
+						"type": "bool"
+					},
+					{
+						"name": "is_grand_prize_distribution_completed",
+						"docs": [
+							"Is grand prize distribution completed?",
+							"大奖分发是否完成"
+						],
+						"type": "bool"
+					},
+					{
+						"name": "exit_rewards_per_second",
+						"docs": ["Exit rewards per second", "每秒退出奖励"],
+						"type": "u64"
+					},
+					{
+						"name": "last_claimed_exit_rewards_timestamp",
+						"docs": [
+							"Timestamp of last claimed exit rewards",
+							"上次领取退出奖励的时间戳"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "nonce",
+						"docs": [
+							"Nonce for unique identification",
+							"用于唯一标识的nonce值"
+						],
+						"type": "u16"
+					}
+				]
+			}
+		},
+		{
+			"name": "Squad",
+			"docs": ["Squad account structure", "战队账户结构"],
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "squad_number",
+						"docs": ["Squad number", "战队编号"],
+						"type": "u32"
+					},
+					{
+						"name": "captain",
+						"docs": ["Squad captain's public key", "战队队长的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "name",
+						"docs": ["Squad name", "战队名称"],
+						"type": {
+							"option": "string"
+						}
+					},
+					{
+						"name": "logo_url",
+						"docs": ["Squad logo URL", "战队logo图片地址"],
+						"type": {
+							"option": "string"
+						}
+					},
+					{
+						"name": "description",
+						"docs": ["Squad description", "战队介绍"],
+						"type": {
+							"option": "string"
+						}
+					},
+					{
+						"name": "current_period",
+						"docs": ["Current period", "当前周期"],
+						"type": "pubkey"
+					},
+					{
+						"name": "total_purchase_quantity",
+						"docs": ["Total purchase amount of the squad", "战队总购买金额"],
+						"type": "u64"
+					},
+					{
+						"name": "current_period_purchase_quantity",
+						"docs": [
+							"Total amount of purchases in the current period",
+							"当期购买的总数量"
+						],
+						"type": "u64"
+					},
+					{
+						"name": "collectable_squad_rewards",
+						"docs": ["Collectable squad reward", "可领取的战队奖励"],
+						"type": "u64"
+					},
+					{
+						"name": "total_squad_rewards_collected",
+						"docs": ["Total squad rewards collected", "已领取的战队奖励总数"],
+						"type": "u64"
+					},
+					{
+						"name": "member_list",
+						"docs": ["List of squad members", "战队成员列表"],
+						"type": {
+							"vec": "pubkey"
+						}
+					},
+					{
+						"name": "managers",
+						"docs": ["List of squad managers", "战队管理员列表"],
+						"type": {
+							"vec": "pubkey"
+						}
+					},
+					{
+						"name": "application_list",
+						"docs": ["List of applicants", "申请者列表"],
+						"type": {
+							"vec": "pubkey"
+						}
+					},
+					{
+						"name": "last_updated_timestamp",
+						"docs": ["Last updated timestamp", "最后更新时间戳"],
+						"type": "u64"
+					},
+					{
+						"name": "created_at",
+						"docs": ["Squad creation timestamp", "战队创建时间戳"],
+						"type": "u64"
+					}
+				]
+			}
+		},
+		{
+			"name": "TopPlayerAccount",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "player",
+						"docs": ["Player's public key", "玩家的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "purchase_quantity",
+						"docs": ["Total purchase quantity", "总购买数量"],
+						"type": "u64"
+					}
+				]
+			}
+		},
+		{
+			"name": "TopSquadAccount",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "squad",
+						"docs": ["Squad's public key", "团队的公钥"],
+						"type": "pubkey"
+					},
+					{
+						"name": "purchase_quantity",
+						"docs": ["Total purchase quantity", "总购买数量"],
+						"type": "u64"
+					}
+				]
+			}
+		},
+		{
+			"name": "TransferEvent",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "event_type",
+						"type": {
+							"defined": {
+								"name": "EventType"
+							}
+						}
+					},
+					{
+						"name": "data",
+						"type": {
+							"defined": {
+								"name": "EventData"
+							}
+						}
+					},
+					{
+						"name": "initiator_type",
+						"type": {
+							"defined": {
+								"name": "InitiatorType"
+							}
+						}
+					},
+					{
+						"name": "initiator",
+						"type": "pubkey"
+					},
+					{
+						"name": "timestamp",
+						"type": "u64"
+					}
+				]
+			}
+		},
+		{
+			"name": "Voucher",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{
+						"name": "voucher_mint",
+						"docs": ["Voucher mint address", "代金券铸造地址"],
+						"type": "pubkey"
+					},
+					{
+						"name": "voucher_vault",
+						"docs": ["Voucher vault address", "代金券保管库地址"],
+						"type": "pubkey"
+					},
+					{
+						"name": "minted_amount",
+						"docs": ["Amount of vouchers minted", "已经铸造的代金券数量"],
+						"type": "u64"
+					},
+					{
+						"name": "bump",
+						"docs": ["Bump seed for PDA derivation", "PDA 派生的 bump 种子"],
+						"type": "u8"
+					}
+				]
+			}
+		}
+	]
+}
