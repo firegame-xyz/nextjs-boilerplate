@@ -50,22 +50,22 @@ export const useQueryData = (address?: string) => {
 		}, 500);
 	}, []);
 
-	const constructQueryOptions = useCallback((address?: string) => {
-		const eventTypes = ["purchase", "reinvest", "autoReinvest", "exit"];
-		const baseFilter = {
-			or: eventTypes.map((type) => ({ eventType: { eq: type } })),
-		};
+	// const constructQueryOptions = useCallback((address?: string) => {
+	// 	const eventTypes = ["purchase", "reinvest", "autoReinvest", "exit"];
+	// 	const baseFilter = {
+	// 		or: eventTypes.map((type) => ({ eventType: { eq: type } })),
+	// 	};
 
-		return {
-			filter: {
-				and: [baseFilter, ...(address ? [{ initiator: { eq: address } }] : [])],
-			},
-			sort: {
-				field: "timestamp",
-				order: "DESC",
-			},
-		};
-	}, []);
+	// 	return {
+	// 		filter: {
+	// 			and: [baseFilter, ...(address ? [{ initiator: { eq: address } }] : [])],
+	// 		},
+	// 		sort: {
+	// 			field: "timestamp",
+	// 			order: "DESC",
+	// 		},
+	// 	};
+	// }, []);
 
 	const setupSubscriptionAndQuery = useCallback(async () => {
 		// const queryOptions = constructQueryOptions(address);
@@ -89,7 +89,9 @@ export const useQueryData = (address?: string) => {
 				.in("event_type", ["purchase", "reinvest", "autoReinvest", "exit"])
 				.order("timestamp", { ascending: false });
 
-			const { data } = await (address ? query.eq("initiator", address) : query);
+			const { data } = await (address
+				? query.contains("data", { player: address })
+				: query);
 
 			const typedData = (data || []).map((item) => ({
 				...item,
@@ -160,7 +162,7 @@ export const useQueryData = (address?: string) => {
 		// 	},
 		// 	error: (error) => console.error("Subscription error:", error),
 		// });
-	}, [address, supabase, constructQueryOptions, addNewTransaction]);
+	}, [address, supabase, addNewTransaction]);
 
 	useEffect(() => {
 		setupSubscriptionAndQuery();

@@ -44,7 +44,7 @@ const HistoryModalBody: React.FC<{ data: Transaction[] }> = React.memo(
 									).toString()}
 								</span>
 								<span className='hidden sm:flex sm:w-2/6'>
-									{formatAddress(transaction.initiator, 12, -12)}
+									{formatAddress(transaction.data?.player ?? "", 12, -12)}
 								</span>
 								<span className='w-[30px]'>
 									<Link

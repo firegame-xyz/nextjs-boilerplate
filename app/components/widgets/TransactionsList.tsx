@@ -134,7 +134,9 @@ const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 											: "0"}
 									</span>
 									<span className='flex w-4/12 items-center gap-1'>
-										<span>{formatAddress(transaction.initiator, 12, -12)}</span>
+										<span>
+											{formatAddress(transaction.data?.player ?? "", 12, -12)}
+										</span>
 										<span className='cursor-pointer'>
 											{transaction.initiator === value && filterApply ? (
 												<CloseIcon onClick={handleClear} />
