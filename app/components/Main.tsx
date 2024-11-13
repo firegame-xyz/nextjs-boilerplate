@@ -23,6 +23,9 @@ import TransactionsList from "@/app/components/widgets/TransactionsList";
 import ConstructionWorkerSalariesBalance from "./widgets/ConstructionWorkerSalariesBalance";
 import RandomnessStatus from "./RandomnessStatus";
 
+const PRICE_PER_ORE = new anchor.BN(1_000_000_000);
+const SECONDS_PER_YEAR = new anchor.BN(60 * 60 * 24 * 365);
+
 const MainComponent: React.FC = () => {
 	// Atoms
 	const [playerData] = useAtom(playerDataAtom);
@@ -31,7 +34,7 @@ const MainComponent: React.FC = () => {
 
 	// Hooks
 	const { publicKey } = useWallet();
-	const { transactions } = useQueryData();
+	const { transactions, isLoading, loadMoreTransactions } = useQueryData("");
 	const currentTime = useCurrentTime();
 
 	// State
@@ -44,9 +47,6 @@ const MainComponent: React.FC = () => {
 	// Callbacks
 	const calculateExitRewards = useCallback(() => {
 		if (!playerData) return;
-
-		const PRICE_PER_ORE = new anchor.BN(1_000_000_000);
-		const SECONDS_PER_YEAR = new anchor.BN(60 * 60 * 24 * 365);
 
 		const currentTime = new anchor.BN(Math.floor(Date.now() / 1000));
 		const timeDiff = currentTime.sub(playerData.lastPurchaseTimestamp);
@@ -108,8 +108,14 @@ const MainComponent: React.FC = () => {
 	// Memoized Components
 	const MemoizedEndList = useMemo(() => <EndList />, []);
 	const MemoizedTransactionsList = useMemo(
-		() => <TransactionsList data={transactions} />,
-		[transactions],
+		() => (
+			<TransactionsList
+				data={transactions}
+				isLoading={isLoading}
+				loadMoreTransactions={loadMoreTransactions}
+			/>
+		),
+		[transactions, isLoading, loadMoreTransactions],
 	);
 
 	const renderRightColumn = useMemo(() => {

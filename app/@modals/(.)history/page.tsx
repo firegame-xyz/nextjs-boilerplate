@@ -1,19 +1,37 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import HistoryModalBody from "@/app/components/modals/history/HistoryModalBody";
+import { useCallback, useMemo, useRef } from "react";
 import { Modal, ModalHandles } from "@/app/components/modals/Modal";
 import { useQueryData } from "@/app/hooks/useData";
+import TransactionsList from "@/app/components/widgets/TransactionsList";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function HistoryModal() {
 	const { publicKey } = useWallet();
+	const { transactions, isLoading, loadMoreTransactions } = useQueryData(
+		publicKey?.toString() ?? "",
+	);
 	const modalRef = useRef<ModalHandles>(null);
-	const { transactions } = useQueryData(publicKey?.toString());
+
+	const handleLoadMore = useCallback(
+		async (filterAddress: string) => {
+			return await loadMoreTransactions(
+				(filterAddress || publicKey?.toString()) ?? "",
+			);
+		},
+		[loadMoreTransactions, publicKey],
+	);
 
 	const MemoizedHistoryList = useMemo(
-		() => <HistoryModalBody data={transactions} />,
-		[transactions],
+		() => (
+			<TransactionsList
+				data={transactions}
+				isLoading={isLoading}
+				isHistory={true}
+				loadMoreTransactions={handleLoadMore}
+			/>
+		),
+		[transactions, isLoading, handleLoadMore],
 	);
 
 	return (
