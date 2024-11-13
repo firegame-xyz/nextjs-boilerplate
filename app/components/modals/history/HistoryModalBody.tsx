@@ -2,13 +2,17 @@ import * as anchor from "@coral-xyz/anchor";
 import Link from "next/link";
 import React from "react";
 
+import { useAtom } from "jotai";
+import { rpcEndpointAtom } from "@/app/state";
+
 import { LinkExternalIcon } from "@/app/components/icons/Icon";
 import TimeAgo from "@/app/components/widgets/TimeAge";
-import { clx, formatAddress } from "@/app/utils/helpers";
+import { clx, formatAddress, getSolanaExplore } from "@/app/utils/helpers";
 import { Transaction } from "@/app/hooks/useData";
 
 const HistoryModalBody: React.FC<{ data: Transaction[] }> = React.memo(
 	function HistoryModalBody({ data }) {
+		const [rpcEndpoint] = useAtom(rpcEndpointAtom);
 		const transactions = data;
 
 		return (
@@ -48,7 +52,7 @@ const HistoryModalBody: React.FC<{ data: Transaction[] }> = React.memo(
 								</span>
 								<span className='w-[30px]'>
 									<Link
-										href={`https://solscan.io/tx/${transaction.signature}`}
+										href={getSolanaExplore(rpcEndpoint, transaction.signature)}
 										target='_blank'
 									>
 										<LinkExternalIcon className='w-5' color='#525252' />

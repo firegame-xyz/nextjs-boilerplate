@@ -87,11 +87,10 @@ export const useQueryData = (address?: string) => {
 				.from("transaction")
 				.select("*")
 				.in("event_type", ["purchase", "reinvest", "autoReinvest", "exit"])
+				.contains("data", { player: address })
 				.order("timestamp", { ascending: false });
 
-			const { data } = await (address
-				? query.contains("data", { player: address })
-				: query);
+			const { data } = await query;
 
 			const typedData = (data || []).map((item) => ({
 				...item,
@@ -113,7 +112,7 @@ export const useQueryData = (address?: string) => {
 					schema: "public",
 					table: "transaction",
 					filter: `event_type=in.(purchase,reinvest,autoReinvest,exit)${
-						address ? ` AND initiator=eq.${address}` : ""
+						address ? ` AND data@>\'{"player":"${address}"}\'` : ""
 					}`,
 				},
 

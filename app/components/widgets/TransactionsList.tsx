@@ -1,17 +1,11 @@
 import * as anchor from "@coral-xyz/anchor";
-import React, {
-	useCallback,
-	// useEffect,
-	useMemo,
-	useState,
-	// useRef,
-} from "react";
-// import { useAtom } from "jotai";
-// import { programAtom } from "@/app/state";
-// import { generateClient } from "aws-amplify/data";
-// import type { Schema } from "@/amplify/data/resource";
+import React, { useCallback, useMemo, useState } from "react";
+
+import { useAtom } from "jotai";
+import { rpcEndpointAtom } from "@/app/state";
+
 import Link from "next/link";
-import { clx, formatAddress } from "@/app/utils/helpers";
+import { clx, formatAddress, getSolanaExplore } from "@/app/utils/helpers";
 import TimeAgo from "./TimeAge";
 import { FilterIcon, CloseIcon, LinkExternalIcon } from "../icons/Icon";
 import { ButtonTertiary } from "../buttons/Button";
@@ -19,7 +13,7 @@ import type { Transaction } from "@/app/hooks/useData";
 
 const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 	({ data }) => {
-		// const [program] = useAtom(programAtom);
+		const [rpcEndpoint] = useAtom(rpcEndpointAtom);
 		const [filterShow, setFilterShow] = useState(false);
 		const [filterApply, setFilterApply] = useState(false);
 		const [value, setValue] = useState<string>("");
@@ -59,7 +53,7 @@ const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 
 		const filteredTransactions = useMemo(() => {
 			return filterApply
-				? transactions.filter((t) => t.initiator === value)
+				? transactions.filter((t) => t.data?.player === value)
 				: transactions;
 		}, [transactions, filterApply, value]);
 
@@ -138,12 +132,14 @@ const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 											{formatAddress(transaction.data?.player ?? "", 12, -12)}
 										</span>
 										<span className='cursor-pointer'>
-											{transaction.initiator === value && filterApply ? (
+											{transaction.data?.player === value && filterApply ? (
 												<CloseIcon onClick={handleClear} />
 											) : (
 												<FilterIcon
 													onClick={() =>
-														handleSetFilterAddress(transaction.initiator)
+														handleSetFilterAddress(
+															transaction.data?.player ?? "",
+														)
 													}
 												/>
 											)}
@@ -151,7 +147,10 @@ const TransactionsList: React.FC<{ data: Transaction[] }> = React.memo(
 									</span>
 									<span className='hidden w-1/12 justify-center sm:flex'>
 										<Link
-											href={`https://solscan.io/tx/${transaction.signature}`}
+											href={getSolanaExplore(
+												rpcEndpoint,
+												transaction.signature,
+											)}
 											target='_blank'
 										>
 											<LinkExternalIcon className='w-5' color='#525252' />

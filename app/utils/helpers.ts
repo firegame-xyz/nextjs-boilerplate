@@ -66,6 +66,27 @@ export function isValidSolanaAddress(address: string) {
 	}
 }
 
+export function getSolanaExplore(
+	url: string | null,
+	tx: string | null,
+): string {
+	if (!url || !tx) return `https://solscan.io`;
+
+	url = url.toLowerCase();
+
+	if (url.includes("mainnet")) {
+		return `https://solscan.io/tx/${tx}`;
+	}
+	if (url.includes("devnet")) {
+		return `https://solscan.io/tx/${tx}?cluster=devnet`;
+	}
+	if (url.includes("testnet")) {
+		return `https://solscan.io/tx/${tx}?cluster=testnet`;
+	}
+
+	return `https://solscan.io`; // Add default return
+}
+
 /**
  * Specific for token amount formatting
  */
