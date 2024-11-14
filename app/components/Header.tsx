@@ -7,10 +7,22 @@ import Dropdown from "./widgets/Dropdown";
 import Nav from "./widgets/Nav";
 import { VoucherBalance } from "./widgets/VoucherBalance";
 import { useGlobal } from "../hooks/useGlobal";
+import { useAtom } from "jotai";
+import { currentTimeAtom } from "../state";
+import { useEffect } from "react";
 
 export default function Header() {
 	const { connected } = useWallet();
 	const {} = useGlobal();
+	const [, setCurrentTime] = useAtom(currentTimeAtom);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setCurrentTime(Math.floor(Date.now() / 1000));
+		}, 1000);
+
+		return () => clearInterval(timer);
+	}, []);
 
 	return (
 		<div className='flex justify-between border-b-2 border-b-warning p-5 sm:justify-start'>

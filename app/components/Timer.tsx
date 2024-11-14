@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAtom } from "jotai";
-import { roundAtom, statePendingAtom } from "@/app/state";
+import { roundAtom, statePendingAtom, currentTimeAtom } from "@/app/state";
 import { useTimer } from "react-timer-hook";
 
 import { ButtonDefault } from "./buttons/Button";
 import ParticlesComponent from "./widgets/ParticlesComponent";
 import RegisterComponent from "./widgets/Register";
-import { useCurrentTime } from "../hooks/useData";
 import { WaveformShader } from "./widgets/WaveformShader";
 
 interface InnerTimerProps {
@@ -74,7 +73,7 @@ export function Timer({
 	const [timerKey, setTimerKey] = useState(0);
 	const [, setIsTimerComplete] = useState(false);
 	const [isCallTime, setIsCallTime] = useState(false);
-	const currentTime = useCurrentTime();
+	const [currentTime] = useAtom(currentTimeAtom);
 
 	const timerCompleteChild = useCallback(() => {
 		timerComplete();
@@ -146,7 +145,9 @@ export function Timer({
 			</div>
 
 			<div className='absolute top-[30%] text-center text-warning'>
-				<div className='mb-5 text-3xl'>ARK {round?.roundNumber}</div>
+				<div className='mb-5 text-3xl [text-shadow:_2px_2px_0_rgb(0_0_0)]'>
+					ARK {round?.roundNumber}
+				</div>
 				{isCallTime ? (
 					<>
 						<div className='text-2xl font-bold text-error-600 [text-shadow:_2px_2px_0_rgb(0_0_0)]'>
@@ -158,7 +159,9 @@ export function Timer({
 					</>
 				) : (
 					<>
-						<div>COUNTDOWN</div>
+						<span className='[text-shadow:_2px_2px_0_rgb(0_0_0)]'>
+							COUNTDOWN
+						</span>
 						<div className='bg-base-black/80 p-2'>
 							{isClient ? (
 								<InnerTimer
@@ -174,7 +177,7 @@ export function Timer({
 				)}
 
 				<Link href='/rule'>
-					<ButtonDefault className='h-8 scale-50 rounded-xl'>
+					<ButtonDefault className='h-8 scale-75 rounded-xl'>
 						RULE
 					</ButtonDefault>
 				</Link>

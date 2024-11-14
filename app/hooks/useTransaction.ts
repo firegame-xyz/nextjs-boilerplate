@@ -38,9 +38,8 @@ export default function useTransaction() {
 	// const [voucherAccount] = useAtom(voucherAccountAtom);
 	// const [voucherBalance] = useAtom(voucherBalanceAtom);
 
-	const [isTransactionInProgress, setIsTransactionInProgress] = useState<
-		boolean
-	>(false);
+	const [isTransactionInProgress, setIsTransactionInProgress] =
+		useState<boolean>(false);
 
 	/**
 	 * Checks if the required state is available for transactions
@@ -67,10 +66,7 @@ export default function useTransaction() {
 		if (!program || !checkRequiredState()) return [];
 
 		return [
-			await program.methods
-				.collectReferrerRewards()
-				.accounts({})
-				.instruction(),
+			await program.methods.collectReferrerRewards().accounts({}).instruction(),
 		];
 	}, [program, checkRequiredState]);
 
@@ -99,12 +95,7 @@ export default function useTransaction() {
 	 */
 	const createExitInstructions = useCallback<InstructionCreator>(async () => {
 		if (!program || !checkRequiredState()) return [];
-		return [
-			await program.methods
-				.exit()
-				.accounts({})
-				.instruction(),
-		];
+		return [await program.methods.exit().accounts({}).instruction()];
 	}, [program, checkRequiredState]);
 
 	// /**
@@ -162,10 +153,7 @@ export default function useTransaction() {
 			if (!program || !checkRequiredState()) return [];
 
 			return [
-				await program.methods
-					.setReferrer(publicKey)
-					.accounts({})
-					.instruction(),
+				await program.methods.setReferrer(publicKey).accounts({}).instruction(),
 			];
 		},
 		[program, checkRequiredState],
@@ -175,18 +163,12 @@ export default function useTransaction() {
 	 * Creates instructions for reinvesting
 	 * @returns {Promise<anchor.web3.TransactionInstruction[]>} Array of transaction instructions
 	 */
-	const createReinvestInstructions = useCallback<
-		InstructionCreator
-	>(async () => {
-		if (!program || !checkRequiredState()) return [];
+	const createReinvestInstructions =
+		useCallback<InstructionCreator>(async () => {
+			if (!program || !checkRequiredState()) return [];
 
-		return [
-			await program.methods
-				.reinvest()
-				.accounts({})
-				.instruction(),
-		];
-	}, [program, checkRequiredState]);
+			return [await program.methods.reinvest().accounts({}).instruction()];
+		}, [program, checkRequiredState]);
 
 	/**
 	 * Creates instructions for requestEarlyUnlock
@@ -220,10 +202,7 @@ export default function useTransaction() {
 			if (!program || !checkRequiredState()) return [];
 			return [
 				isOn
-					? await program.methods
-							.setAutoReinvest()
-							.accounts({})
-							.instruction()
+					? await program.methods.setAutoReinvest().accounts({}).instruction()
 					: await program.methods
 							.cancelAutoReinvest()
 							.accounts({})
@@ -236,17 +215,13 @@ export default function useTransaction() {
 	/**
 	 * Creates instructions for settling the previous round
 	 */
-	const createSettlePreviousRoundInstructions = useCallback<
-		InstructionCreator
-	>(async () => {
-		if (!program || !game || !checkRequiredState()) return [];
-		return [
-			await program.methods
-				.settlePreviousRound()
-				.accounts({})
-				.instruction(),
-		];
-	}, [program, game, checkRequiredState]);
+	const createSettlePreviousRoundInstructions =
+		useCallback<InstructionCreator>(async () => {
+			if (!program || !game || !checkRequiredState()) return [];
+			return [
+				await program.methods.settlePreviousRound().accounts({}).instruction(),
+			];
+		}, [program, game, checkRequiredState]);
 
 	/**
 	 * Creates instructions for withdraw
@@ -259,10 +234,7 @@ export default function useTransaction() {
 			if (!program || !checkRequiredState()) return [];
 
 			return [
-				await program.methods
-					.withdraw(orderNumber)
-					.accounts({})
-					.instruction(),
+				await program.methods.withdraw(orderNumber).accounts({}).instruction(),
 			];
 		},
 		[program, checkRequiredState],
@@ -284,16 +256,16 @@ export default function useTransaction() {
 				return;
 			}
 
+			const id = Math.floor(Math.random() * 10000000);
+			notification.pending(id, `Pending`, `It's pending. Please wait.`);
 			setIsTransactionInProgress(true);
 			setStatePending(true);
 
 			try {
 				// Create and send the transaction
 				const instructions = await instructionsMethod();
-				const {
-					blockhash,
-					lastValidBlockHeight,
-				} = await connection.getLatestBlockhash("finalized");
+				const { blockhash, lastValidBlockHeight } =
+					await connection.getLatestBlockhash("finalized");
 
 				const tx = new anchor.web3.Transaction().add(...instructions);
 				tx.recentBlockhash = blockhash;
@@ -327,6 +299,7 @@ export default function useTransaction() {
 				if (transactionResult?.meta && !transactionResult.meta.err) {
 					console.log("Transaction confirmed:", transactionResult);
 					notification.success(`${messageType} Success!`);
+					notification.remove(id);
 					return transactionResult;
 				} else {
 					throw new Error(
@@ -347,6 +320,7 @@ export default function useTransaction() {
 			} finally {
 				setIsTransactionInProgress(false);
 				setStatePending(false);
+				notification.remove(id);
 			}
 		},
 		[

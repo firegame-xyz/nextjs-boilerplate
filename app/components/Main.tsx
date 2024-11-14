@@ -10,11 +10,16 @@ import React, {
 import { useAtom } from "jotai";
 import { useWallet } from "@solana/wallet-adapter-react";
 
-import { playerDataAtom, registeredAtom, roundAtom } from "@/app/state";
+import {
+	playerDataAtom,
+	registeredAtom,
+	roundAtom,
+	currentTimeAtom,
+} from "@/app/state";
 import { BoxBalance } from "@/app/components/widgets/BoxBalance";
 import { Timer } from "@/app/components/Timer";
 import { clx, formatAmount, formatTokenAmount } from "@/app/utils/helpers";
-import { useQueryData, useCurrentTime } from "@/app/hooks/useData";
+import { useQueryData } from "@/app/hooks/useData";
 import EndList from "@/app/components/widgets/EndList";
 import Exit from "@/app/components/widgets/Exit";
 import PurchaseComponent from "@/app/components/widgets/Purchase";
@@ -31,11 +36,11 @@ const MainComponent: React.FC = () => {
 	const [playerData] = useAtom(playerDataAtom);
 	const [registered] = useAtom(registeredAtom);
 	const [round] = useAtom(roundAtom);
+	const [currentTime] = useAtom(currentTimeAtom);
 
 	// Hooks
 	const { publicKey } = useWallet();
 	const { transactions, isLoading, loadMoreTransactions } = useQueryData("");
-	const currentTime = useCurrentTime();
 
 	// State
 	const [expiryTimestamp, setExpiryTimestamp] = useState<string>("0");
@@ -46,10 +51,10 @@ const MainComponent: React.FC = () => {
 
 	// Callbacks
 	const calculateExitRewards = useCallback(() => {
-		if (!playerData) return;
+		if (!playerData || currentTime === 0) return;
 
-		const currentTime = new anchor.BN(Math.floor(Date.now() / 1000));
-		const timeDiff = currentTime.sub(playerData.lastPurchaseTimestamp);
+		const nowTime = new anchor.BN(currentTime);
+		const timeDiff = nowTime.sub(playerData.lastPurchaseTimestamp);
 
 		// Calculate pending rewards for this period
 		const pendingExitRewards = playerData.oreAmount
@@ -69,13 +74,13 @@ const MainComponent: React.FC = () => {
 	}, [playerData]);
 
 	const exitRewards = useCallback(() => {
-		if (!round) return setExitRewardsValue(0);
-		const _value = new anchor.BN(Math.floor(Date.now() / 1000))
+		if (!round || currentTime === 0) return setExitRewardsValue(0);
+		const _value = new anchor.BN(currentTime)
 			.sub(round.lastClaimedExitRewardsTimestamp)
 			.mul(new anchor.BN(round?.exitRewardsPerSecond));
 
 		setExitRewardsValue(formatAmount(_value).toNumber());
-	}, [round]);
+	}, [round, currentTime]);
 
 	const handleTabChange = useCallback((tabIndex: number) => {
 		setTabActive(tabIndex);
@@ -122,31 +127,47 @@ const MainComponent: React.FC = () => {
 		if (!registered || !publicKey) return null;
 		return (
 			<div className='w-full sm:w-1/3'>
+				<div className='banner mb-4 h-[60px]'>{`THE LAST 10 PURCHASE,THE BIG WINNER!`}</div>
+
 				<PurchaseComponent />
-				<div className='banner mt-4 h-[60px]'>{`THE LAST 10 PURCHASE,THE BIG WINNER!`}</div>
+
 				<div className='widget-base banner-base mt-4 p-4'>
-					<div className='flex items-center gap-2'>
-						<div className='relative h-[32px] w-[32px]'>
-							<Image
-								src='/images/ore.png'
-								alt='Ore icon'
-								fill
-								sizes='32px'
-								style={{ objectFit: "contain" }}
-							/>
+					<div className='flex justify-between'>
+						<div className='flex items-center gap-2'>
+							<div className='relative h-[32px] w-[32px]'>
+								<Image
+									src='/images/ore.png'
+									alt='Ore icon'
+									fill
+									sizes='32px'
+									style={{ objectFit: "contain" }}
+								/>
+							</div>
+							<div className='text-base-white'>
+								<BoxBalance />
+							</div>
 						</div>
-						<div className='text-base-white'>
-							<BoxBalance />
+						<div>
+							<span>{`My Salary: `}</span>
+							<ConstructionWorkerSalariesBalance />
+							{` FGC`}
 						</div>
 					</div>
-					<div className='flex mt-3 text-xs'>
-						<div className='flex flex-1 gap-4'>
-							<div className='flex flex-col'>
-								<span>{`Exit Rewards`}</span>
+					<div className='flex flex-col mt-3 text-xs'>
+						<div className='mb-1'>{`Claim these bonus rewards by exiting now:`}</div>
+						<div className='widget-base flex gap-4 p-4'>
+							<div className='flex flex-col flex-1 text-center'>
+								<span>{`Real-time Rewards`}</span>
 								<span className='text-base-white'>{exitRewardsValue}</span>
 							</div>
-							<div className='flex flex-col'>
-								<span>{`Pending Rewards`}</span>
+							<div className='flex flex-col flex-1 text-center'>
+								<span>{`Extra Salary`}</span>
+								<span className='text-base-white'>
+									<ConstructionWorkerSalariesBalance />
+								</span>
+							</div>
+							<div className='flex flex-col flex-1 text-center'>
+								<span>{`Ore Yield`}</span>
 								<span className='text-base-white'>
 									{formatTokenAmount(
 										formatAmount(new anchor.BN(pendingRewardsValue)),
@@ -154,14 +175,11 @@ const MainComponent: React.FC = () => {
 									)}
 								</span>
 							</div>
-							<div className='flex flex-col'>
-								<span>{`Construction Worker Salaries`}</span>
-								<span className='text-base-white'>
-									<ConstructionWorkerSalariesBalance />
-								</span>
-							</div>
 						</div>
-						<Exit />
+						<div className='mt-4 text-center'>
+							<Exit />
+						</div>
+						<div className='text-xs text-center text-base-white mt-2'>{`Tip: Claim all bonuses before game end`}</div>
 					</div>
 				</div>
 			</div>

@@ -43,6 +43,7 @@ export const Notification: React.FC<Props> = ({
 	}).current;
 
 	useEffect(() => {
+		if (type === "pending") return;
 		timer.current = setTimeout(() => {
 			dismiss();
 		}, liveTime);
@@ -51,7 +52,7 @@ export const Notification: React.FC<Props> = ({
 				clearTimeout(timer.current);
 			}
 		};
-	}, [liveTime, dismiss]);
+	}, [liveTime, type, dismiss]);
 
 	const handleMouseEnter = () => {
 		if (progressRef.current !== null) {

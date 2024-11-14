@@ -290,6 +290,7 @@ const randomnessAtom = atom<RandomnessState>({
 const rpcEndpointAtom = atom<string>(
 	clusterApiUrl(WalletAdapterNetwork.Devnet),
 );
+const currentTimeAtom = atom<number>(0);
 const providerAtom = atom<anchor.AnchorProvider | null>(null);
 const programAtom = atom<IDL | null>(null);
 const configAtom = atom<Config | null>(null);
@@ -312,6 +313,7 @@ const mySquadAtom = atomWithStorage("mySquad", null);
 
 // Export individual atoms for use in other components
 export {
+	currentTimeAtom,
 	RPCPendingAtom,
 	rpcEndpointAtom,
 	randomnessAtom,

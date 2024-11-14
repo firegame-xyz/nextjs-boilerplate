@@ -135,7 +135,7 @@ export function baseWinRate(purchaseAmount: number): number {
 	}
 	// Handle the case where purchaseAmount is 20000 or greater
 	if (purchaseAmount >= 20000) {
-		return 10000; // 100.00%
+		return 9900; // 100.00%
 	}
 
 	const probabilityPoints: ProbabilityPoint[] = [
@@ -145,7 +145,7 @@ export function baseWinRate(purchaseAmount: number): number {
 		{ amount: 2000, probability: 3000 }, // 30.00%
 		{ amount: 5000, probability: 6000 }, // 60.00%
 		{ amount: 10000, probability: 9000 }, // 90.00%
-		{ amount: 20000, probability: 10000 }, // 100.00%
+		{ amount: 20000, probability: 9900 }, // 100.00%
 	];
 
 	const { lower, upper } = probabilityPoints

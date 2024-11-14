@@ -5,669 +5,743 @@
 html,
 body,
 :root {
-  --primary-bg: #17181c;
-  --primary-text: #ffffffa6;
-  min-height: 100vh;
+	--primary-bg: #17181c;
+	--primary-text: #ffffffa6;
+	min-height: 100vh;
 }
 
 body {
-  background-color: var(--primary-bg);
-  color: var(--primary-text);
+	background-color: var(--primary-bg);
+	color: var(--primary-text);
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 48px;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 48px;
 }
 
 @media (min-width: 640px) {
-  main {
-    padding-bottom: 0;
-  }
+	main {
+		padding-bottom: 0;
+	}
 }
 
 input:focus {
-  outline: none;
+	outline: none;
 }
 
 .scale75 {
-  zoom: 0.75;
+	zoom: 0.75;
 }
 
 .center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .wallpoet-regular {
-  font-family: "Wallpoet", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+	font-family: "Wallpoet", sans-serif;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .wallet-adapter-button-trigger {
-  background-color: transparent;
+	background-color: transparent;
 }
 
 .wallet-adapter-button:not([disabled]):hover {
-  background-color: transparent;
+	background-color: transparent;
 }
 
 .item-badge {
-  position: absolute;
-  z-index: 1;
-  width: 70px;
-  text-align: center;
-  height: 40px;
-  line-height: 50px;
-  border-radius: 3px;
-  padding: 2px 4px 0;
-  top: -11px;
-  left: -26px;
-  transform: rotate(-45deg);
+	position: absolute;
+	z-index: 1;
+	width: 70px;
+	text-align: center;
+	height: 40px;
+	line-height: 50px;
+	border-radius: 3px;
+	padding: 2px 4px 0;
+	top: -11px;
+	left: -26px;
+	transform: rotate(-45deg);
 }
 
 @layer components {
-  .input-base {
-    @apply w-full border border-gray-600 bg-gray-800 p-2 text-sm;
-  }
+	.input-base {
+		@apply w-full border border-gray-600 bg-gray-800 p-2 text-sm;
+	}
 
-  .filter-base {
-    display: none;
-  }
+	.filter-base {
+		display: none;
+	}
 
-  .filter-base.hidden {
-    display: none;
-  }
+	.filter-base.hidden {
+		display: none;
+	}
 
-  .filter-base.display {
-    display: block;
-  }
+	.filter-base.display {
+		display: block;
+	}
 
-  .floatAt {
-    animation: float 3s ease-in-out infinite;
-  }
-  .numberBox1 {
-    width: calc(259px / 2);
-    height: calc(86px / 2);
-    background-image: url(/images/bg_n1.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: 100%;
-    animation-delay: 0;
-  }
+	.floatAt {
+		animation: float 3s ease-in-out infinite;
+	}
+	.numberBox1 {
+		width: calc(259px / 2);
+		height: calc(86px / 2);
+		background-image: url(/images/bg_n1.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: 100%;
+		animation-delay: 0;
+	}
 
-  .numberBox2 {
-    width: calc(258px / 2);
-    height: calc(81px / 2);
-    background-image: url(/images/bg_n2.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: 100%;
-    left: -60px;
-    animation-delay: 1s;
-  }
+	.numberBox2 {
+		width: calc(258px / 2);
+		height: calc(81px / 2);
+		background-image: url(/images/bg_n2.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: 100%;
+		left: -60px;
+		animation-delay: 1s;
+	}
 
-  .numberBox3 {
-    width: calc(258px / 2);
-    height: calc(81px / 2);
-    background-image: url(/images/bg_n3.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: 100%;
-    left: 60px;
-    animation-delay: 1.5s;
-  }
+	.numberBox3 {
+		width: calc(258px / 2);
+		height: calc(81px / 2);
+		background-image: url(/images/bg_n3.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: 100%;
+		left: 60px;
+		animation-delay: 1.5s;
+	}
 
-  .banner {
-    @apply flex items-center justify-center rounded-lg text-xl text-warning;
-    width: 100%;
-    background-image: url(/images/bg_banner.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: 100%;
-  }
+	.banner {
+		@apply flex items-center justify-center rounded-lg text-xl text-warning;
+		width: 100%;
+		background-image: url(/images/bg_banner.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: 100%;
+	}
 
-  .banner-base {
-    @apply text-warning;
-    width: 100%;
-    background-image: url(/images/bg_banner_full.png);
-    background-size: cover;
-    background-position: center;
-  }
+	.banner-base {
+		@apply text-warning;
+		width: 100%;
+		background-image: url(/images/bg_banner_full.png);
+		background-size: cover;
+		background-position: center;
+	}
 
-  .time-base {
-    background-image: url(/images/bg_time.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: 100%;
-    height: 310px;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
-      0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5),
-      0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.5);
-  }
+	.time-base {
+		background-image: url(/images/bg_time.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: 100%;
+		height: 310px;
+		text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+			0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5),
+			0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.5);
+	}
 
-  .textShadow {
-    text-shadow: 0 2px 0px #135052;
-  }
+	.textShadow {
+		text-shadow: 0 2px 0px #135052;
+	}
 
-  .anItem {
-    opacity: 0;
-    transform: translateX(-1%);
-    animation: itemFadeIn 0.1s ease-out forwards;
-  }
+	.anItem {
+		opacity: 0;
+		transform: translateX(-1%);
+		animation: itemFadeIn 0.1s ease-out forwards;
+	}
 
-  .notification-bar {
-    height: 100%;
-    animation: notification-progress-bar 6s linear forwards;
-  }
+	.notification-bar {
+		height: 100%;
+		animation: notification-progress-bar 6s linear forwards;
+	}
 
-  .notification-bar.success {
-    background-color: #15b79e;
-  }
+	.notification-bar.success {
+		background-color: #15b79e;
+	}
 
-  .notification-bar.info {
-    background-color: #2e90fa;
-  }
+	.notification-bar.info {
+		background-color: #2e90fa;
+	}
 
-  .notification-bar.warning {
-    background-color: #ef6820;
-  }
+	.notification-bar.warning {
+		background-color: #ef6820;
+	}
 
-  .notification-bar.error {
-    background-color: #f97066;
-  }
+	.notification-bar.error {
+		background-color: #f97066;
+	}
 
-  .notification {
-    animation: notification-slide-in 0.3s ease-in-out forwards;
-  }
+	.notification {
+		animation: notification-slide-in 0.3s ease-in-out forwards;
+	}
 
-  .notification-dismissed {
-    animation: notification-slide-out 0.3s ease-in-out forwards;
-  }
+	.notification-dismissed {
+		animation: notification-slide-out 0.3s ease-in-out forwards;
+	}
 
-  .widget-base {
-    @apply block rounded-lg bg-blue-900;
-    box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.1) inset,
-      0px 1px 4px 0px rgba(13, 14, 17, 0.8);
-  }
+	.widget-base {
+		@apply block rounded-lg bg-blue-900;
+		box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.1) inset,
+			0px 1px 4px 0px rgba(13, 14, 17, 0.8);
+	}
 
-  .btn-base {
-    @apply h-[42px] px-5 text-sm font-medium text-base-white focus:outline-none disabled:cursor-not-allowed;
-  }
+	.btn-base {
+		@apply h-[42px] px-5 text-sm font-medium text-base-white focus:outline-none disabled:cursor-not-allowed;
+	}
 
-  .btn-2xl {
-    @apply flex items-center justify-center text-lg;
-  }
+	.btn-2xl {
+		@apply flex items-center justify-center text-lg;
+	}
 
-  .btn-xl {
-    @apply flex items-center justify-center text-md;
-  }
+	.btn-xl {
+		@apply flex items-center justify-center text-md;
+	}
 
-  .btn-lg {
-    @apply flex items-center justify-center text-md;
-  }
+	.btn-lg {
+		@apply flex items-center justify-center text-md;
+	}
 
-  .btn-md {
-    @apply flex items-center justify-center text-sm;
-  }
+	.btn-md {
+		@apply flex items-center justify-center text-sm;
+	}
 
-  .btn-sm {
-    @apply flex items-center justify-center text-sm;
-  }
+	.btn-sm {
+		@apply flex items-center justify-center text-sm;
+	}
 
-  .btn-disabled {
-    @apply bg-gray-400/50 !important;
-  }
+	.btn-disabled {
+		@apply bg-gray-400/50 !important;
+	}
 
-  div .widget-base:nth-of-type(1) {
-    animation: fadeInUp 250ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(1) {
+		animation: fadeInUp 250ms ease-out forwards;
+	}
 
-  div .widget-base:nth-of-type(2) {
-    animation: fadeInUpDelayed 300ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(2) {
+		animation: fadeInUpDelayed 300ms ease-out forwards;
+	}
 
-  div .widget-base:nth-of-type(3) {
-    animation: fadeInUpDelayed 350ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(3) {
+		animation: fadeInUpDelayed 350ms ease-out forwards;
+	}
 
-  div .widget-base:nth-of-type(4) {
-    animation: fadeInUpDelayed 400ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(4) {
+		animation: fadeInUpDelayed 400ms ease-out forwards;
+	}
 
-  div .widget-base:nth-of-type(5) {
-    animation: fadeInUpDelayed 500ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(5) {
+		animation: fadeInUpDelayed 500ms ease-out forwards;
+	}
 
-  div .widget-base:nth-of-type(6) {
-    animation: fadeInUpDelayed 600ms ease-out forwards;
-  }
+	div .widget-base:nth-of-type(6) {
+		animation: fadeInUpDelayed 600ms ease-out forwards;
+	}
 
-  .wrap-modal-base {
-    @apply fixed inset-0 z-[999] hidden h-screen w-screen overflow-auto bg-base-black bg-opacity-75;
-    animation: fadeIn 200ms forwards;
-    opacity: 0;
-  }
+	.wrap-modal-base {
+		@apply fixed inset-0 z-[999] hidden h-screen w-screen overflow-auto bg-base-black bg-opacity-75;
+		animation: fadeIn 200ms forwards;
+		opacity: 0;
+	}
 
-  .wrap-modal-base.fadeOut {
-    animation: fadeOut 200ms forwards;
-  }
+	.wrap-modal-base.fadeOut {
+		animation: fadeOut 200ms forwards;
+	}
 
-  .modal-base {
-    @apply relative mx-auto my-20 max-w-[660px] rounded-2xl bg-gray-800 p-8;
-  }
+	.modal-base {
+		@apply relative mx-auto my-20 max-w-[660px] rounded-2xl bg-gray-800 p-8;
+	}
 
-  .modal-bg-gradient {
-    @apply absolute -inset-x-1/2 -top-full bottom-1/3 bg-gradient-radial from-[#2775ca] to-transparent to-70%;
-  }
+	.modal-bg-gradient {
+		@apply absolute -inset-x-1/2 -top-full bottom-1/3 bg-gradient-radial from-[#2775ca] to-transparent to-70%;
+	}
 
-  .modal-head {
-    @apply relative z-10 flex justify-between;
-  }
+	.modal-head {
+		@apply relative z-10 flex justify-between;
+	}
 
-  .close-modal {
-    @apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-800 text-md font-bold text-base-white;
-  }
+	.close-modal {
+		@apply flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-800 text-md font-bold text-base-white;
+	}
 
-  .modal-details-area {
-    @apply relative z-10 flex flex-col space-y-3 rounded-2xl border border-gray-700 bg-gray-800 p-6;
-  }
+	.modal-details-area {
+		@apply relative z-10 flex flex-col space-y-3 rounded-2xl border border-gray-700 bg-gray-800 p-6;
+	}
 
-  .modal-result-area {
-    @apply relative z-10 flex flex-col items-center justify-center;
-  }
+	.modal-result-area {
+		@apply relative z-10 flex flex-col items-center justify-center;
+	}
 
-  .modal-result-title {
-    @apply mt-4 w-1/2 text-center font-semibold text-base-white;
-  }
+	.modal-result-title {
+		@apply mt-4 w-1/2 text-center font-semibold text-base-white;
+	}
 
-  .modal-result-token {
-    @apply relative inline-block h-20 w-20;
-  }
+	.modal-result-token {
+		@apply relative inline-block h-20 w-20;
+	}
 
-  .modal-base:has(> .modal-result-USDC) {
-    background: linear-gradient(
-          var(--modal-bg-al),
-          rgba(39, 117, 202, var(--modal-bg-o-usdc)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top left / 50% var(--modal-bg-ps) no-repeat,
-      linear-gradient(
-          var(--modal-bg-ar),
-          rgba(39, 117, 202, var(--modal-bg-o-usdc)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top right / 50% var(--modal-bg-ps) no-repeat,
-      #292929;
-    animation: modal-bg-animate 10s linear infinite;
-  }
+	.modal-base:has(> .modal-result-USDC) {
+		background: linear-gradient(
+					var(--modal-bg-al),
+					rgba(39, 117, 202, var(--modal-bg-o-usdc)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top left / 50% var(--modal-bg-ps) no-repeat,
+			linear-gradient(
+					var(--modal-bg-ar),
+					rgba(39, 117, 202, var(--modal-bg-o-usdc)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top right / 50% var(--modal-bg-ps) no-repeat,
+			#292929;
+		animation: modal-bg-animate 10s linear infinite;
+	}
 
-  .modal-base:has(> .modal-result-ETH) {
-    background: linear-gradient(
-          var(--modal-bg-al),
-          rgba(104, 125, 227, var(--modal-bg-o-eth)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top left / 50% var(--modal-bg-ps) no-repeat,
-      linear-gradient(
-          var(--modal-bg-ar),
-          rgba(104, 125, 227, var(--modal-bg-o-eth)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top right / 50% var(--modal-bg-ps) no-repeat,
-      #292929;
-    animation: modal-bg-animate 10s linear infinite;
-  }
+	.modal-base:has(> .modal-result-ETH) {
+		background: linear-gradient(
+					var(--modal-bg-al),
+					rgba(104, 125, 227, var(--modal-bg-o-eth)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top left / 50% var(--modal-bg-ps) no-repeat,
+			linear-gradient(
+					var(--modal-bg-ar),
+					rgba(104, 125, 227, var(--modal-bg-o-eth)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top right / 50% var(--modal-bg-ps) no-repeat,
+			#292929;
+		animation: modal-bg-animate 10s linear infinite;
+	}
 
-  .modal-base:has(> .modal-result-OP) {
-    background: linear-gradient(
-          var(--modal-bg-al),
-          rgba(255, 4, 32, var(--modal-bg-o-op)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top left / 50% var(--modal-bg-ps) no-repeat,
-      linear-gradient(
-          var(--modal-bg-ar),
-          rgba(255, 4, 32, var(--modal-bg-o-op)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top right / 50% var(--modal-bg-ps) no-repeat,
-      #292929;
-    animation: modal-bg-animate 10s linear infinite;
-  }
+	.modal-base:has(> .modal-result-OP) {
+		background: linear-gradient(
+					var(--modal-bg-al),
+					rgba(255, 4, 32, var(--modal-bg-o-op)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top left / 50% var(--modal-bg-ps) no-repeat,
+			linear-gradient(
+					var(--modal-bg-ar),
+					rgba(255, 4, 32, var(--modal-bg-o-op)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top right / 50% var(--modal-bg-ps) no-repeat,
+			#292929;
+		animation: modal-bg-animate 10s linear infinite;
+	}
 
-  .modal-base:has(> .modal-result-ARB) {
-    background: linear-gradient(
-          var(--modal-bg-al),
-          rgba(18, 170, 255, var(--modal-bg-o-arb)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top left / 50% var(--modal-bg-ps) no-repeat,
-      linear-gradient(
-          var(--modal-bg-ar),
-          rgba(18, 170, 255, var(--modal-bg-o-arb)) 0%,
-          rgba(39, 117, 202, 0) var(--modal-bg-pl)
-        )
-        top right / 50% var(--modal-bg-ps) no-repeat,
-      #292929;
-    animation: modal-bg-animate 10s linear infinite;
-  }
+	.modal-base:has(> .modal-result-ARB) {
+		background: linear-gradient(
+					var(--modal-bg-al),
+					rgba(18, 170, 255, var(--modal-bg-o-arb)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top left / 50% var(--modal-bg-ps) no-repeat,
+			linear-gradient(
+					var(--modal-bg-ar),
+					rgba(18, 170, 255, var(--modal-bg-o-arb)) 0%,
+					rgba(39, 117, 202, 0) var(--modal-bg-pl)
+				)
+				top right / 50% var(--modal-bg-ps) no-repeat,
+			#292929;
+		animation: modal-bg-animate 10s linear infinite;
+	}
 
-  @property --modal-bg-pl {
-    syntax: "<percentage>";
-    inherits: false;
-    initial-value: 100%;
-  }
+	@property --modal-bg-pl {
+		syntax: "<percentage>";
+		inherits: false;
+		initial-value: 100%;
+	}
 
-  @property --modal-bg-o-usdc {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 0.4;
-  }
+	@property --modal-bg-o-usdc {
+		syntax: "<number>";
+		inherits: false;
+		initial-value: 0.4;
+	}
 
-  @property --modal-bg-o-eth {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 0.7;
-  }
+	@property --modal-bg-o-eth {
+		syntax: "<number>";
+		inherits: false;
+		initial-value: 0.7;
+	}
 
-  @property --modal-bg-o-arb {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 0.4;
-  }
+	@property --modal-bg-o-arb {
+		syntax: "<number>";
+		inherits: false;
+		initial-value: 0.4;
+	}
 
-  @property --modal-bg-o-op {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 0.4;
-  }
+	@property --modal-bg-o-op {
+		syntax: "<number>";
+		inherits: false;
+		initial-value: 0.4;
+	}
 
-  @property --modal-bg-ps {
-    syntax: "<percentage>";
-    inherits: false;
-    initial-value: 50%;
-  }
+	@property --modal-bg-ps {
+		syntax: "<percentage>";
+		inherits: false;
+		initial-value: 50%;
+	}
 
-  @property --modal-bg-al {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 180deg;
-  }
+	@property --modal-bg-al {
+		syntax: "<angle>";
+		inherits: false;
+		initial-value: 180deg;
+	}
 
-  @property --modal-bg-ar {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 180deg;
-  }
+	@property --modal-bg-ar {
+		syntax: "<angle>";
+		inherits: false;
+		initial-value: 180deg;
+	}
 
-  @keyframes modal-bg-animate {
-    0% {
-      --modal-bg-o-usdc: 0.4;
-      --modal-bg-o-eth: 0.7;
-      --modal-bg-o-arb: 0.4;
-      --modal-bg-o-op: 0.4;
-      --modal-bg-pl: 100%;
-      --modal-bg-ps: 50%;
-      --modal-bg-al: 180deg;
-      --modal-bg-ar: 180deg;
-    }
-    50% {
-      --modal-bg-o-usdc: 0.3;
-      --modal-bg-o-eth: 0.4;
-      --modal-bg-o-arb: 0.3;
-      --modal-bg-o-op: 0.3;
-      --modal-bg-pl: 55%;
-      --modal-bg-ps: 55%;
-      --modal-bg-al: 220deg;
-      --modal-bg-ar: 140deg;
-    }
-    100% {
-      --modal-bg-o-usdc: 0.4;
-      --modal-bg-o-eth: 0.7;
-      --modal-bg-o-arb: 0.4;
-      --modal-bg-o-op: 0.4;
-      --modal-bg-pl: 100%;
-      --modal-bg-ps: 50%;
-      --modal-bg-al: 180deg;
-      --modal-bg-ar: 180deg;
-    }
-  }
+	@keyframes modal-bg-animate {
+		0% {
+			--modal-bg-o-usdc: 0.4;
+			--modal-bg-o-eth: 0.7;
+			--modal-bg-o-arb: 0.4;
+			--modal-bg-o-op: 0.4;
+			--modal-bg-pl: 100%;
+			--modal-bg-ps: 50%;
+			--modal-bg-al: 180deg;
+			--modal-bg-ar: 180deg;
+		}
+		50% {
+			--modal-bg-o-usdc: 0.3;
+			--modal-bg-o-eth: 0.4;
+			--modal-bg-o-arb: 0.3;
+			--modal-bg-o-op: 0.3;
+			--modal-bg-pl: 55%;
+			--modal-bg-ps: 55%;
+			--modal-bg-al: 220deg;
+			--modal-bg-ar: 140deg;
+		}
+		100% {
+			--modal-bg-o-usdc: 0.4;
+			--modal-bg-o-eth: 0.7;
+			--modal-bg-o-arb: 0.4;
+			--modal-bg-o-op: 0.4;
+			--modal-bg-pl: 100%;
+			--modal-bg-ps: 50%;
+			--modal-bg-al: 180deg;
+			--modal-bg-ar: 180deg;
+		}
+	}
 }
 
 .glow1 {
-  filter: drop-shadow(0 0 8px #fec84b);
+	filter: drop-shadow(0 0 8px #fec84b);
 }
 .glow2 {
-  filter: drop-shadow(0 0 8px #d6d6d6);
+	filter: drop-shadow(0 0 8px #d6d6d6);
 }
 .glow3 {
-  filter: drop-shadow(0 0 8px #bf6534);
+	filter: drop-shadow(0 0 8px #bf6534);
+}
+
+.buyBtn {
+	position: relative;
+	color: #111111;
+	font-size: 1rem;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	transition: all 0.2s ease;
+	padding: 6px 20px;
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.buyBtn:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	border-radius: 28px;
+	background: rgb(255, 190, 0, 0.5);
+	width: 36px;
+	height: 36px;
+	animation: buttonExpand 2s ease infinite; /* 添加动画 */
+}
+.buyBtn span {
+	position: relative;
+	z-index: 1;
+}
+.buyBtn svg {
+	position: relative;
+	top: 0;
+	margin-left: 10px;
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke: #111111;
+	stroke-width: 2;
+	transform: translateX(-5px);
+	animation: arrowMove 2s ease infinite; /* 添加动画 */
+}
+
+/* 添加按钮扩展动画 */
+@keyframes buttonExpand {
+	0%,
+	100% {
+		width: 36px;
+		background: rgba(255, 190, 0, 0.5);
+	}
+	50% {
+		width: 100%;
+		background: rgb(255, 190, 0);
+	}
+}
+
+/* 添加箭头移动动画 */
+@keyframes arrowMove {
+	0%,
+	100% {
+		transform: translateX(-5px);
+	}
+	50% {
+		transform: translateX(0);
+	}
+}
+
+/* 保留原有的活跃状态效果 */
+.buyBtn:active {
+	color: #111111;
+	transform: scale(0.96);
 }
 
 .heightLightButton {
-  position: relative;
-  /* transition: all 0.2s ease; */
+	position: relative;
+	/* transition: all 0.2s ease; */
 }
 .heightLightButton:active {
-  transform: scale(0.96);
+	/* transform: scale(0.96); */
 }
 .heightLightButton:before,
 .heightLightButton:after {
-  position: absolute;
-  content: "";
-  width: 170%;
-  left: 50%;
-  height: 120%;
-  transform: translateX(-50%);
-  z-index: -1000;
-  background-repeat: no-repeat;
+	position: absolute;
+	content: "";
+	width: 100%;
+	left: 50%;
+	height: 100%;
+	transform: translateX(-50%);
+	z-index: -1000;
+	background-repeat: no-repeat;
 }
 .heightLightButton.animate::before {
-  top: -80%;
-  background-image: radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, transparent 20%, #ffbe00 20%, transparent 30%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #ffbe00 15%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%);
-  background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
-    10% 10%, 18% 18%;
-  animation: greentopBubbles ease-in-out 0.7s forwards infinite;
+	top: -80%;
+	background-image: radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, transparent 20%, #ffbe00 20%, transparent 30%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, transparent 10%, #ffbe00 15%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%);
+	background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+		10% 10%, 18% 18%;
+	animation: greentopBubbles ease-in-out 0.7s forwards infinite;
 }
 @keyframes greentopBubbles {
-  0% {
-    background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
-      40% 90%, 55% 90%, 70% 90%;
-  }
-  50% {
-    background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
-      50% 50%, 65% 20%, 90% 30%;
-  }
-  100% {
-    background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
-      50% 40%, 65% 10%, 90% 20%;
-    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-  }
+	0% {
+		background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+			40% 90%, 55% 90%, 70% 90%;
+	}
+	50% {
+		background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+			50% 50%, 65% 20%, 90% 30%;
+	}
+	100% {
+		background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+			50% 40%, 65% 10%, 90% 20%;
+		background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+	}
 }
 .heightLightButton.animate::after {
-  bottom: -80%;
-  background-image: radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, transparent 10%, #ffbe00 15%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%),
-    radial-gradient(circle, #ffbe00 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
-  animation: greenbottomBubbles ease-in-out 0.7s forwards infinite;
+	bottom: -80%;
+	background-image: radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, transparent 10%, #ffbe00 15%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%),
+		radial-gradient(circle, #ffbe00 20%, transparent 20%);
+	background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
+	animation: greenbottomBubbles ease-in-out 0.7s forwards infinite;
 }
 @keyframes greenbottomBubbles {
-  0% {
-    background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
-      70% -10%, 70% 0%;
-  }
-  50% {
-    background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
-      105% 0%;
-  }
-  100% {
-    background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
-      110% 10%;
-    background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-  }
+	0% {
+		background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+			70% -10%, 70% 0%;
+	}
+	50% {
+		background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+			105% 0%;
+	}
+	100% {
+		background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+			110% 10%;
+		background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+	}
 }
 
 @keyframes itemFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-1%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+	0% {
+		opacity: 0;
+		transform: translateX(-1%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
 
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes fadeInUpDelayed {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
 
-  50% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+	50% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
 
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
 }
 
 @keyframes notification-slide-in {
-  0% {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0%);
-  }
+	0% {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0%);
+	}
 }
 
 @keyframes notification-slide-out {
-  0% {
-    opacity: 1;
-    transform: translateX(0%);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+	0% {
+		opacity: 1;
+		transform: translateX(0%);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(100%);
+	}
 }
 
 @keyframes notification-progress-bar {
-  0% {
-    width: 100%;
-  }
-  100% {
-    width: 0%;
-  }
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0%;
+	}
 }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-5px);
+	}
 }
 
 @property --angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
+	syntax: "<angle>";
+	inherits: false;
+	initial-value: 0deg;
 }
 
 .g-container {
-  position: relative;
-  margin: auto;
-  width: 300px; /* Increased width */
-  height: 260px; /* Height remains the same */
-  filter: drop-shadow(0 0 5px hsl(162, 100%, 58%))
-    drop-shadow(0 0 10px hsl(270, 73%, 53%));
+	position: relative;
+	margin: auto;
+	width: 300px; /* Increased width */
+	height: 260px; /* Height remains the same */
+	filter: drop-shadow(0 0 5px hsl(162, 100%, 58%))
+		drop-shadow(0 0 10px hsl(270, 73%, 53%));
 }
 
 .item .g-triangle {
-  clip-path: polygon(0 100%, 100% 100%, 50% 0);
-  mask: linear-gradient(117deg, #000 55%, transparent 55%, transparent),
-    linear-gradient(-117deg, #000 55%, transparent 55%, transparent),
-    linear-gradient(#000, #000);
-  mask-position: 0 0, 150px 0, 0 250px; /* Adjusted mask position */
-  mask-size: 150px 250px, 150px 250px, 100% 10px; /* Adjusted mask size */
-  mask-repeat: no-repeat;
+	clip-path: polygon(0 100%, 100% 100%, 50% 0);
+	mask: linear-gradient(117deg, #000 55%, transparent 55%, transparent),
+		linear-gradient(-117deg, #000 55%, transparent 55%, transparent),
+		linear-gradient(#000, #000);
+	mask-position: 0 0, 150px 0, 0 250px; /* Adjusted mask position */
+	mask-size: 150px 250px, 150px 250px, 100% 10px; /* Adjusted mask size */
+	mask-repeat: no-repeat;
 }
 
 .g-triangle {
-  position: relative;
-  width: 300px; /* Increased width */
-  height: 260px; /* Height remains the same */
-  background: conic-gradient(
-    from var(--angle),
-    hsl(162, 100%, 58%),
-    hsl(270, 73%, 53%),
-    hsl(162, 100%, 58%)
-  );
-  animation: rotate 3s infinite linear;
+	position: relative;
+	width: 300px; /* Increased width */
+	height: 260px; /* Height remains the same */
+	background: conic-gradient(
+		from var(--angle),
+		hsl(162, 100%, 58%),
+		hsl(270, 73%, 53%),
+		hsl(162, 100%, 58%)
+	);
+	animation: rotate 3s infinite linear;
 }
 
 @keyframes rotate {
-  to {
-    --angle: 360deg;
-  }
+	to {
+		--angle: 360deg;
+	}
 }

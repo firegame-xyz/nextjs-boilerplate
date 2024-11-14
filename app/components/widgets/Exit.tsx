@@ -67,7 +67,7 @@ export default function Exit() {
 	return (
 		<ButtonTertiary
 			className={clx(
-				"rounded-lg heightLightButton h-8 text-base-white",
+				"w-2/5 rounded-lg heightLightButton text-base-white",
 				!isDisabled && "animate",
 			)}
 			disabled={isDisabled}

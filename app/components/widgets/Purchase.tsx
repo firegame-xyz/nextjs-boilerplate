@@ -154,16 +154,34 @@ const PurchaseComponent = () => {
 			: null;
 	}, [value]);
 
+	const isShowBuy = useMemo(() => {
+		if (!value || isNaN(Number(value))) {
+			return false;
+		}
+		// Convert price to integer considering decimals (e.g., 1.5 -> 1500000 for 6 decimals)
+		const priceInteger = Math.floor(
+			Number(num) * Math.pow(10, balance?.decimals ?? 6),
+		);
+		const res = new anchor.BN(value).mul(new anchor.BN(priceInteger));
+
+		return res.gt(new anchor.BN(balance?.valueAmount ?? 0));
+	}, [balance, value, num]);
+
 	// Callbacks
 	const handleSetAutoReinvest = useCallback(
 		async (isOn: boolean) => {
 			try {
+				setStatePending(true);
+				setIsTransactionInProgress(true);
 				await executeTransaction(
 					() => createSetAutoReinvestInstructions(isOn),
 					"AutoReinvest",
 				);
 			} catch (err) {
 				console.error("AutoReinvest error:", err);
+			} finally {
+				setStatePending(false);
+				setIsTransactionInProgress(false);
 			}
 		},
 		[createSetAutoReinvestInstructions, executeTransaction],
@@ -600,7 +618,10 @@ const PurchaseComponent = () => {
 			throw new Error("Missing provider or program");
 		}
 
+		const id = Math.floor(Math.random() * 10000000);
+
 		try {
+			notification.pending(id, `Pending`, `It's pending. Please wait.`);
 			setStatePending(true);
 			setIsTransactionInProgress(true);
 
@@ -672,6 +693,7 @@ const PurchaseComponent = () => {
 				notification.error(`Transaction Error!`, "An unknown error occurred");
 			}
 		} finally {
+			notification.remove(id);
 			setIsTransactionInProgress(false);
 			setStatePending(false);
 		}
@@ -702,7 +724,16 @@ const PurchaseComponent = () => {
 
 	return (
 		<div className='flex flex-col'>
-			<div className='mb-4 flex items-center justify-end'>
+			<div className='mb-4 flex items-center justify-between'>
+				<div>
+					<div className='buyBtn'>
+						<span>BUY FGC</span>
+						<svg width='13px' height='10px' viewBox='0 0 13 10'>
+							<path d='M1,5 L11,5'></path>
+							<polyline points='8 1 12 5 8 9'></polyline>
+						</svg>
+					</div>
+				</div>
 				<div className='flex items-center gap-2'>
 					<span className='text-xs'>Auto Reinvest</span>
 					<Switch
@@ -730,7 +761,7 @@ const PurchaseComponent = () => {
 								style={{ objectFit: "contain" }}
 							/>
 						</div>
-						Ore
+						{`ORE`}
 					</span>
 				</div>
 			</div>
@@ -738,7 +769,7 @@ const PurchaseComponent = () => {
 				{value && (
 					<>
 						<div className='flex justify-between'>
-							<span>Price</span>
+							<span>{`Price`}</span>
 							<span className='flex gap-1'>
 								<div className='relative h-[16px] w-[16px]'>
 									<Image
@@ -770,13 +801,25 @@ const PurchaseComponent = () => {
 			</div>
 
 			<div className='mt-8 flex justify-between'>
-				<ButtonPrimary
-					className='rounded-lg'
-					disabled={isTransactionInProgress || !value || error || round?.isOver}
-					onClick={handlePurchase}
-				>
-					Purchase and Construction
-				</ButtonPrimary>
+				<div className='flex flex-col relative'>
+					{isShowBuy && (
+						<div className='absolute w-full text-center -top-6 text-xs text-base-white'>
+							Not Enough FGC.{" "}
+							<a href='#' className='text-warning underline'>
+								Get More
+							</a>
+						</div>
+					)}
+					<ButtonPrimary
+						className='rounded-lg'
+						disabled={
+							isTransactionInProgress || !value || error || round?.isOver
+						}
+						onClick={handlePurchase}
+					>
+						Purchase and Construction
+					</ButtonPrimary>
+				</div>
 
 				<Reinvest />
 			</div>

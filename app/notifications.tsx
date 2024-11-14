@@ -17,6 +17,18 @@ export const NotificationContextProvider = ({
 		});
 	};
 
+	const pendingAdd = (
+		type: string,
+		id: number,
+		title: ReactNode,
+		message: ReactNode,
+	) => {
+		dispatch({
+			type: "ADD_NOTIFICATION",
+			payload: { id, title, message, type } as Notification,
+		});
+	};
+
 	const remove = (id: number) => {
 		dispatch({ type: "DELETE_NOTIFICATION", payload: id });
 	};
@@ -25,6 +37,9 @@ export const NotificationContextProvider = ({
 		dispatch({ type: "CLEAR_NOTIFICATION", payload: null });
 	};
 
+	const pending = (id: number, title: ReactNode, message?: ReactNode) => {
+		pendingAdd("pending", id, title, message);
+	};
 	const success = (title: ReactNode, message?: ReactNode) => {
 		add("success", title, message);
 	};
@@ -41,7 +56,7 @@ export const NotificationContextProvider = ({
 		add("error", title, message);
 	};
 
-	const value = { success, warning, info, error, remove, clear };
+	const value = { success, warning, info, error, remove, clear, pending };
 
 	return (
 		<NotificationContext.Provider value={value}>
@@ -52,6 +67,7 @@ export const NotificationContextProvider = ({
 };
 
 type NotificationContextType = {
+	pending: (id: number, title: ReactNode, message?: ReactNode) => void;
 	success: (title: ReactNode, message?: ReactNode) => void;
 	warning: (title: ReactNode, message?: ReactNode) => void;
 	info: (title: ReactNode, message?: ReactNode) => void;

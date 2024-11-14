@@ -283,18 +283,18 @@ export function useAvatarUrl(imageUrl: string | undefined | null) {
 	return avatarUrl;
 }
 
-export const useCurrentTime = () => {
-	const [currentTime, setCurrentTime] = useState<number>(
-		Math.floor(Date.now() / 1000),
-	);
+// export const useCurrentTime = () => {
+// 	const [currentTime, setCurrentTime] = useState<number>(
+// 		Math.floor(Date.now() / 1000),
+// 	);
 
-	useEffect(() => {
-		const timer = setInterval(() => {
-			setCurrentTime(Math.floor(Date.now() / 1000));
-		}, 1000);
+// 	useEffect(() => {
+// 		const timer = setInterval(() => {
+// 			setCurrentTime(Math.floor(Date.now() / 1000));
+// 		}, 1000);
 
-		return () => clearInterval(timer);
-	}, []);
+// 		return () => clearInterval(timer);
+// 	}, []);
 
-	return currentTime;
-};
+// 	return currentTime;
+// };

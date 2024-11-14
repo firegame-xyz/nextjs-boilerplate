@@ -1,4 +1,5 @@
-import { useCurrentTime } from "@/app/hooks/useData";
+import { currentTimeAtom } from "@/app/state";
+import { useAtom } from "jotai";
 import React, { useMemo } from "react";
 
 interface TimeAgoProps {
@@ -6,7 +7,7 @@ interface TimeAgoProps {
 }
 
 const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
-	const currentTime = useCurrentTime();
+	const [currentTime] = useAtom(currentTimeAtom);
 
 	const timeAgo = useMemo(() => {
 		// const now = Math.floor(Date.now() / 1000);
