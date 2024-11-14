@@ -14,17 +14,17 @@ import {
 
 export async function POST(req: Request) {
 	try {
-		const body = await req.json();
-		const { wallet, randomnessPubkey } = body;
-
 		const queue = isMainNet ? ON_DEMAND_MAINNET_QUEUE : ON_DEMAND_DEVNET_QUEUE;
 		const sbProgramId = isMainNet
 			? ON_DEMAND_MAINNET_PID
 			: ON_DEMAND_DEVNET_PID;
-		const rpc = isMainNet ? ON_DEMAND_MAINNET_RPC : ON_DEMAND_DEVNET_RPC;
+		// const rpc = isMainNet ? ON_DEMAND_MAINNET_RPC : ON_DEMAND_DEVNET_RPC;
+
+		const body = await req.json();
+		const { wallet, randomnessPubkey, rpc } = body;
 
 		// Create Solana connection
-		const connection = new anchor.web3.Connection(rpc, {
+		const connection = new anchor.web3.Connection(decodeURIComponent(rpc), {
 			commitment: "confirmed",
 			confirmTransactionInitialTimeout: 60000,
 		});

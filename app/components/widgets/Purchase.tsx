@@ -18,6 +18,7 @@ import {
 	providerAtom,
 	randomnessAtom,
 	roundAtom,
+	rpcEndpointAtom,
 	squadAtom,
 	statePendingAtom,
 	voucherBalanceAtom,
@@ -108,6 +109,7 @@ interface RevealKey {
 
 const PurchaseComponent = () => {
 	// Atoms
+	const [rpcEndpoint] = useAtom(rpcEndpointAtom);
 	const [balance] = useAtom(balanceAtom);
 	const [playerData] = useAtom(playerDataAtom);
 	const [program] = useAtom(programAtom);
@@ -189,7 +191,14 @@ const PurchaseComponent = () => {
 
 	const fetchReveal = useCallback(
 		async (randomnessPubkey: string) => {
-			if (!provider || !wallet || !signTransaction || !connection || !program) {
+			if (
+				!provider ||
+				!wallet ||
+				!signTransaction ||
+				!connection ||
+				!program ||
+				!rpcEndpoint
+			) {
 				throw new Error("Please connect your wallet to continue");
 			}
 			try {
@@ -208,6 +217,7 @@ const PurchaseComponent = () => {
 					body: JSON.stringify({
 						randomnessPubkey: randomnessPubkey,
 						wallet,
+						rpc: encodeURIComponent(rpcEndpoint),
 					}),
 					headers: { "Content-Type": "application/json" },
 					method: "POST",
@@ -314,6 +324,7 @@ const PurchaseComponent = () => {
 			notification,
 			provider,
 			wallet,
+			rpcEndpoint,
 			setValue,
 			signTransaction,
 			setRandomness,
@@ -324,7 +335,14 @@ const PurchaseComponent = () => {
 
 	const fetchCommit = useCallback(
 		async (randomnessPubkey: string) => {
-			if (!provider || !wallet || !signTransaction || !program || !connection) {
+			if (
+				!provider ||
+				!wallet ||
+				!signTransaction ||
+				!program ||
+				!connection ||
+				!rpcEndpoint
+			) {
 				throw new Error("Missing wallet, provider, program or connection");
 			}
 
@@ -344,6 +362,7 @@ const PurchaseComponent = () => {
 					body: JSON.stringify({
 						randomnessPubkey: randomnessPubkey,
 						wallet,
+						rpc: encodeURIComponent(rpcEndpoint),
 					}),
 					headers: { "Content-Type": "application/json" },
 					method: "POST",
@@ -449,6 +468,7 @@ const PurchaseComponent = () => {
 			fetchReveal,
 			notification,
 			provider,
+			rpcEndpoint,
 			signTransaction,
 			wallet,
 			value,
@@ -456,7 +476,14 @@ const PurchaseComponent = () => {
 	);
 
 	const fetchRandomness = useCallback(async () => {
-		if (!provider || !publicKey || !wallet || !signTransaction || !connection) {
+		if (
+			!provider ||
+			!publicKey ||
+			!wallet ||
+			!signTransaction ||
+			!connection ||
+			!rpcEndpoint
+		) {
 			throw new Error("Please connect your wallet to continue");
 		}
 		if (randomness.revealing.txSignature) {
@@ -536,7 +563,11 @@ const PurchaseComponent = () => {
 		}));
 
 		const response = await fetch("/api/randomness", {
-			body: JSON.stringify({ publicKey: publicKey.toBase58(), wallet }),
+			body: JSON.stringify({
+				publicKey: publicKey.toBase58(),
+				wallet,
+				rpc: encodeURIComponent(rpcEndpoint),
+			}),
 			headers: { "Content-Type": "application/json" },
 			method: "POST",
 		});
@@ -607,6 +638,7 @@ const PurchaseComponent = () => {
 		notification,
 		provider,
 		publicKey,
+		rpcEndpoint,
 		signTransaction,
 		wallet,
 		setRandomness,

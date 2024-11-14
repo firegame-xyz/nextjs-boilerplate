@@ -21,14 +21,14 @@ export async function POST(req: Request) {
 		const sbProgramId = isMainNet
 			? ON_DEMAND_MAINNET_PID
 			: ON_DEMAND_DEVNET_PID;
-		const rpc = isMainNet ? ON_DEMAND_MAINNET_RPC : ON_DEMAND_DEVNET_RPC;
+		// const rpc = isMainNet ? ON_DEMAND_MAINNET_RPC : ON_DEMAND_DEVNET_RPC;
 
 		// Extract wallet from request body
 		const body = await req.json();
-		const { wallet, publicKey } = body;
+		const { wallet, publicKey, rpc } = body;
 
 		// Initialize Solana connection with timeout
-		const connection = new web3.Connection(rpc, {
+		const connection = new web3.Connection(decodeURIComponent(rpc), {
 			commitment: "confirmed",
 			confirmTransactionInitialTimeout: 60000, // 60 seconds timeout
 		});
