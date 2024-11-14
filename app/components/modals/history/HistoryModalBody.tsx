@@ -123,7 +123,7 @@ const HistoryModalBody: React.FC = React.memo(function HistoryModalBody({}) {
 		loadMoreHistoryTransactions(publicKey.toString());
 
 		const historySubscribe = supabase
-			.channel("custom-all-channel")
+			.channel("custom-address-channel")
 			.on(
 				"postgres_changes",
 				{
