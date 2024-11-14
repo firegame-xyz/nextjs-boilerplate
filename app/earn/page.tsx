@@ -114,7 +114,7 @@ export default function DepositPage() {
 	return (
 		<div className='flex flex-col sm:flex-row gap-4'>
 			{registered && publicKey ? (
-				<div className='widget-base w-full sm:w-[280px] h-64 overflow-hidden'>
+				<div className='widget-base w-full sm:w-[280px] overflow-hidden'>
 					<div className='mb-4 banner-base p-4'>
 						<p className='text-sm mb-1'>Your Balance</p>
 						<p className='text-base'>{`${formatTokenAmount(
@@ -123,12 +123,13 @@ export default function DepositPage() {
 					</div>
 
 					<div className='px-4'>
-						<div className='mb-3'>
+						<div className='mb-1'>
 							<label
 								htmlFor='amount'
-								className='block text-sm font-medium mb-3'
+								className='flex justify-between text-sm font-medium mb-3'
 							>
-								Amount to Deposit
+								<span>Amount to Deposit</span>
+								<span className='text-xs font-normal'>ARP: 100%</span>
 							</label>
 							<input
 								id='amount'
@@ -152,8 +153,9 @@ export default function DepositPage() {
 							}
 							className='w-full text-sm rounded-lg'
 						>
-							Deposit
+							{`Stake`}
 						</ButtonPrimary>
+						<div className='text-xs text-base-white mt-2 px-1'>{`Tip: Exit staking anytime! Early withdrawals receive rewards at 20% APR.`}</div>
 					</div>
 				</div>
 			) : (

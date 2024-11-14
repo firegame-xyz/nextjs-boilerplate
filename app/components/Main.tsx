@@ -71,7 +71,7 @@ const MainComponent: React.FC = () => {
 		const exitRewards = anchor.BN.min(totalPendingRewards, maxExitRewards);
 
 		setPendingRewardsValue(exitRewards.toNumber());
-	}, [playerData]);
+	}, [playerData, currentTime]);
 
 	const exitRewards = useCallback(() => {
 		if (!round || currentTime === 0) return setExitRewardsValue(0);

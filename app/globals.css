@@ -470,7 +470,7 @@ input:focus {
 	top: 0;
 	left: 0;
 	display: block;
-	border-radius: 28px;
+	border-radius: 0.5rem;
 	background: rgb(255, 190, 0, 0.5);
 	width: 36px;
 	height: 36px;
