@@ -8,6 +8,8 @@ import Header from "./components/Header";
 import Nav from "./components/widgets/Nav";
 import Alert from "./components/Alert";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 const oswald = Oswald({
 	subsets: ["latin"],
 	weight: ["300", "400", "500", "600", "700"],
@@ -47,7 +49,10 @@ export default function RootLayout({
 						<Nav type='mobile' />
 						<Alert />
 						<div className='w-full p-4'>
-							<div className='mx-auto max-w-screen-xl'>{children}</div>
+							<div className='mx-auto max-w-screen-xl'>
+								{children}
+								<SpeedInsights />
+							</div>
 						</div>
 						{modals}
 					</main>
