@@ -6,8 +6,6 @@ import {
 	isMainNet,
 	ON_DEMAND_MAINNET_PID,
 	ON_DEMAND_DEVNET_PID,
-	ON_DEMAND_MAINNET_RPC,
-	ON_DEMAND_DEVNET_RPC,
 } from "@/app/utils/helpers";
 
 export async function POST(req: Request) {
