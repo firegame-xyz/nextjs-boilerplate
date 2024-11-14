@@ -3,11 +3,11 @@
 import * as anchor from "@coral-xyz/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { ButtonPrimary, ButtonTertiary } from "@/app/components/buttons/Button";
 
-import { clx, formatAddress, formatTokenAmount } from "@/app/utils/helpers";
+import { clx, formatAddress } from "@/app/utils/helpers";
 
 import { SolanaAvatar } from "../components/widgets/SolanaAvatar";
 import { useAtom } from "jotai";
@@ -19,6 +19,7 @@ import {
 	providerAtom,
 	registeredAtom,
 	squadListAtom,
+	SquadAll,
 } from "@/app/state";
 import useTransaction from "../hooks/useTransaction";
 
@@ -33,6 +34,9 @@ export default function Page() {
 	const { publicKey } = useWallet();
 	const [error, setError] = useState<string | null>(null);
 	const [searchValue, setSearchValue] = useState<string>("");
+	const [filteredSquadList, setFilteredSquadList] = useState<SquadAll[] | null>(
+		squadList,
+	);
 	// const [squadAll, setSquadAll] = useState<SquadAll[] | null>(null);
 	const [pending] = useState<boolean>(false);
 	const { executeTransaction } = useTransaction();
@@ -43,67 +47,6 @@ export default function Page() {
 			? false
 			: true;
 	}, [playData]);
-
-	// const handleCreateSquad = async () => {
-	//   if (!publicKey || !program || !provider || !game) return;
-
-	//   const createSquad = await program.methods.createSquad().instruction();
-
-	//   let tx = new anchor.web3.Transaction();
-	//   tx.add(createSquad);
-
-	//   const { blockhash } = await connection.getLatestBlockhash("finalized");
-	//   tx.recentBlockhash = blockhash;
-	//   tx.feePayer = provider.wallet.publicKey;
-
-	//   setPending(true);
-
-	//   try {
-	//     let signedTransaction = await provider.wallet.signTransaction(tx);
-	//     let txid = await connection.sendRawTransaction(
-	//       signedTransaction.serialize(),
-	//       { skipPreflight: false, preflightCommitment: "confirmed" },
-	//     );
-
-	//     const latestBlockhash = await connection.getLatestBlockhash();
-	//     const confirmation = await connection.confirmTransaction({
-	//       signature: txid,
-	//       blockhash: latestBlockhash.blockhash,
-	//       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-	//     });
-
-	//     if (confirmation.value.err) {
-	//       console.error("Transaction failed:", confirmation.value.err);
-	//       notification.error(
-	//         "Create Squad Error!",
-	//         <>{confirmation.value.err}</>,
-	//       );
-	//     } else {
-	//       const transactionResult = await connection.getParsedTransaction(txid, {
-	//         commitment: "confirmed",
-	//       });
-
-	//       if (
-	//         transactionResult &&
-	//         transactionResult.meta &&
-	//         !transactionResult.meta.err
-	//       ) {
-	//         console.log("Transaction confirmed:", transactionResult);
-	//         notification.success("Create Squad Success!");
-	//         router.push("/squad/my");
-	//       } else {
-	//         console.error("Transaction error details:", transactionResult);
-	//         notification.error("Create Squad Error!", <>{transactionResult}</>);
-	//       }
-	//     }
-
-	//     setPending(false);
-	//   } catch (err: any) {
-	//     setPending(false);
-	//     console.log(err);
-	//     notification.error("Create Squad Error!", <>{err.message}</>);
-	//   }
-	// };
 
 	const joinInstruction = async (
 		squad: anchor.web3.PublicKey,
@@ -213,62 +156,28 @@ export default function Page() {
 	};
 
 	const handleSearch = () => {
-		if (!searchValue) return;
-		// getSquadSearch(searchValue).then((result) => {
-		//   console.log("getSquadSearch", result);
-		//   setSquadData(result);
-		// });
+		if (searchValue === "") {
+			setFilteredSquadList(squadList);
+			return;
+		}
+		const filtered = squadList.filter((item) =>
+			item.account.name?.toLowerCase().includes(searchValue.toLowerCase()),
+		);
+		setFilteredSquadList(filtered);
 	};
 
-	// const fetchSquadAll = useCallback(async () => {
-	// 	if (!program) return;
-	// 	try {
-	// 		const data = await program.account.squad.all();
-	// 		setSquadAll(data);
-	// 	} catch (err) {
-	// 		console.error("Error fetching squad all:", err);
-	// 	} finally {
-	// 	}
-	// }, [program]);
-
-	// useEffect(() => {
-	// 	if (!program) return;
-	// 	fetchSquadAll();
-	// 	const listener = program.addEventListener(
-	// 		"transferEvent",
-	// 		(event, slot) => {
-	// 			if (event.eventType.createSquad) {
-	// 				fetchSquadAll();
-	// 			}
-	// 		},
-	// 	);
-
-	// 	return () => {
-	// 		program.removeEventListener(listener).catch(console.error);
-	// 	};
-	// }, [program, playData, fetchSquadAll]);
-
-	// useEffect(() => {
-	//   if (searchValue) return;
-	//   getSquadAll(30, 0).then((result) => {
-	//     setSquadData(result);
-	//   });
-	// }, [state.mySquad, searchValue]);
+	useEffect(() => {
+		if (searchValue === "") {
+			setFilteredSquadList(squadList);
+		}
+	}, [squadList, searchValue]);
 
 	return (
 		<div>
 			<div className='text-center'>
 				{`Form a squad and invite your teammates to join.`}
 				<br />
-				{`Win massive weekly airdrop rewards and enjoy team discounts.`}
-				{!isCreateSquad && (
-					<>
-						<br />
-						<span className='text-xs'>{`Creating a squad will cost ${formatTokenAmount(
-							10000,
-						)} FGC`}</span>
-					</>
-				)}
+				{`Win massive weekly airdrop rewards.`}
 			</div>
 			<div className='mt-4 flex justify-center gap-4'>
 				{isCreateSquad ? (
@@ -320,8 +229,8 @@ export default function Page() {
 							{!isCreateSquad && <span></span>}
 						</span>
 					</div>
-					{squadList && squadList.length > 0 ? (
-						squadList?.map(
+					{filteredSquadList && filteredSquadList.length > 0 ? (
+						filteredSquadList?.map(
 							(item, index) =>
 								item.account.captain.toString() !==
 									"11111111111111111111111111111111" && (

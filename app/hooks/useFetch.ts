@@ -149,6 +149,8 @@ export const useFetch = () => {
 			const gamePDA = findGamePDA(program.programId);
 			const gameData = await program.account.game.fetch(gamePDA);
 			setGame(gameData);
+			getVoucherAccountBalance();
+			getTokenAccountBalance();
 		} catch (error) {
 			console.error("Error fetching game:", error);
 		}
@@ -260,8 +262,6 @@ export const useFetch = () => {
 			setRegistered(
 				playerData.player.toString() === provider.publicKey.toString(),
 			);
-			getVoucherAccountBalance();
-			getTokenAccountBalance();
 		} catch (error) {
 			console.error("Error fetching player data:", error);
 			setRegistered(false);

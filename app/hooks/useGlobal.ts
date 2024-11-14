@@ -68,7 +68,7 @@ export function useGlobal() {
 	const [provider, setProvider] = useAtom(providerAtom);
 	const [program, setProgram] = useAtom(programAtom);
 	const [game, setGame] = useAtom(gameAtom);
-	const [, setConfig] = useAtom(configAtom);
+	const [config, setConfig] = useAtom(configAtom);
 	const [round, setRound] = useAtom(roundAtom);
 	const [, setPeriod] = useAtom(periodAtom);
 	const [, setLastPeriod] = useAtom(lastPeriodAtom);
@@ -608,9 +608,13 @@ export function useGlobal() {
 	useEffect(() => {
 		if (RPCPending) return;
 		fetchConfig();
+	}, [RPCPending, program]);
+
+	useEffect(() => {
+		if (RPCPending) return;
 		fetchGame();
 		fetchSquadList();
-	}, [RPCPending, program]);
+	}, [RPCPending, config]);
 
 	useEffect(() => {
 		if (RPCPending) return;
