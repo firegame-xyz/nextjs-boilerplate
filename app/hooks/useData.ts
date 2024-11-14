@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/app/config/supabase";
 
+// Type definition for transaction data
 export type Transaction = {
 	id: number;
 	signature: string;
@@ -22,6 +23,7 @@ export type Transaction = {
 	isNew?: boolean;
 };
 
+// Valid transaction event types
 const TRANSACTION_TYPES = [
 	"purchase",
 	"reinvest",
@@ -29,13 +31,12 @@ const TRANSACTION_TYPES = [
 	"exit",
 ] as const;
 
+// Number of transactions to load per page
 const PAGE_SIZE = 7;
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
 
+// Service for handling transaction data operations
 export const transactionService = {
+	// Fetch transactions with filtering and pagination
 	async fetchTransactions(filterAddress: string, start: number, end: number) {
 		let query = supabase
 			.from("transaction")
@@ -43,12 +44,12 @@ export const transactionService = {
 			.in("event_type", TRANSACTION_TYPES)
 			.order("timestamp", { ascending: false });
 
-		// 添加过滤条件
+		// Add address filter if provided
 		if (filterAddress && filterAddress.trim()) {
 			query = query.eq("data->>player", filterAddress);
 		}
 
-		// 添加分页
+		// Add pagination range
 		query = query.range(start, end);
 
 		const { data, error } = await query;
@@ -61,6 +62,7 @@ export const transactionService = {
 		})) as Transaction[];
 	},
 
+	// Subscribe to real-time transaction updates
 	subscribeToTransactions(onInsert: (transaction: Transaction) => void) {
 		return supabase
 			.channel("custom-all-channel")
@@ -90,15 +92,17 @@ export const transactionService = {
 	},
 };
 
+// Custom hook for querying and managing transaction data
 export const useQueryData = (filterAddress: string) => {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const processedIdsRef = useRef(new Set<number>());
+	const processedIdsRef = useRef(new Set<number>()); // Track processed transaction IDs
 	const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
 	const currentPageRef = useRef(0);
 	const currentFilterRef = useRef("");
-	const loadingRef = useRef(false); // 添加新的 ref 来防止并发加载
+	const loadingRef = useRef(false); // Prevent concurrent loading
 
+	// Add a new transaction to the list
 	const addNewTransaction = useCallback((newTransaction: Transaction) => {
 		setTransactions((prevTransactions) => {
 			if (prevTransactions.some((t) => t.id === newTransaction.id)) {
@@ -107,6 +111,7 @@ export const useQueryData = (filterAddress: string) => {
 			return [{ ...newTransaction, isNew: true }, ...prevTransactions];
 		});
 
+		// Remove highlight after 500ms
 		setTimeout(() => {
 			setTransactions((prevTransactions) =>
 				prevTransactions.map((t) =>
@@ -116,6 +121,7 @@ export const useQueryData = (filterAddress: string) => {
 		}, 500);
 	}, []);
 
+	// Load more transactions with filtering
 	const loadMoreTransactions = useCallback(
 		async (filterAddress: string): Promise<boolean> => {
 			if (loadingRef.current) return false;
@@ -124,7 +130,7 @@ export const useQueryData = (filterAddress: string) => {
 			setIsLoading(true);
 
 			try {
-				// 如果是新的过滤地址，重置状态
+				// Reset state if filter changes
 				if (filterAddress !== currentFilterRef.current) {
 					currentPageRef.current = 0;
 					currentFilterRef.current = filterAddress;
@@ -141,7 +147,7 @@ export const useQueryData = (filterAddress: string) => {
 					end,
 				);
 
-				// 确保数据不重复
+				// Update transactions if filter hasn't changed
 				if (filterAddress === currentFilterRef.current) {
 					if (currentPageRef.current === 0) {
 						setTransactions(typedData);
@@ -159,7 +165,7 @@ export const useQueryData = (filterAddress: string) => {
 						});
 					}
 
-					// 更新已处理的ID集合
+					// Update processed IDs
 					typedData.forEach((t) => processedIdsRef.current.add(t.id));
 					currentPageRef.current += 1;
 
@@ -177,6 +183,7 @@ export const useQueryData = (filterAddress: string) => {
 		[],
 	);
 
+	// Reset all state
 	const resetState = useCallback(() => {
 		loadingRef.current = false;
 		setTransactions([]);
@@ -187,11 +194,12 @@ export const useQueryData = (filterAddress: string) => {
 		setIsLoading(false);
 	}, []);
 
+	// Setup real-time subscription
 	const setupSubscription = useCallback(() => {
 		subscriptionRef.current?.unsubscribe();
 		subscriptionRef.current = transactionService.subscribeToTransactions(
 			(newTransaction) => {
-				// 只有当没有过滤条件，或者新交易匹配过滤条件时才添加
+				// Only add transaction if it matches current filter
 				if (
 					!currentFilterRef.current ||
 					newTransaction.data?.player === currentFilterRef.current
@@ -205,6 +213,7 @@ export const useQueryData = (filterAddress: string) => {
 		);
 	}, [addNewTransaction]);
 
+	// Initialize data with filter
 	const initializeData = useCallback(
 		async (address: string) => {
 			resetState();
@@ -214,6 +223,7 @@ export const useQueryData = (filterAddress: string) => {
 		[resetState, loadMoreTransactions, setupSubscription],
 	);
 
+	// Setup effect for filter changes
 	useEffect(() => {
 		initializeData(filterAddress);
 		return () => {
@@ -224,8 +234,10 @@ export const useQueryData = (filterAddress: string) => {
 	return { transactions, isLoading, loadMoreTransactions };
 };
 
+// Cache for avatar URLs
 const avatarUrlCache = new Map<string, { url: string; timestamp: number }>();
 
+// Get signed URL for avatar image
 export const getAvatarUrl = async (url: string) => {
 	const CACHE_DURATION = 3600000; // 1 hour in milliseconds
 	const cached = avatarUrlCache.get(url);
@@ -258,6 +270,7 @@ export const getAvatarUrl = async (url: string) => {
 	}
 };
 
+// Custom hook for managing avatar URLs
 export function useAvatarUrl(imageUrl: string | undefined | null) {
 	const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
@@ -282,19 +295,3 @@ export function useAvatarUrl(imageUrl: string | undefined | null) {
 
 	return avatarUrl;
 }
-
-// export const useCurrentTime = () => {
-// 	const [currentTime, setCurrentTime] = useState<number>(
-// 		Math.floor(Date.now() / 1000),
-// 	);
-
-// 	useEffect(() => {
-// 		const timer = setInterval(() => {
-// 			setCurrentTime(Math.floor(Date.now() / 1000));
-// 		}, 1000);
-
-// 		return () => clearInterval(timer);
-// 	}, []);
-
-// 	return currentTime;
-// };
