@@ -653,7 +653,11 @@ const PurchaseComponent = () => {
 		const id = Math.floor(Math.random() * 10000000);
 
 		try {
-			notification.pending(id, `Pending`, `It's pending. Please wait.`);
+			notification.pending(
+				id,
+				`Waiting For Wallet To Sign Transaction`,
+				`Pending wallet to sign`,
+			);
 			setStatePending(true);
 			setIsTransactionInProgress(true);
 

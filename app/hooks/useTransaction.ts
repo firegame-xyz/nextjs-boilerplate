@@ -257,7 +257,11 @@ export default function useTransaction() {
 			}
 
 			const id = Math.floor(Math.random() * 10000000);
-			notification.pending(id, `Pending`, `It's pending. Please wait.`);
+			notification.pending(
+				id,
+				`Waiting For Wallet To Sign Transaction`,
+				`Pending wallet to sign`,
+			);
 			setIsTransactionInProgress(true);
 			setStatePending(true);
 
