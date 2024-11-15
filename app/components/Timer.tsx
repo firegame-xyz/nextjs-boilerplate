@@ -5,8 +5,8 @@ import { roundAtom, statePendingAtom, currentTimeAtom } from "@/app/state";
 import { useTimer } from "react-timer-hook";
 
 import { ButtonDefault } from "./buttons/Button";
-import ParticlesComponent from "./widgets/ParticlesComponent";
-import RegisterComponent from "./widgets/Register";
+// import ParticlesComponent from "./widgets/ParticlesComponent";
+// import RegisterComponent from "./widgets/Register";
 import { WaveformShader } from "./widgets/WaveformShader";
 
 interface InnerTimerProps {
@@ -122,14 +122,14 @@ export function Timer({
 					pointerEvents: isCallTime ? "none" : "auto",
 				}}
 			>
-				<ParticlesComponent
+				{/* <ParticlesComponent
 					count={5000}
 					pointColor1='#CCCCCC'
 					pointColor2='#FFBE00'
 					pointSize={2}
 					angularVelocity={0.336}
 					velocity={particlesVelocity}
-				/>
+				/> */}
 			</div>
 			<div
 				style={{
@@ -181,9 +181,6 @@ export function Timer({
 						RULE
 					</ButtonDefault>
 				</Link>
-				<div className='flex flex-col items-center'>
-					{!registered && <RegisterComponent />}
-				</div>
 			</div>
 		</div>
 	);

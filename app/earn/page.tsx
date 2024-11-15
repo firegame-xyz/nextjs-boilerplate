@@ -113,161 +113,151 @@ export default function DepositPage() {
 
 	return (
 		<div className='flex flex-col sm:flex-row gap-4'>
-			{registered && publicKey ? (
-				<div className='widget-base w-full sm:w-[280px] overflow-hidden'>
-					<div className='mb-4 banner-base p-4'>
-						<p className='text-sm mb-1'>Your Balance</p>
-						<p className='text-base'>{`${formatTokenAmount(
-							balance?.amount || 0,
-						)} FGC`}</p>
-					</div>
+			<div className='widget-base w-full sm:w-[280px] overflow-hidden'>
+				<div className='mb-4 banner-base p-4'>
+					<p className='text-sm mb-1'>Your Balance</p>
+					<p className='text-base'>{`${formatTokenAmount(
+						balance?.amount || 0,
+					)} FGC`}</p>
+				</div>
 
-					<div className='px-4'>
-						<div className='mb-1'>
-							<label
-								htmlFor='amount'
-								className='flex justify-between text-sm font-medium mb-3'
-							>
-								<span>Amount to Deposit</span>
-								<span className='text-xs font-normal'>ARP: 100%</span>
-							</label>
-							<input
-								id='amount'
-								type='text'
-								value={amount}
-								onChange={handleAmountChange}
-								className='input-base border-none bg-gray-900 w-full text-sm placeholder-gray-700 rounded-lg'
-								placeholder='Enter amount (in millions)'
-							/>
-						</div>
-
-						<ButtonPrimary
-							onClick={handleDeposit}
-							disabled={
-								!amount ||
-								parseFloat(amount) <= 0 ||
-								parseFloat(amount) % 1000000 !== 0 ||
-								parseFloat(amount) >
-									Number(balance?.amount?.toString() || "0") ||
-								isTransactionInProgress
-							}
-							className='w-full text-sm rounded-lg'
+				<div className='px-4'>
+					<div className='mb-1'>
+						<label
+							htmlFor='amount'
+							className='flex justify-between text-sm font-medium mb-3'
 						>
-							{`Stake`}
-						</ButtonPrimary>
-						<div className='text-xs text-base-white mt-2 px-1'>{`Tip: Exit staking anytime! Early withdrawals receive rewards at 20% APR.`}</div>
+							<span>Amount to Deposit</span>
+							<span className='text-xs font-normal'>ARP: 100%</span>
+						</label>
+						<input
+							id='amount'
+							type='text'
+							value={amount}
+							onChange={handleAmountChange}
+							className='input-base border-none bg-gray-900 w-full text-sm placeholder-gray-700 rounded-lg'
+							placeholder='Enter amount (in millions)'
+						/>
 					</div>
+
+					<ButtonPrimary
+						onClick={handleDeposit}
+						disabled={
+							!amount ||
+							parseFloat(amount) <= 0 ||
+							parseFloat(amount) % 1000000 !== 0 ||
+							parseFloat(amount) > Number(balance?.amount?.toString() || "0") ||
+							isTransactionInProgress
+						}
+						className='w-full text-sm rounded-lg'
+					>
+						{`Stake`}
+					</ButtonPrimary>
+					<div className='text-xs text-base-white mt-2 px-1'>{`Tip: Exit staking anytime! Early withdrawals receive rewards at 20% APR.`}</div>
 				</div>
-			) : (
-				<div className='text-center py-6 w-full'>
-					<p className='text-xs'>
-						Please connect your wallet and register to make a deposit.
-					</p>
-				</div>
-			)}
-			{registered && publicKey && (
-				<div className='widget-base p-4 sm:flex-1 min-h-96'>
-					<h2 className='text-sm font-semibold mb-3'>Your Locked Deposits</h2>
-					<div className='overflow-x-auto border-collapse border border-gray-700/50 rounded-lg'>
-						<table className='w-full table-auto border-collapse'>
-							<thead>
-								<tr className='text-left text-xs border-b border-gray-700 bg-blue-600/45'>
-									<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
-										Amount (FGC)
-									</th>
-									<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
-										Rewards
-									</th>
-									<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
-										APR
-									</th>
-									<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
-										Unlock Date
-									</th>
-									<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
-										Status
-									</th>
-									<th className='px-4 py-3 font-medium'></th>
-								</tr>
-							</thead>
-							<tbody>
-								{Array.isArray(orderList) && orderList.length > 0 ? (
-									orderList.map((deposit, index) => (
-										<tr
-											key={index}
-											className={clx(
-												"border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors text-base-white",
-												index === orderList.length - 1 && "border-b-0",
-											)}
-										>
-											<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
-												{formatTokenAmount(formatAmount(deposit.depositAmount))}
-											</td>
-											<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
-												{formatTokenAmount(formatAmount(deposit.minedAmount))}
-											</td>
-											<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
-												{`${deposit.annualPercentageRate * 0.01}%`}
-											</td>
-											<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
-												{deposit.earlyUnlockRequested
-													? new Date(
-															deposit.earlyUnlockTimestamp.toNumber() * 1000,
-													  ).toLocaleString()
-													: new Date(
-															deposit.withdrawableTimestamp.toNumber() * 1000,
-													  ).toLocaleString()}
-											</td>
-											<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
-												{deposit.earlyUnlockRequested
-													? "Early Unlock Requested"
-													: "Locked"}
-											</td>
-											<td className='px-4 py-3 text-xs'>
-												{deposit.earlyUnlockRequested ? (
-													<ButtonTertiary
-														className='w-24 h-6 rounded-lg'
-														disabled={
-															isTransactionInProgress ||
-															deposit.earlyUnlockTimestamp.toNumber() >
-																Math.floor(Date.now() / 1000)
-														}
-														onClick={() => handleWithdraw(deposit)}
-													>
-														Withdraw
-													</ButtonTertiary>
-												) : (
-													<ButtonTertiary
-														className='w-24 h-6 rounded-lg'
-														disabled={isTransactionInProgress}
-														onClick={() =>
-															deposit.withdrawableTimestamp.toNumber() <
+			</div>
+
+			<div className='widget-base p-4 sm:flex-1 min-h-96'>
+				<h2 className='text-sm font-semibold mb-3'>Your Locked Deposits</h2>
+				<div className='overflow-x-auto border-collapse border border-gray-700/50 rounded-lg'>
+					<table className='w-full table-auto border-collapse'>
+						<thead>
+							<tr className='text-left text-xs border-b border-gray-700 bg-blue-600/45'>
+								<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
+									Amount (FGC)
+								</th>
+								<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
+									Rewards
+								</th>
+								<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
+									APR
+								</th>
+								<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
+									Unlock Date
+								</th>
+								<th className='px-4 py-3 font-medium border-r border-gray-700/25'>
+									Status
+								</th>
+								<th className='px-4 py-3 font-medium'></th>
+							</tr>
+						</thead>
+						<tbody>
+							{Array.isArray(orderList) && orderList.length > 0 ? (
+								orderList.map((deposit, index) => (
+									<tr
+										key={index}
+										className={clx(
+											"border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors text-base-white",
+											index === orderList.length - 1 && "border-b-0",
+										)}
+									>
+										<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
+											{formatTokenAmount(formatAmount(deposit.depositAmount))}
+										</td>
+										<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
+											{formatTokenAmount(formatAmount(deposit.minedAmount))}
+										</td>
+										<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
+											{`${deposit.annualPercentageRate * 0.01}%`}
+										</td>
+										<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
+											{deposit.earlyUnlockRequested
+												? new Date(
+														deposit.earlyUnlockTimestamp.toNumber() * 1000,
+												  ).toLocaleString()
+												: new Date(
+														deposit.withdrawableTimestamp.toNumber() * 1000,
+												  ).toLocaleString()}
+										</td>
+										<td className='px-4 py-3 text-xs border-r border-gray-700/25'>
+											{deposit.earlyUnlockRequested
+												? "Early Unlock Requested"
+												: "Locked"}
+										</td>
+										<td className='px-4 py-3 text-xs'>
+											{deposit.earlyUnlockRequested ? (
+												<ButtonTertiary
+													className='w-24 h-6 rounded-lg'
+													disabled={
+														isTransactionInProgress ||
+														deposit.earlyUnlockTimestamp.toNumber() >
 															Math.floor(Date.now() / 1000)
-																? handleWithdraw(deposit)
-																: handleUnlock(deposit)
-														}
-													>
-														Unlock
-													</ButtonTertiary>
-												)}
-											</td>
-										</tr>
-									))
-								) : (
-									<tr>
-										<td
-											colSpan={6}
-											className='px-4 py-4 text-center text-sm text-gray-500'
-										>
-											No deposits found
+													}
+													onClick={() => handleWithdraw(deposit)}
+												>
+													Withdraw
+												</ButtonTertiary>
+											) : (
+												<ButtonTertiary
+													className='w-24 h-6 rounded-lg'
+													disabled={isTransactionInProgress}
+													onClick={() =>
+														deposit.withdrawableTimestamp.toNumber() <
+														Math.floor(Date.now() / 1000)
+															? handleWithdraw(deposit)
+															: handleUnlock(deposit)
+													}
+												>
+													Unlock
+												</ButtonTertiary>
+											)}
 										</td>
 									</tr>
-								)}
-							</tbody>
-						</table>
-					</div>
+								))
+							) : (
+								<tr>
+									<td
+										colSpan={6}
+										className='px-4 py-4 text-center text-sm text-gray-500'
+									>
+										No deposits found
+									</td>
+								</tr>
+							)}
+						</tbody>
+					</table>
 				</div>
-			)}
+			</div>
 		</div>
 	);
 }

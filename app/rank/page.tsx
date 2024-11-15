@@ -51,73 +51,8 @@ export default function Page() {
 
 	return (
 		<div>
-			<div className='flex flex-col gap-4 sm:flex-row'>
-				<div className='widget-base banner-base w-full p-5 sm:w-2/3'>
-					<div className='flex flex-col'>
-						<div className='flex justify-between'>
-							<span className='text-2xl'>Squad Reward</span>
-							<span className='text-2xl text-base-white'>
-								{formatTokenAmount(
-									formatAmount(period?.squadRewardAmount || new anchor.BN(0)),
-									0,
-								)}
-							</span>
-						</div>
-						<div className='mt-2 flex flex-col sm:flex-row gap-2'>
-							<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
-								<span className='text-sm'>First</span>
-								<span className='text-xl text-base-white'>
-									{formatTokenAmount(
-										formatAmount(
-											period?.squadFirstPlaceRewardAmount || new anchor.BN(0),
-										),
-										0,
-									)}
-								</span>
-							</div>
-							<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
-								<span className='text-sm'>Second</span>
-								<span className='text-xl text-base-white'>
-									{formatTokenAmount(
-										formatAmount(
-											period?.squadSecondPlaceRewardAmount || new anchor.BN(0),
-										),
-										0,
-									)}
-								</span>
-							</div>
-							<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
-								<span className='text-sm'>Third</span>
-								<span className='text-xl text-base-white'>
-									{formatTokenAmount(
-										formatAmount(
-											period?.squadThirdPlaceRewardAmount || new anchor.BN(0),
-										),
-										0,
-									)}
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className='widget-base banner-base w-full sm:w-1/3'>
-					<div className='flex flex-col items-center justify-center gap-y-1 p-5'>
-						<span className='text-2xl'>Purchase The Most</span>
-						<span className='text-2xl text-base-white xl:text-4xl'>
-							{formatTokenAmount(
-								formatAmount(
-									period?.individualRewardAmount || new anchor.BN(0),
-								),
-								0,
-							)}
-						</span>
-					</div>
-				</div>
-			</div>
-
-			<div className='mt-6 flex items-center justify-between'>
-				<div className='flex rounded-lg bg-gray-800'>
+			<div className='mb-4'>
+				<div className='flex justify-center'>
 					<span
 						className={clx(
 							"cursor-pointer rounded-lg bg-gray-800 px-4 py-2 text-gray-600",
@@ -137,16 +72,23 @@ export default function Page() {
 						{`Squad Rank`}
 					</span>
 				</div>
-				{/* {round?.roundNumber && (
-					<SelectDropdown
-						round={round?.roundNumber}
-						handleCallBack={handleSetRound}
-					/>
-				)} */}
 			</div>
 
 			{tabActive === 1 ? (
 				<>
+					<div className='widget-base banner-base w-full'>
+						<div className='flex flex-col items-center justify-center gap-y-1 p-5 min-h-[146px]'>
+							<span className='text-2xl'>Purchase The Most</span>
+							<span className='text-2xl text-base-white xl:text-4xl'>
+								{formatTokenAmount(
+									formatAmount(
+										period?.individualRewardAmount || new anchor.BN(0),
+									),
+									0,
+								)}
+							</span>
+						</div>
+					</div>
 					<div className='mt-4 flex flex-col gap-4 sm:flex-row'>
 						{period?.topPlayers.map(
 							(item, index) =>
@@ -233,6 +175,55 @@ export default function Page() {
 				</>
 			) : (
 				<>
+					<div className='widget-base banner-base w-full p-5'>
+						<div className='flex flex-col'>
+							<div className='flex justify-between'>
+								<span className='text-2xl'>Squad Reward</span>
+								<span className='text-2xl text-base-white'>
+									{formatTokenAmount(
+										formatAmount(period?.squadRewardAmount || new anchor.BN(0)),
+										0,
+									)}
+								</span>
+							</div>
+							<div className='mt-2 flex flex-col sm:flex-row gap-2'>
+								<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
+									<span className='text-sm'>First</span>
+									<span className='text-xl text-base-white'>
+										{formatTokenAmount(
+											formatAmount(
+												period?.squadFirstPlaceRewardAmount || new anchor.BN(0),
+											),
+											0,
+										)}
+									</span>
+								</div>
+								<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
+									<span className='text-sm'>Second</span>
+									<span className='text-xl text-base-white'>
+										{formatTokenAmount(
+											formatAmount(
+												period?.squadSecondPlaceRewardAmount ||
+													new anchor.BN(0),
+											),
+											0,
+										)}
+									</span>
+								</div>
+								<div className='flex flex-1 flex-col rounded-md bg-gray-800 px-4 py-2'>
+									<span className='text-sm'>Third</span>
+									<span className='text-xl text-base-white'>
+										{formatTokenAmount(
+											formatAmount(
+												period?.squadThirdPlaceRewardAmount || new anchor.BN(0),
+											),
+											0,
+										)}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div className='mt-4 flex flex-col gap-4 sm:flex-row'>
 						{period?.topSquads.map(
 							(item, index) =>
@@ -251,7 +242,8 @@ export default function Page() {
 											</div>
 											<div className='flex flex-col gap-1'>
 												<div>
-													{formatAddress(item.squad.toString(), 12, -12)}
+													{item.info.name ??
+														formatAddress(item.squad.toString(), 12, -12)}
 												</div>
 												<div className='flex items-end gap-1.5'>
 													<span className='text-sm text-gray-600'>

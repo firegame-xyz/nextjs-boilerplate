@@ -98,21 +98,20 @@ const RegisterComponent = () => {
 	return (
 		<>
 			{!(connected && registered) && (
-				<>
+				<div className='flex flex-col w-full justify-center items-center gap-4'>
 					<ButtonTertiary
-						className='h-8 rounded-lg'
+						className='w-3/6 rounded-lg text-md'
 						disabled={isTransactionInProgress}
 						onClick={handle}
 					>
 						Register
 					</ButtonTertiary>
 					{game?.remainingRegistrationRewardSlots && (
-						<div className='text-xs'>
-							{`Registration reward quota: `}
-							{game?.remainingRegistrationRewardSlots.toString()}
+						<div>
+							{`🎁 New users will receive 1500FGV as a gift reward quota: ${game?.remainingRegistrationRewardSlots.toString()}`}
 						</div>
 					)}
-				</>
+				</div>
 			)}
 		</>
 	);

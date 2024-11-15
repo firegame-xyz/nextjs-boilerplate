@@ -151,9 +151,7 @@ const PurchaseComponent = () => {
 	}, [num, squadScore]);
 
 	const specialRewardsProbability = useMemo(() => {
-		return new anchor.BN(value).gte(new anchor.BN(100))
-			? `${baseWinRate(Number(value)) * 0.01}%`
-			: null;
+		return `${(baseWinRate(Number(value)) / 100).toFixed(2)}%`;
 	}, [value]);
 
 	const isShowBuy = useMemo(() => {
@@ -828,7 +826,7 @@ const PurchaseComponent = () => {
 						</div>
 					</>
 				)}
-				{specialRewardsProbability && (
+				{value && (
 					<div className='flex justify-between'>
 						<span>Probability of Winning Special Rewards</span>
 						<span>{specialRewardsProbability}</span>

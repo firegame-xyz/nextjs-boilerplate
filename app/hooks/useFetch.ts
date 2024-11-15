@@ -2,6 +2,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { SystemProgram } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { useConnection } from "@solana/wallet-adapter-react";
+import { supabase } from "@/app/config/supabase";
 
 import {
 	findConfigPDA,
@@ -172,6 +173,19 @@ export const useFetch = () => {
 		}
 	};
 
+	const fetchTransactions = async (addressArray: string[]) => {
+		const query = supabase
+			.from("squad")
+			.select("*")
+			.in("public_key", addressArray);
+
+		const { data, error } = await query;
+
+		if (error) throw error;
+
+		return data;
+	};
+
 	const fetchPeriod = async () => {
 		if (!program || !round || !game) {
 			setPeriod(null);
@@ -183,15 +197,22 @@ export const useFetch = () => {
 				round.currentPeriod,
 			);
 
-			const accounts = await Promise.all(
-				periodData.topSquads.map(async (item) => {
-					const squadInfo = await program.account.squad.fetch(item.squad);
-					return {
-						...item,
-						info: squadInfo,
-					};
-				}),
-			);
+			const squadArray = periodData.topSquads.map((s) => s.squad.toString());
+			const info = await fetchTransactions(squadArray);
+
+			const accounts = periodData.topSquads.map((item) => {
+				const squadInfo = info?.find(
+					(i) => i.public_key === item.squad.toString(),
+				);
+				return {
+					...item,
+					info: {
+						name: squadInfo.name,
+						logoUrl: squadInfo.logo_url,
+					},
+				};
+			});
+
 			setPeriod({
 				...periodData,
 				topSquads: accounts,
@@ -212,17 +233,22 @@ export const useFetch = () => {
 							const prevPeriodData = await program.account.period.fetch(
 								prevPeriodPDA,
 							);
-							const accounts = await Promise.all(
-								prevPeriodData.topSquads.map(async (item) => {
-									const squadInfo = await program.account.squad.fetch(
-										item.squad,
-									);
-									return {
-										...item,
-										info: squadInfo,
-									};
-								}),
+
+							const squadArray = periodData.topSquads.map((s) =>
+								s.squad.toString(),
 							);
+							const info = await fetchTransactions(squadArray);
+
+							const accounts = periodData.topSquads.map((item) => {
+								const squadInfo = info?.find(
+									(i) => i.public_key === item.squad.toString(),
+								);
+								return {
+									...item,
+									info: squadInfo || null,
+								};
+							});
+
 							return {
 								...prevPeriodData,
 								topSquads: accounts,
