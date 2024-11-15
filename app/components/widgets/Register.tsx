@@ -107,8 +107,18 @@ const RegisterComponent = () => {
 						Register
 					</ButtonTertiary>
 					{game?.remainingRegistrationRewardSlots && (
-						<div>
-							{`🎁 New users will receive 1500FGV as a gift reward quota: ${game?.remainingRegistrationRewardSlots.toString()}`}
+						<div className='flex flex-col items-center justify-center'>
+							<div>
+								{`🎁 New users will receive`}
+								<span className='mx-1 text-base-white'>{`1500 FGV`}</span>
+								{` as a gift reward`}
+							</div>
+							<div>
+								{`Quota: `}
+								<span className='text-warning'>
+									{game?.remainingRegistrationRewardSlots.toString()}
+								</span>
+							</div>
 						</div>
 					)}
 				</div>
