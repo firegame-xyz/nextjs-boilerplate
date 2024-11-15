@@ -44,6 +44,7 @@ export type Round = {
 	roundNumber: number;
 	currentPeriod: anchor.web3.PublicKey;
 	roundVault: anchor.web3.PublicKey;
+	autoReinvestPlayerAmount: number;
 	startTime: anchor.BN;
 	endTime: anchor.BN;
 	lastCallSlot: anchor.BN;

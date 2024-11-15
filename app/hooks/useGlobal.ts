@@ -687,20 +687,20 @@ export function useGlobal() {
 	}, [rpcEndpoint, reset]);
 
 	// Clean up on disconnect
-	useEffect(() => {
-		if (!disconnecting) return;
+	// useEffect(() => {
+	// 	if (!disconnecting) return;
 
-		setProgram(null);
-		setGame(null);
-		setRound(null);
-		setPlayerData(null);
-		// setPlayerRound(null);
-		setSquad(null);
-		setBalance(null);
-		setVoucherBalance(null);
-		setRegistered(false);
-		setSquadLoading(false);
-	}, [disconnecting]);
+	// 	setProgram(null);
+	// 	setGame(null);
+	// 	setRound(null);
+	// 	setPlayerData(null);
+	// 	// setPlayerRound(null);
+	// 	setSquad(null);
+	// 	setBalance(null);
+	// 	setVoucherBalance(null);
+	// 	setRegistered(false);
+	// 	setSquadLoading(false);
+	// }, [disconnecting]);
 
 	return useMemo(
 		() => ({
