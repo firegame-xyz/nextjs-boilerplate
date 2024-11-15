@@ -106,7 +106,14 @@ export const Notification: React.FC<Props> = ({
 					{titleArea}
 				</div>
 				<div className={clx("text-sm text-base-white/90", msgAreaClassName)}>
-					{messageArea}
+					{type === "pending" ? (
+						<div className='flex items-center'>
+							<div className='animate-spin rounded-full h-3 w-3 border-b-2 border-base-white mr-2' />
+							{messageArea}
+						</div>
+					) : (
+						<>{messageArea}</>
+					)}
 				</div>
 				<div className='absolute bottom-0 left-0 h-px w-full bg-transparent'>
 					<div
