@@ -14,8 +14,8 @@ export default function ThreeScene() {
 		if (!containerRef.current) return;
 
 		const container = containerRef.current;
-		const width = container.clientWidth;
-		const height = container.clientHeight;
+		const width = Math.max(1, container.clientWidth);
+		const height = Math.max(1, container.clientHeight);
 
 		// Scene setup
 		const scene = new THREE.Scene();
@@ -29,20 +29,23 @@ export default function ThreeScene() {
 		camera.add(pointLight);
 
 		// Renderer setup
-		const renderer = new THREE.WebGLRenderer({ antialias: true });
-		renderer.setPixelRatio(window.devicePixelRatio);
+		const renderer = new THREE.WebGLRenderer({
+			antialias: true,
+			powerPreference: "high-performance",
+		});
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 		renderer.setSize(width, height);
 		renderer.toneMapping = THREE.ReinhardToneMapping;
-		renderer.toneMappingExposure = Math.pow(1, 4.0); // Default exposure
+		renderer.toneMappingExposure = Math.pow(1, 4.0);
 		container.appendChild(renderer.domElement);
 
 		// Post-processing setup
 		const renderScene = new RenderPass(scene, camera);
 		const bloomPass = new UnrealBloomPass(
 			new THREE.Vector2(width, height),
-			1.5, // strength 从1.5增加到2.0
-			0.4, // radius 从0.4增加到0.5
-			2, // threshold 从0.85降低到0.75
+			1.5,
+			0.4,
+			2,
 		);
 		const outputPass = new OutputPass();
 		const composer = new EffectComposer(renderer);
@@ -55,6 +58,8 @@ export default function ThreeScene() {
 		controls.maxPolarAngle = Math.PI * 0.5;
 		controls.minDistance = 2;
 		controls.maxDistance = 6;
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.05;
 
 		// Model loading
 		const clock = new THREE.Clock();
@@ -77,36 +82,65 @@ export default function ThreeScene() {
 			const delta = clock.getDelta();
 			if (mixer) mixer.update(delta);
 
+			controls.update();
 			composer.render();
 		}
-		animate();
 
 		// Resize handler
 		function handleResize() {
-			const width = container.clientWidth;
-			const height = container.clientHeight;
+			if (!container) return;
+
+			const width = Math.max(1, container.clientWidth);
+			const height = Math.max(1, container.clientHeight);
 
 			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
 
 			renderer.setSize(width, height);
 			composer.setSize(width, height);
+			bloomPass.resolution.set(width, height);
 		}
 
-		const resizeObserver = new ResizeObserver(handleResize);
+		// Initial animation
+		animate();
+
+		// Setup resize observer
+		const resizeObserver = new ResizeObserver(() => {
+			handleResize();
+		});
 		resizeObserver.observe(container);
 
 		// Cleanup
 		return () => {
 			resizeObserver.disconnect();
 			container.removeChild(renderer.domElement);
+			scene.clear();
 			renderer.dispose();
+			composer.dispose();
+			controls.dispose();
 		};
 	}, []);
 
 	return (
-		<div style={{ position: "absolute", width: "100%", height: "100%" }}>
-			<div ref={containerRef} style={{ width: "100%", height: "100%" }} />
+		<div
+			style={{
+				position: "absolute",
+				width: "100%",
+				height: "100%",
+				minWidth: "1px",
+				minHeight: "1px",
+				overflow: "hidden",
+			}}
+		>
+			<div
+				ref={containerRef}
+				style={{
+					width: "100%",
+					height: "100%",
+					minWidth: "1px",
+					minHeight: "1px",
+				}}
+			/>
 		</div>
 	);
 }

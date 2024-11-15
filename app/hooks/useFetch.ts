@@ -31,7 +31,7 @@ import {
 	providerAtom,
 } from "@/app/state";
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const useFetch = () => {
 	const { connection } = useConnection();
@@ -58,7 +58,7 @@ export const useFetch = () => {
 	const [voucherMintAccountAddress, setVoucherMintAccountAddress] =
 		useState<anchor.web3.PublicKey | null>(null);
 
-	const getTokenAccountBalance = async () => {
+	const getTokenAccountBalance = useCallback(async () => {
 		if (!provider || !connection || !config) {
 			setTokenMintAccountAddress(null);
 			setBalance(null);
@@ -87,9 +87,9 @@ export const useFetch = () => {
 				decimals: 6,
 			});
 		}
-	};
+	}, [provider, connection, config, setTokenMintAccountAddress, setBalance]);
 
-	const getVoucherAccountBalance = async () => {
+	const getVoucherAccountBalance = useCallback(async () => {
 		if (!provider || !connection || !config) {
 			setVoucherAccount(null);
 			setVoucherMintAccountAddress(null);
@@ -122,9 +122,16 @@ export const useFetch = () => {
 				decimals: 6,
 			});
 		}
-	};
+	}, [
+		provider,
+		connection,
+		config,
+		setVoucherAccount,
+		setVoucherMintAccountAddress,
+		setVoucherBalance,
+	]);
 
-	const fetchConfig = async () => {
+	const fetchConfig = useCallback(async () => {
 		if (!program) {
 			setConfig(null);
 			return;
@@ -138,9 +145,9 @@ export const useFetch = () => {
 		} catch (error) {
 			console.error("Error fetching config:", error);
 		}
-	};
+	}, [program, setConfig]);
 
-	const fetchGame = async () => {
+	const fetchGame = useCallback(async () => {
 		if (!program) {
 			setGame(null);
 			return;
@@ -155,9 +162,9 @@ export const useFetch = () => {
 		} catch (error) {
 			console.error("Error fetching game:", error);
 		}
-	};
+	}, [program, setGame, getVoucherAccountBalance, getTokenAccountBalance]);
 
-	const fetchRound = async () => {
+	const fetchRound = useCallback(async () => {
 		if (!program || !game) {
 			setRound(null);
 			setGame(null);
@@ -171,9 +178,9 @@ export const useFetch = () => {
 			console.error("Error fetching round:", error);
 			setRound(null);
 		}
-	};
+	}, [program, game, setRound, setGame]);
 
-	const fetchTransactions = async (addressArray: string[]) => {
+	const fetchTransactions = useCallback(async (addressArray: string[]) => {
 		const query = supabase
 			.from("squad")
 			.select("*")
@@ -184,9 +191,9 @@ export const useFetch = () => {
 		if (error) throw error;
 
 		return data;
-	};
+	}, []);
 
-	const fetchPeriod = async () => {
+	const fetchPeriod = useCallback(async () => {
 		if (!program || !round || !game) {
 			setPeriod(null);
 			setLastPeriod([]);
@@ -267,9 +274,9 @@ export const useFetch = () => {
 		} catch (error) {
 			console.error("Error fetching period:", error);
 		}
-	};
+	}, [program, round, game, setPeriod, setLastPeriod, fetchTransactions]);
 
-	const fetchPlayerData = async () => {
+	const fetchPlayerData = useCallback(async () => {
 		if (!program || !provider || !provider.publicKey) {
 			setPlayerPDA(SystemProgram.programId);
 			setPlayerData(null);
@@ -292,9 +299,9 @@ export const useFetch = () => {
 			console.error("Error fetching player data:", error);
 			setRegistered(false);
 		}
-	};
+	}, [program, provider, setPlayerPDA, setPlayerData, setRegistered]);
 
-	const fetchSquad = async () => {
+	const fetchSquad = useCallback(async () => {
 		if (!program || !playerData || !playerData.squad) {
 			setSquad(null);
 			return;
@@ -308,9 +315,9 @@ export const useFetch = () => {
 		} finally {
 			setSquadLoading(false);
 		}
-	};
+	}, [program, playerData, setSquad, setSquadLoading]);
 
-	const fetchSquadList = async () => {
+	const fetchSquadList = useCallback(async () => {
 		if (!program) {
 			setSquadList([]);
 			return;
@@ -321,7 +328,7 @@ export const useFetch = () => {
 		} catch (err) {
 			console.error("Error fetching squad list:", err);
 		}
-	};
+	}, [program, setSquadList]);
 
 	return {
 		fetchConfig,
