@@ -288,9 +288,18 @@ const randomnessAtom = atom<RandomnessState>({
 	},
 });
 
-const rpcEndpointAtom = atom<string>(
-	clusterApiUrl(WalletAdapterNetwork.Devnet),
-);
+const getDefaultEndpoint = () => {
+	if (typeof window !== "undefined") {
+		return (
+			localStorage.getItem("rpcEndpoint") ??
+			clusterApiUrl(WalletAdapterNetwork.Devnet)
+		);
+	}
+
+	return clusterApiUrl(WalletAdapterNetwork.Devnet);
+};
+
+const rpcEndpointAtom = atom<string>(getDefaultEndpoint());
 const currentTimeAtom = atom<number>(0);
 const providerAtom = atom<anchor.AnchorProvider | null>(null);
 const programAtom = atom<IDL | null>(null);

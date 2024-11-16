@@ -20,7 +20,7 @@ export default function RpcModal() {
 			redirect={true}
 			title={
 				<div>
-					<h1>Change RPC</h1>
+					<h1>RPC Configuration</h1>
 				</div>
 			}
 		>

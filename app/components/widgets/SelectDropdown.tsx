@@ -1,11 +1,4 @@
-// import { useWallet } from "@solana/wallet-adapter-react";
-// import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-// import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-
-// import { copyToClipboard } from "@/app/utils/helpers";
-
-// import { ButtonPrimary } from "../buttons/Button";
 import { SelectIcon } from "../icons/Icon";
 
 interface SelectProps {
@@ -13,32 +6,7 @@ interface SelectProps {
 	handleCallBack?: (round: number) => void;
 }
 
-// interface Props {
-// 	address: string;
-// }
-
-// const CopyComponent: React.FC<Props> = ({ address }) => {
-// 	const [isCopied, setIsCopied] = useState(false);
-
-// 	const handleClick = async () => {
-// 		const result = await copyToClipboard(address);
-// 		setIsCopied(result);
-
-// 		let timer: NodeJS.Timeout;
-// 		timer = setTimeout(() => {
-// 			clearTimeout(timer);
-// 			setIsCopied(false);
-// 		}, 3000);
-// 	};
-
-// 	return (
-// 		<div onClick={handleClick}>{isCopied ? "Copied" : "Copy Address"}</div>
-// 	);
-// };
-
 const SelectDropdown: React.FC<SelectProps> = ({ round, handleCallBack }) => {
-	// const { setVisible } = useWalletModal();
-	// const { connected, publicKey, disconnect } = useWallet();
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectValue, setSelectValue] = useState<number>(round);
 	const ref = useRef<HTMLDivElement>(null);

@@ -2,37 +2,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-
 import { formatAddress } from "@/app/utils/helpers";
-
 import { ButtonPrimary } from "../buttons/Button";
 import { MenuIcon } from "../icons/Icon";
-
-// import ConstructionWorkerSalariesBalance from "./ConstructionWorkerSalariesBalance";
 import CopyComponent from "./Copy";
-
-// interface Props {
-//   address: string;
-//   startText: string;
-//   endText: string;
-// }
-
-// const CopyComponent: React.FC<Props> = ({ address, startText, endText }) => {
-//   const [isCopied, setIsCopied] = useState(false);
-
-//   const handleClick = async () => {
-//     const result = await copyToClipboard(address);
-//     setIsCopied(result);
-
-//     let timer: NodeJS.Timeout;
-//     timer = setTimeout(() => {
-//       clearTimeout(timer);
-//       setIsCopied(false);
-//     }, 3000);
-//   };
-
-//   return <div onClick={handleClick}>{isCopied ? endText : startText}</div>;
-// };
 
 const Dropdown: React.FC = () => {
 	const { setVisible } = useWalletModal();
@@ -97,23 +70,6 @@ const Dropdown: React.FC = () => {
 					>
 						{formatAddress(publicKey?.toBase58() || "")}
 					</div>
-					{/* <div
-            className='block cursor-pointer px-4 py-2 text-gray-200'
-            role='menuitem'
-          >
-            <div>{`Construction Worker Salaries`}</div>
-            <ConstructionWorkerSalariesBalance />
-          </div> */}
-					{/* <div
-            className='block cursor-pointer px-4 py-2 text-gray-200 hover:bg-gray-200 hover:text-gray-900'
-            role='menuitem'
-          >
-            <CopyComponent
-              address={`${baseUrl}?link_code=${publicKey?.toBase58()!}`}
-              startText='Copy Invitation URL'
-              endText='Copied'
-            />
-          </div> */}
 					<div
 						className='block cursor-pointer px-4 py-2 text-gray-200 hover:bg-gray-200 hover:text-gray-900'
 						role='menuitem'
@@ -129,7 +85,7 @@ const Dropdown: React.FC = () => {
 							className='block cursor-pointer px-4 py-2 text-gray-200 hover:bg-gray-200 hover:text-gray-900'
 							role='menuitem'
 						>
-							Change RPC
+							RPC Config
 						</div>
 					</Link>
 					<Link href={"/profile"} onClick={() => setIsOpen(false)}>
