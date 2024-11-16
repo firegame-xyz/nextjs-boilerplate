@@ -221,7 +221,6 @@ const MainComponent: React.FC = () => {
 				<div className={clx("w-full sm:w-2/3", "flex items-center relative")}>
 					<ThreeScene />
 					<Timer
-						registered={registered}
 						expiryTimestamp={expiryTimestamp}
 						timerComplete={timerComplete}
 					/>

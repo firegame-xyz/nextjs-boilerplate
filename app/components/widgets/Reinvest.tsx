@@ -79,9 +79,11 @@ export default function Reinvest() {
 	 */
 	const isReinvestDisabled = useMemo(() => {
 		return (
-			isTransactionInProgress || round?.isOver || total.lt(new anchor.BN(1000))
+			isTransactionInProgress ||
+			round?.isOver ||
+			total.lt(new anchor.BN(1_000_000_000))
 		);
-	}, [isTransactionInProgress, round, total, playerData]);
+	}, [isTransactionInProgress, round?.isOver, total]);
 
 	return (
 		<ButtonTertiary

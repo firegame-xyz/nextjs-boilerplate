@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAtom } from "jotai";
-import { roundAtom, statePendingAtom, currentTimeAtom } from "@/app/state";
+import { roundAtom, currentTimeAtom } from "@/app/state";
 import { useTimer } from "react-timer-hook";
 
 import { ButtonDefault } from "./buttons/Button";
 // import ParticlesComponent from "./widgets/ParticlesComponent";
-// import RegisterComponent from "./widgets/Register";
 import { WaveformShader } from "./widgets/WaveformShader";
 
 interface InnerTimerProps {
@@ -51,7 +50,6 @@ function InnerTimer({ expiryTimestamp, timerComplete }: InnerTimerProps) {
 }
 
 interface TimerProps {
-	registered?: boolean;
 	expiryTimestamp: string;
 	className?: string;
 	timerComplete: () => void;
@@ -61,14 +59,12 @@ interface TimerProps {
  * Main Timer component
  */
 export function Timer({
-	registered = false,
 	expiryTimestamp,
 	className,
 	timerComplete,
 }: TimerProps) {
-	// const [game] = useAtom(gameAtom);
 	const [round] = useAtom(roundAtom);
-	const [statePending] = useAtom(statePendingAtom);
+	// const [statePending] = useAtom(statePendingAtom);
 	const [isClient, setIsClient] = useState(false);
 	const [timerKey, setTimerKey] = useState(0);
 	const [, setIsTimerComplete] = useState(false);
@@ -105,10 +101,10 @@ export function Timer({
 		}
 	}, [currentTime, round?.endTime, round?.isOver]);
 
-	const particlesVelocity = useMemo(
-		() => (statePending ? 0.1 : 0.009),
-		[statePending],
-	);
+	// const particlesVelocity = useMemo(
+	// 	() => (statePending ? 0.1 : 0.009),
+	// 	[statePending],
+	// );
 
 	return (
 		<div
@@ -163,7 +159,7 @@ export function Timer({
 							COUNTDOWN
 						</span>
 						<div className='bg-base-black/80 p-2'>
-							{isClient ? (
+							{isClient && round ? (
 								<InnerTimer
 									key={timerKey}
 									expiryTimestamp={expiryTimestamp}
